@@ -1,0 +1,77 @@
+{
+  "name": "@eve-online-tools/eve-resfile",
+  "version": "0.0.1",
+  "description": "EVE Online resfile index loader with Vite and Rollup plugins",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eve-online-tools/node-packages.git",
+    "directory": "packages/eve-resfile"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./vite": {
+      "import": {
+        "types": "./dist/vite/index.d.ts",
+        "default": "./dist/vite/index.js"
+      },
+      "require": {
+        "types": "./dist/vite/index.d.ts",
+        "default": "./dist/vite/index.cjs"
+      }
+    },
+    "./rollup": {
+      "import": {
+        "types": "./dist/rollup/index.d.ts",
+        "default": "./dist/rollup/index.js"
+      },
+      "require": {
+        "types": "./dist/rollup/index.d.ts",
+        "default": "./dist/rollup/index.cjs"
+      }
+    },
+    "./client": {
+      "types": "./dist/vite/client.d.ts"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsup src/index.ts src/vite/index.ts src/rollup/index.ts --format cjs,esm --dts --external vite --external rollup && mkdir -p dist/vite && cp src/vite/client.d.ts dist/vite/client.d.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "pnpm --workspace-root vitest run packages/eve-resfile"
+  },
+  "peerDependencies": {
+    "rollup": "^4.0.0",
+    "vite": "^6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "rollup": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.24",
+    "rollup": "^4.41.1",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

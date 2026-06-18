@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "eve-online-tools/node-packages" }],
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": [
+    "@eve-online-tools/demo",
+    "@eve-online-tools/storybook",
+    "@repo/mantine-build",
+    "@repo/tsconfig",
+    "@repo/vite-config"
+  ]
+}

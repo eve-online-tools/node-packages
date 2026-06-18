@@ -1,0 +1,31 @@
+# __PACKAGE_NAME__
+
+Pure TypeScript utilities for EVE Online tooling.
+
+## Installation
+
+```bash
+pnpm add __PACKAGE_NAME__
+```
+
+## Usage
+
+```ts
+import { placeholder } from "__PACKAGE_NAME__";
+
+placeholder();
+```
+
+## Development
+
+This package lives in the [node-packages](https://github.com/eve-online-tools/node-packages) monorepo.
+
+```bash
+pnpm build
+pnpm test
+pnpm --filter __PACKAGE_NAME__ typecheck
+```
+
+## License
+
+MIT

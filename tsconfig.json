@@ -1,0 +1,16 @@
+{
+  "include": [
+    "packages",
+    "apps",
+    "internal",
+    "scripts",
+    "@types",
+    "vitest.config.ts",
+    "vitest.setup.ts",
+    "oxlint.config.ts"
+  ],
+  "compilerOptions": {
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
+    "noEmit": true
+  }
+}

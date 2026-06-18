@@ -1,0 +1,20 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+storybook-static/
+
+# caches
+.turbo/
+**/.cache/
+*.tsbuildinfo
+.stylelintcache
+
+# test output
+coverage/
+
+# logs
+*.log
+.pnpm-debug.log*

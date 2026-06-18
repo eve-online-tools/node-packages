@@ -1,0 +1,7 @@
+{
+  "extends": "../../internal/tsconfig/react.json",
+  "include": ["src", "../../@types"],
+  "compilerOptions": {
+    "noEmit": true
+  }
+}

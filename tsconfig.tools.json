@@ -1,0 +1,16 @@
+{
+  "extends": "./internal/tsconfig/node.json",
+  "include": [
+    "internal/**/*.ts",
+    "scripts/**/*.ts",
+    "@types",
+    "vitest.config.ts",
+    "vitest.setup.ts",
+    "oxlint.config.ts"
+  ],
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM"],
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom", "vite/client"],
+    "noEmit": true
+  }
+}

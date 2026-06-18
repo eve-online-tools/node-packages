@@ -1,0 +1,40 @@
+{
+  "name": "__PACKAGE_NAME__",
+  "version": "0.0.1",
+  "description": "Pure TypeScript utilities",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eve-online-tools/node-packages.git",
+    "directory": "packages/__PACKAGE_SLUG__"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "typecheck": "tsc --noEmit",
+    "test": "pnpm --workspace-root vitest run packages/__PACKAGE_SLUG__"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.24",
+    "typescript": "catalog:"
+  }
+}

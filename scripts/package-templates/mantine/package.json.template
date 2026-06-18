@@ -1,0 +1,45 @@
+{
+  "name": "__PACKAGE_NAME__",
+  "version": "0.0.1",
+  "description": "Mantine components for EVE Online",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eve-online-tools/node-packages.git",
+    "directory": "packages/__PACKAGE_SLUG__"
+  },
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.mts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    },
+    "./styles.css": "./dist/styles.css",
+    "./styles.layer.css": "./dist/styles.layer.css"
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "pnpm run clean && rollup -c rollup.config.ts --configPlugin esbuild && tsx ../../internal/mantine-build/post-build.ts",
+    "typecheck": "pnpm exec tsc --noEmit -p tsconfig.json",
+    "test": "pnpm --workspace-root vitest run packages/__PACKAGE_SLUG__"
+  },
+  "sideEffects": ["**/*.css", "**/*.css.js", "**/*.css.cjs", "**/*.css.mjs"],
+  "peerDependencies": {
+    "@mantine/core": "^9.0.0",
+    "@mantine/hooks": "^9.0.0",
+    "react": "^18.x || ^19.x",
+    "react-dom": "^18.x || ^19.x"
+  }
+}
