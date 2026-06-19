@@ -28,7 +28,7 @@ describe("vite plugin", () => {
     vi.restoreAllMocks();
   });
 
-  it("resolves res imports and loads dev proxy modules in watch mode", async () => {
+  const stubIndexFetch = () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async (url: string | URL) => {
@@ -42,9 +42,17 @@ describe("vite plugin", () => {
           return new Response("res:/icons/64/icon.png,icons/icon_123.png,hash");
         }
 
+        if (href.endsWith("/icons/icon_123.png")) {
+          return new Response(Buffer.from("png-bytes"));
+        }
+
         throw new Error(`Unexpected fetch: ${href}`);
       }),
     );
+  };
+
+  it("resolves res imports and loads dev proxy modules in watch mode", async () => {
+    stubIndexFetch();
 
     const plugin = eveResfile({ buildNumber: "123456", cacheDir, root: cacheDir });
     const context = {
@@ -53,7 +61,7 @@ describe("vite plugin", () => {
       emitFile: vi.fn(() => "asset-ref"),
     };
 
-    await getHook(plugin.configResolved)?.({ root: cacheDir } as never);
+    await getHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never);
     await getHook(plugin.buildStart)?.call(context as never, {} as never);
 
     const resolvedId = await getHook(plugin.resolveId)?.call(
@@ -65,6 +73,41 @@ describe("vite plugin", () => {
     expect(resolvedId).toContain("res:/icons/64/icon.png");
 
     const moduleSource = await getHook(plugin.load)?.call(context as never, resolvedId as string);
-    expect(moduleSource).toBe('export default "/__eve_res__/icons%2F64%2Ficon.png"');
+    expect(moduleSource).toEqual({
+      code: 'export default "/__eve_res__/icons%2F64%2Ficon.png"',
+      moduleType: "js",
+    });
+  });
+
+  it("emits CDN assets in production builds", async () => {
+    stubIndexFetch();
+
+    const plugin = eveResfile({ buildNumber: "123456", cacheDir, root: cacheDir });
+    const context = {
+      meta: { watchMode: false },
+      info: vi.fn(),
+      emitFile: vi.fn(() => "asset-ref"),
+    };
+
+    await getHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never);
+    await getHook(plugin.buildStart)?.call(context as never, {} as never);
+
+    const resolvedId = await getHook(plugin.resolveId)?.call(
+      context as never,
+      "res:/icons/64/icon.png",
+      undefined,
+      {} as never,
+    );
+
+    const moduleSource = await getHook(plugin.load)?.call(context as never, resolvedId as string);
+    expect(moduleSource).toEqual({
+      code: "export default import.meta.ROLLUP_FILE_URL_asset-ref",
+      moduleType: "js",
+    });
+    expect(context.emitFile).toHaveBeenCalledWith({
+      type: "asset",
+      name: "icon.png",
+      source: Buffer.from("png-bytes"),
+    });
   });
 });

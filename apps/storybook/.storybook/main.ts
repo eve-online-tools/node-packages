@@ -1,5 +1,5 @@
 import type { StorybookConfig } from "@storybook/react-vite";
-import { createWorkspaceAliases } from "../../../internal/vite-config/workspace-aliases";
+import { createWorkspaceAliases, mergeAliases } from "../../../internal/vite-config/workspace-aliases";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,10 +24,10 @@ const config: StorybookConfig = {
   },
   async viteFinal(config) {
     config.resolve = config.resolve ?? {};
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      ...createWorkspaceAliases(monorepoRoot),
-    };
+    config.resolve.alias = mergeAliases(
+      config.resolve.alias,
+      createWorkspaceAliases(monorepoRoot),
+    );
 
     return config;
   },

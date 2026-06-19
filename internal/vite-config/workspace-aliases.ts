@@ -1,10 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { Alias } from "vite";
-
-function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
+import type { Alias, AliasOptions } from "vite";
 
 /**
  * Vite aliases for workspace packages.
@@ -42,7 +38,7 @@ export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
     }
 
     aliases.push({
-      find: new RegExp(`^${escapeRegExp(packageJson.name)}$`),
+      find: packageJson.name,
       replacement: indexFile,
     });
 
@@ -65,6 +61,27 @@ export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
   }
 
   return aliases;
+}
+
+export function mergeAliases(...groups: (AliasOptions | undefined)[]): Alias[] {
+  const merged: Alias[] = [];
+
+  for (const group of groups) {
+    if (!group) {
+      continue;
+    }
+
+    if (Array.isArray(group)) {
+      merged.push(...group);
+      continue;
+    }
+
+    for (const [find, replacement] of Object.entries(group)) {
+      merged.push({ find, replacement });
+    }
+  }
+
+  return merged;
 }
 
 export function resolveMonorepoRoot(fromDir: string, depth = 2): string {

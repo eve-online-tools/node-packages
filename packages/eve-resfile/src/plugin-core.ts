@@ -46,12 +46,22 @@ export const resolveResfileId = (source: string): string | null => {
   return virtualIdForResPath(normalizeResPath(source));
 };
 
+export const formatRollupAssetModule = (referenceId: string): string =>
+  `export default import.meta.ROLLUP_FILE_URL_${referenceId}`;
+
+/** Rolldown (Vite 8+) needs an explicit JS module type when the virtual id has a non-JS extension. */
+export const asJsLoadResult = (code: string): { code: string; moduleType: "js" } => ({
+  code,
+  moduleType: "js",
+});
+
 export type LoadResfileAssetOptions = {
   watchMode: boolean;
   assetOrigin: string;
   index: ResfileIndex;
   resPath: string;
   emitAsset: (name: string, source: Buffer) => string;
+  formatAssetModule: (assetRef: string) => string;
 };
 
 export const loadResfileAssetModule = async ({
@@ -60,6 +70,7 @@ export const loadResfileAssetModule = async ({
   index,
   resPath,
   emitAsset,
+  formatAssetModule,
 }: LoadResfileAssetOptions): Promise<string> => {
   const cdnPath = lookupOrThrow(index, resPath);
 
@@ -68,6 +79,6 @@ export const loadResfileAssetModule = async ({
   }
 
   const buffer = await fetchBuffer(`${assetOrigin}/${cdnPath}`);
-  const referenceId = emitAsset(basename(resPath), buffer);
-  return `export default import.meta.ROLLUP_FILE_URL_${referenceId}`;
+  const assetRef = emitAsset(basename(resPath), buffer);
+  return formatAssetModule(assetRef);
 };

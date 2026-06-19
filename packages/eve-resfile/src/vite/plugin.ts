@@ -1,65 +1,18 @@
-import type { Connect, Plugin } from "vite";
+import type { Plugin } from "vite";
 
-import { contentTypeForPath } from "../content-type";
-import { DEFAULT_ASSET_ORIGIN, DEV_PROXY_PREFIX } from "../constants";
-import { fetchBuffer } from "../fetch";
+import { DEFAULT_ASSET_ORIGIN } from "../constants";
+import { createDevProxyMiddleware } from "../dev-middleware";
 import { loadResfileIndexData } from "../index-loader";
-import { resPathFromDevProxyUrl } from "../lookup";
 import {
+  asJsLoadResult,
+  formatRollupAssetModule,
   isVirtualResId,
   loadResfileAssetModule,
-  lookupOrThrow,
   resolveEveResfileOptions,
   resolveResfileId,
   resPathFromVirtualId,
 } from "../plugin-core";
 import type { EveResfileOptions, ResfileIndex, ResolvedEveResfileOptions } from "../types";
-
-const createDevProxyMiddleware = (
-  ensureIndex: () => Promise<ResfileIndex>,
-  assetOrigin: string,
-): Connect.NextHandleFunction => {
-  return async (req, res, next) => {
-    if (!req.url || req.method !== "GET") {
-      next();
-      return;
-    }
-
-    const pathname = new URL(req.url, "http://localhost").pathname;
-    if (!pathname.startsWith(DEV_PROXY_PREFIX)) {
-      next();
-      return;
-    }
-
-    const resPath = resPathFromDevProxyUrl(pathname);
-    if (!resPath) {
-      res.statusCode = 400;
-      res.end("Invalid resfile proxy path.");
-      return;
-    }
-
-    let cdnPath: string;
-    try {
-      const index = await ensureIndex();
-      cdnPath = lookupOrThrow(index, resPath);
-    } catch (error) {
-      res.statusCode = 404;
-      res.end(error instanceof Error ? error.message : "Resfile not found.");
-      return;
-    }
-
-    try {
-      const buffer = await fetchBuffer(`${assetOrigin}/${cdnPath}`);
-      res.statusCode = 200;
-      res.setHeader("Content-Type", contentTypeForPath(resPath));
-      res.setHeader("Cache-Control", "public, max-age=86400");
-      res.end(buffer);
-    } catch (error) {
-      res.statusCode = 502;
-      res.end(error instanceof Error ? error.message : "Failed to fetch resfile from CDN.");
-    }
-  };
-};
 
 export const eveResfile = (options: EveResfileOptions = {}): Plugin => {
   let resolvedOptions: ResolvedEveResfileOptions | null = null;
@@ -120,7 +73,7 @@ export const eveResfile = (options: EveResfileOptions = {}): Plugin => {
       const resPath = resPathFromVirtualId(id);
       const index = loadedIndex ?? (await ensureIndex());
 
-      return loadResfileAssetModule({
+      const code = await loadResfileAssetModule({
         watchMode: this.meta.watchMode,
         assetOrigin: resolvedOptions.assetOrigin,
         index,
@@ -131,7 +84,10 @@ export const eveResfile = (options: EveResfileOptions = {}): Plugin => {
             name,
             source,
           }),
+        formatAssetModule: formatRollupAssetModule,
       });
+
+      return asJsLoadResult(code);
     },
   };
 };

@@ -2,6 +2,7 @@ import type { Plugin } from "rollup";
 
 import { loadResfileIndexData } from "../index-loader";
 import {
+  formatRollupAssetModule,
   isVirtualResId,
   loadResfileAssetModule,
   resolveEveResfileOptions,
@@ -57,6 +58,7 @@ export const eveResfile = (options: EveResfileOptions = {}): Plugin => {
             name,
             source,
           }),
+        formatAssetModule: formatRollupAssetModule,
       });
     },
   };

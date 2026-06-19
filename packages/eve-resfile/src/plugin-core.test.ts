@@ -1,4 +1,6 @@
 import {
+  asJsLoadResult,
+  formatRollupAssetModule,
   loadResfileAssetModule,
   lookupOrThrow,
   resolveResfileId,
@@ -31,6 +33,13 @@ describe("plugin-core", () => {
     );
   });
 
+  it("wraps generated module sources for Rolldown load hooks", () => {
+    expect(asJsLoadResult('export default "asset-url"')).toEqual({
+      code: 'export default "asset-url"',
+      moduleType: "js",
+    });
+  });
+
   it("returns dev proxy modules in watch mode", async () => {
     const moduleSource = await loadResfileAssetModule({
       watchMode: true,
@@ -38,6 +47,7 @@ describe("plugin-core", () => {
       index,
       resPath: "res:/icons/64/icon.png",
       emitAsset: () => "asset-ref",
+      formatAssetModule: formatRollupAssetModule,
     });
 
     expect(moduleSource).toBe('export default "/__eve_res__/icons%2F64%2Ficon.png"');
@@ -59,9 +69,30 @@ describe("plugin-core", () => {
         expect(source.toString()).toBe("png-bytes");
         return "asset-ref";
       },
+      formatAssetModule: formatRollupAssetModule,
     });
 
     expect(moduleSource).toBe("export default import.meta.ROLLUP_FILE_URL_asset-ref");
+    vi.unstubAllGlobals();
+  });
+
+  it("uses a custom asset module formatter in build mode", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(Buffer.from("png-bytes"))),
+    );
+
+    const moduleSource = await loadResfileAssetModule({
+      watchMode: false,
+      assetOrigin: "https://resources.test",
+      index,
+      resPath: "res:/icons/64/icon.png",
+      emitAsset: () => "emitted/icon.png",
+      formatAssetModule: (filename) =>
+        `export default __webpack_public_path__ + ${JSON.stringify(filename)}`,
+    });
+
+    expect(moduleSource).toBe('export default __webpack_public_path__ + "emitted/icon.png"');
     vi.unstubAllGlobals();
   });
 });

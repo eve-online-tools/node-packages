@@ -60,7 +60,7 @@
     "@types/react-dom": "catalog:",
     "@types/signale": "^1",
     "@vitejs/plugin-react": "catalog:",
-    "esbuild": "^0.25.5",
+    "esbuild": "^0.27.0",
     "hash-css-selector": "^1.1.0",
     "identity-obj-proxy": "^3.0.0",
     "jest-axe": "^9.0.0",
