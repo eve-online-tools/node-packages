@@ -1,0 +1,54 @@
+{
+  "name": "@eve-online-tools/esi-provider",
+  "version": "0.0.1",
+  "description": "ESI provider for React",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eve-online-tools/node-packages.git",
+    "directory": "packages/esi-provider"
+  },
+  "bin": {
+    "esi-provider": "./dist/cli.mjs"
+  },
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.mts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "pnpm run clean && rollup -c rollup.config.ts --configPlugin esbuild && tsx ../../internal/mantine-build/post-build.ts && tsup --config tsup.cli.config.ts",
+    "typecheck": "pnpm exec tsc --noEmit -p tsconfig.json",
+    "test": "pnpm --workspace-root vitest run packages/esi-provider"
+  },
+  "peerDependencies": {
+    "openapi-fetch": "^0.17.x",
+    "openapi-typescript": "^7.x",
+    "react": "^18.x || ^19.x",
+    "react-dom": "^18.x || ^19.x"
+  },
+  "dependencies": {
+    "openapi-typescript": "^7.13.0"
+  },
+  "devDependencies": {
+    "openapi-fetch": "^0.17.0"
+  }
+}

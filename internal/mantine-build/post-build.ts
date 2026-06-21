@@ -5,6 +5,12 @@ import signale from "signale";
 
 const packageDir = process.env.MANTINE_PACKAGE_DIR ?? process.cwd();
 
+function loadPackageJson(): Record<string, any> {
+  const packageJsonPath = path.join(packageDir, "package.json");
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+  return packageJson;
+}
+
 function emitDeclarations(): void {
   const tsconfigBuildPath = path.join(packageDir, "tsconfig.build.json");
   const typesDir = path.join(packageDir, "dist/types");
@@ -25,6 +31,13 @@ function emitDeclarations(): void {
 }
 
 function prepareStyles(): void {
+  const packageJson = loadPackageJson();
+  if (!Object.keys(packageJson.exports).some((key) => key.endsWith(".css"))) {
+    signale.info(
+      `No styles.css export found in package.json for ${path.basename(packageDir)}`,
+    );
+    return;
+  }
   const rollupCssFilePath = path.join(packageDir, "dist/esm/index.css");
 
   if (!fs.existsSync(rollupCssFilePath)) {
@@ -42,7 +55,10 @@ function prepareStyles(): void {
   }
 
   fs.writeFileSync(path.join(packageDir, "dist/styles.css"), content);
-  fs.writeFileSync(path.join(packageDir, "dist/styles.layer.css"), `@layer mantine {${content}}`);
+  fs.writeFileSync(
+    path.join(packageDir, "dist/styles.layer.css"),
+    `@layer mantine {${content}}`,
+  );
 
   fs.rmSync(rollupCssFilePath);
   fs.rmSync(path.join(packageDir, "dist/cjs/index.css"));

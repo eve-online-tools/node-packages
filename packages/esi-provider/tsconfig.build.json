@@ -1,0 +1,16 @@
+{
+  "extends": "../../internal/tsconfig/build.json",
+  "include": ["src"],
+  "exclude": [
+    "**/*.test.tsx",
+    "**/*.test.ts",
+    "**/*.story.tsx",
+    "**/*.story.ts",
+    "src/cli/**",
+    "dist"
+  ],
+  "compilerOptions": {
+    "rootDir": "src",
+    "declarationDir": "dist/types"
+  }
+}
