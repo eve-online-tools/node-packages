@@ -90,6 +90,8 @@ export const createESIProvider = <Paths extends {}>(
           "App-Name": appName,
           "App-Version": appVersion,
           "User-Agent": userAgent,
+          // Browsers don't like overriding the User-Agent header, ESI also supports `X-User-Agent`
+          "X-User-Agent": userAgent,
           "X-Compatibility-Date": compatibilityDate,
           "X-Tenant": tenant,
         },
