@@ -10,6 +10,7 @@ describe('lookup', () => {
     expect(normalizeResPath('res:/icons/64/icon.png')).toBe('res:/icons/64/icon.png')
     expect(normalizeResPath('res:icons/64/icon.png')).toBe('res:/icons/64/icon.png')
     expect(normalizeResPath('res:/icons/64/icon.png?v=1')).toBe('res:/icons/64/icon.png')
+    expect(normalizeResPath('res:/Icons/64/Icon.PNG')).toBe('res:/icons/64/icon.png')
   })
 
   it('rejects invalid res imports', () => {
@@ -21,6 +22,21 @@ describe('lookup', () => {
   it('looks up CDN paths', () => {
     expect(lookupCdnPath(index, 'res:/icons/64/icon.png')).toBe('icons/icon_123.png')
     expect(lookupCdnPath(index, 'res:/missing.png')).toBeUndefined()
+  })
+
+  it('looks up CDN paths case-insensitively when keys are normalized', () => {
+    expect(lookupCdnPath(index, 'res:/Icons/64/Icon.png')).toBe('icons/icon_123.png')
+    expect(lookupCdnPath(index, 'res:/UI/window.png')).toBe('ui/window_456.png')
+  })
+
+  it('does not scan the map on misses', () => {
+    const index = new Map([['res:/icons/64/icon.png', 'icons/icon_123.png']])
+    const iterateSpy = vi.spyOn(index, Symbol.iterator)
+
+    expect(lookupCdnPath(index, 'res:/missing.png')).toBeUndefined()
+    expect(iterateSpy).not.toHaveBeenCalled()
+
+    iterateSpy.mockRestore()
   })
 
   it('round-trips dev proxy URLs', () => {

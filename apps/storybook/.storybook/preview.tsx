@@ -1,5 +1,4 @@
 import '@mantine/core/styles.css'
-import '@eve-online-tools/mantine-ui/styles.css'
 import { MantineProvider } from '@mantine/core'
 import { useGlobals } from '@storybook/preview-api'
 import type { Preview } from '@storybook/react'

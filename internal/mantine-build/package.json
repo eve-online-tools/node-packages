@@ -1,5 +1,9 @@
 {
   "name": "@repo/mantine-build",
   "version": "0.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@eve-online-tools/eve-resfile": "workspace:*",
+    "@eve-online-tools/eve-sde": "workspace:*"
+  }
 }

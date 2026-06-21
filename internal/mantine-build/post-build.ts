@@ -2,6 +2,7 @@ import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import signale from 'signale'
+import { rebaseStylesCssUrls } from './prepare-styles'
 
 const packageDir = process.env.MANTINE_PACKAGE_DIR ?? process.cwd()
 
@@ -43,7 +44,7 @@ function prepareStyles(): void {
     process.exit(1)
   }
 
-  const content = fs.readFileSync(rollupCssFilePath, 'utf-8')
+  const content = rebaseStylesCssUrls(fs.readFileSync(rollupCssFilePath, 'utf-8'))
 
   if (!content.trim()) {
     signale.error('Extracted CSS is empty.')

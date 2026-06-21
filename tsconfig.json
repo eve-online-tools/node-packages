@@ -9,6 +9,7 @@
     "vitest.setup.ts",
     "oxlint.config.ts"
   ],
+  "exclude": ["**/*.story.tsx", "**/*.story.ts"],
   "compilerOptions": {
     "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
     "noEmit": true

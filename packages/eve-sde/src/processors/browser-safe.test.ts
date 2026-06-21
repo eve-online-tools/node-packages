@@ -14,16 +14,18 @@ const listProcessorDistFiles = (): string[] => {
 }
 
 describe('processors dist bundle', () => {
-  it('does not reference Buffer so browser consumers can import parseJsonlTable', () => {
-    const files = listProcessorDistFiles()
+  const processorDistFiles = listProcessorDistFiles()
 
-    expect(files.length).toBeGreaterThan(0)
-
-    for (const file of files) {
-      const content = readFileSync(join(packageRoot, file), 'utf8')
-      expect(content, file).not.toMatch(/\bBuffer\b/)
-    }
+  it('ships at least one processor dist file', () => {
+    expect(processorDistFiles.length).toBeGreaterThan(0)
   })
+
+  for (const file of processorDistFiles) {
+    it(`does not reference Buffer in ${file}`, () => {
+      const content = readFileSync(join(packageRoot, file), 'utf8')
+      expect(content).not.toMatch(/\bBuffer\b/)
+    })
+  }
 
   it('parseJsonlTable works when Buffer is unavailable', async () => {
     const originalBuffer = globalThis.Buffer

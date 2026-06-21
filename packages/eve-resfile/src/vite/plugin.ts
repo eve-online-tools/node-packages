@@ -1,34 +1,32 @@
 import type { Plugin } from 'vite'
 
-import { DEFAULT_ASSET_ORIGIN } from '../constants'
+import { ensureResfileIndex, type ResfileBuildContext } from '../context'
+import { createFetchConcurrencyGate } from '../fetch-concurrency'
 import { createDevProxyMiddleware } from '../dev-middleware'
-import { loadResfileIndexData } from '../index-loader'
 import {
   asJsLoadResult,
+  fetchOptionsFor,
   formatRollupAssetModule,
   isVirtualResId,
   loadResfileAssetModule,
+  resetFetchFailureLog,
   resolveEveResfileOptions,
   resolveResfileId,
   resPathFromVirtualId,
+  summarizeFetchFailures,
 } from '../plugin-core'
-import type { EveResfileOptions, ResfileIndex, ResolvedEveResfileOptions } from '../types'
+import type { EveResfileOptions } from '../types'
 
-export const eveResfile = (options: EveResfileOptions = {}): Plugin => {
-  let resolvedOptions: ResolvedEveResfileOptions | null = null
-  let indexPromise: Promise<ResfileIndex> | null = null
-  let loadedIndex: ResfileIndex | null = null
+const configNotResolvedError =
+  '[eve-resfile] Vite configResolved must run before configureServer. Ensure the eve-resfile plugin is registered in vite.config plugins.'
 
-  const ensureIndex = (): Promise<ResfileIndex> => {
-    if (!resolvedOptions) {
-      throw new Error('@eve-online-tools/eve-resfile/vite: configResolved has not run yet.')
-    }
+export const createViteResfilePlugin = (ctx: ResfileBuildContext, options: EveResfileOptions = {}): Plugin => {
+  let viteConfigResolved = false
 
-    indexPromise ??= loadResfileIndexData(resolvedOptions).then((index) => {
-      loadedIndex = index
-      return index
-    })
-    return indexPromise
+  if (options.root) {
+    ctx.options = resolveEveResfileOptions(options, options.root)
+    ctx.packageRoot = options.root
+    ctx.fetchConcurrencyGate = createFetchConcurrencyGate(ctx.options.fetchConcurrency)
   }
 
   return {
@@ -36,19 +34,38 @@ export const eveResfile = (options: EveResfileOptions = {}): Plugin => {
     enforce: 'pre',
 
     configResolved(config) {
-      resolvedOptions = resolveEveResfileOptions(options, config.root)
+      ctx.options = resolveEveResfileOptions(options, config.root)
+      ctx.packageRoot = config.root
+      ctx.fetchConcurrencyGate = createFetchConcurrencyGate(ctx.options.fetchConcurrency)
+      viteConfigResolved = true
     },
 
     async buildStart() {
-      const index = await ensureIndex()
+      resetFetchFailureLog()
+      const index = await ensureResfileIndex(ctx)
       this.info(`Loaded EVE resfileindex (build ${index.buildNumber}, ${index.resPathToCdnPath.size} entries).`)
+    },
+
+    buildEnd() {
+      if (!this.meta.watchMode) {
+        summarizeFetchFailures(ctx.options.fetchConcurrency)
+      }
     },
 
     configureServer: {
       order: 'pre',
       handler(server) {
+        if (!viteConfigResolved) {
+          throw new Error(configNotResolvedError)
+        }
+
         server.middlewares.use(
-          createDevProxyMiddleware(ensureIndex, resolvedOptions?.assetOrigin ?? DEFAULT_ASSET_ORIGIN),
+          createDevProxyMiddleware(
+            () => ensureResfileIndex(ctx),
+            () => ctx.options.assetOrigin,
+            () => ctx.options.missingResPath,
+            () => ctx.options.fetchTimeoutMs,
+          ),
         )
       },
     },
@@ -61,18 +78,21 @@ export const eveResfile = (options: EveResfileOptions = {}): Plugin => {
       if (!isVirtualResId(id)) {
         return null
       }
-      if (!resolvedOptions) {
-        throw new Error('@eve-online-tools/eve-resfile/vite: configResolved has not run yet.')
+
+      if (!viteConfigResolved) {
+        throw new Error(configNotResolvedError)
       }
 
+      const index = ctx.index ?? (await ensureResfileIndex(ctx))
       const resPath = resPathFromVirtualId(id)
-      const index = loadedIndex ?? (await ensureIndex())
 
       const code = await loadResfileAssetModule({
         watchMode: this.meta.watchMode,
-        assetOrigin: resolvedOptions.assetOrigin,
+        assetOrigin: ctx.options.assetOrigin,
         index,
         resPath,
+        missingResPath: ctx.options.missingResPath,
+        fetchOptions: fetchOptionsFor(ctx.options, ctx.fetchConcurrencyGate),
         emitAsset: (name, source) =>
           this.emitFile({
             type: 'asset',

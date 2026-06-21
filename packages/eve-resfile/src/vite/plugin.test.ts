@@ -2,17 +2,16 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 
-import { eveResfile } from './plugin'
-
-const getHook = <T extends (...args: never[]) => unknown>(hook: T | { handler: T } | undefined): T | undefined => {
-  if (!hook) {
-    return undefined
-  }
-  if (typeof hook === 'function') {
-    return hook
-  }
-  return hook.handler
-}
+import {
+  getPluginHook,
+  mockBuildNumber,
+  samplePngBytes,
+  sampleResPath,
+  stubResfileCdnFetch,
+  testAllowedHosts,
+} from '../test-utils/mock-cdn'
+import { createEveResfileIntegration } from '../integration-factory'
+import { eveResfile, vitePlugin } from './index'
 
 describe('vite plugin', () => {
   let cacheDir: string
@@ -26,51 +25,28 @@ describe('vite plugin', () => {
     vi.restoreAllMocks()
   })
 
-  const stubIndexFetch = () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (url: string | URL) => {
-        const href = String(url)
-
-        if (href.endsWith('/eveonline_123456.txt')) {
-          return new Response('app:/resfileindex.txt,resindex/resfileindex.txt,hash')
-        }
-
-        if (href.endsWith('/resindex/resfileindex.txt')) {
-          return new Response('res:/icons/64/icon.png,icons/icon_123.png,hash')
-        }
-
-        if (href.endsWith('/icons/icon_123.png')) {
-          return new Response(Buffer.from('png-bytes'))
-        }
-
-        throw new Error(`Unexpected fetch: ${href}`)
-      }),
-    )
-  }
-
   it('resolves res imports and loads dev proxy modules in watch mode', async () => {
-    stubIndexFetch()
+    stubResfileCdnFetch()
 
-    const plugin = eveResfile({ buildNumber: '123456', cacheDir, root: cacheDir })
+    const plugin = eveResfile({ buildNumber: mockBuildNumber, cacheDir, root: cacheDir })
     const context = {
       meta: { watchMode: true },
       info: vi.fn(),
       emitFile: vi.fn(() => 'asset-ref'),
     }
 
-    await getHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never)
-    await getHook(plugin.buildStart)?.call(context as never, {} as never)
+    await getPluginHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never)
+    await getPluginHook(plugin.buildStart)?.call(context as never, {} as never)
 
-    const resolvedId = await getHook(plugin.resolveId)?.call(
+    const resolvedId = await getPluginHook(plugin.resolveId)?.call(
       context as never,
-      'res:/icons/64/icon.png',
+      sampleResPath,
       undefined,
       {} as never,
     )
-    expect(resolvedId).toContain('res:/icons/64/icon.png')
+    expect(resolvedId).toContain(sampleResPath)
 
-    const moduleSource = await getHook(plugin.load)?.call(context as never, resolvedId as string)
+    const moduleSource = await getPluginHook(plugin.load)?.call(context as never, resolvedId as string)
     expect(moduleSource).toEqual({
       code: 'export default "/__eve_res__/icons%2F64%2Ficon.png"',
       moduleType: 'js',
@@ -78,26 +54,26 @@ describe('vite plugin', () => {
   })
 
   it('emits CDN assets in production builds', async () => {
-    stubIndexFetch()
+    stubResfileCdnFetch({ includeAssets: true })
 
-    const plugin = eveResfile({ buildNumber: '123456', cacheDir, root: cacheDir })
+    const plugin = eveResfile({ buildNumber: mockBuildNumber, cacheDir, root: cacheDir })
     const context = {
       meta: { watchMode: false },
       info: vi.fn(),
       emitFile: vi.fn(() => 'asset-ref'),
     }
 
-    await getHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never)
-    await getHook(plugin.buildStart)?.call(context as never, {} as never)
+    await getPluginHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never)
+    await getPluginHook(plugin.buildStart)?.call(context as never, {} as never)
 
-    const resolvedId = await getHook(plugin.resolveId)?.call(
+    const resolvedId = await getPluginHook(plugin.resolveId)?.call(
       context as never,
-      'res:/icons/64/icon.png',
+      sampleResPath,
       undefined,
       {} as never,
     )
 
-    const moduleSource = await getHook(plugin.load)?.call(context as never, resolvedId as string)
+    const moduleSource = await getPluginHook(plugin.load)?.call(context as never, resolvedId as string)
     expect(moduleSource).toEqual({
       code: 'export default import.meta.ROLLUP_FILE_URL_asset-ref',
       moduleType: 'js',
@@ -105,7 +81,90 @@ describe('vite plugin', () => {
     expect(context.emitFile).toHaveBeenCalledWith({
       type: 'asset',
       name: 'icon.png',
-      source: Buffer.from('png-bytes'),
+      source: samplePngBytes,
     })
+  })
+
+  it('throws when configureServer runs before configResolved', () => {
+    const integration = createEveResfileIntegration({ buildNumber: mockBuildNumber, cacheDir, root: cacheDir })
+    const plugin = vitePlugin(integration)
+    const context = {
+      meta: { watchMode: true },
+      info: vi.fn(),
+      emitFile: vi.fn(() => 'asset-ref'),
+    }
+
+    const configureServer = plugin.configureServer
+    const handler = typeof configureServer === 'function' ? configureServer : configureServer?.handler
+
+    expect(() =>
+      handler?.call(
+        context as never,
+        {
+          middlewares: {
+            use: vi.fn(),
+          },
+        } as never,
+      ),
+    ).toThrow('configResolved must run before configureServer')
+  })
+
+  it('uses configured assetOrigin in dev middleware', async () => {
+    const fetchMock = stubResfileCdnFetch({ includeAssets: true })
+
+    const integration = createEveResfileIntegration({
+      buildNumber: mockBuildNumber,
+      cacheDir,
+      root: cacheDir,
+      indexOrigin: 'https://binaries.test',
+      assetOrigin: 'https://resources.test',
+      allowedHosts: testAllowedHosts,
+    })
+    const plugin = vitePlugin(integration)
+    const context = {
+      meta: { watchMode: true },
+      info: vi.fn(),
+      emitFile: vi.fn(() => 'asset-ref'),
+    }
+
+    await getPluginHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never)
+    await getPluginHook(plugin.buildStart)?.call(context as never, {} as never)
+
+    const middlewares: Array<
+      (
+        req: { url?: string; method?: string },
+        res: { statusCode: number; setHeader: (name: string, value: string) => void; end: (body?: Buffer) => void },
+        next: () => void,
+      ) => void | Promise<void>
+    > = []
+
+    const configureServer = plugin.configureServer
+    const handler = typeof configureServer === 'function' ? configureServer : configureServer?.handler
+
+    handler?.call(
+      context as never,
+      {
+        middlewares: {
+          use(middleware: (typeof middlewares)[number]) {
+            middlewares.push(middleware)
+          },
+        },
+      } as never,
+    )
+
+    const next = vi.fn()
+    const response = {
+      statusCode: 200,
+      setHeader: vi.fn(),
+      end: vi.fn(),
+    }
+
+    await middlewares[0]?.({ url: '/__eve_res__/icons%2F64%2Ficon.png', method: 'GET' }, response, next)
+
+    expect(next).not.toHaveBeenCalled()
+    expect(fetchMock.mock.calls.some((call) => String(call[0]) === 'https://resources.test/icons/icon_123.png')).toBe(
+      true,
+    )
+    expect(response.end).toHaveBeenCalledWith(samplePngBytes)
   })
 })
