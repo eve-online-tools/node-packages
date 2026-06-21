@@ -6,93 +6,90 @@ import {
   resolveResfileId,
   resPathFromVirtualId,
   virtualIdForResPath,
-} from "./plugin-core";
-import type { ResfileIndex } from "./types";
+} from './plugin-core'
+import type { ResfileIndex } from './types'
 
-describe("plugin-core", () => {
+describe('plugin-core', () => {
   const index: ResfileIndex = {
-    buildNumber: "123456",
-    resPathToCdnPath: new Map([["res:/icons/64/icon.png", "icons/icon_123.png"]]),
-  };
+    buildNumber: '123456',
+    resPathToCdnPath: new Map([['res:/icons/64/icon.png', 'icons/icon_123.png']]),
+  }
 
-  it("resolves res imports to virtual module ids", () => {
-    expect(resolveResfileId("res:/icons/64/icon.png")).toBe(
-      virtualIdForResPath("res:/icons/64/icon.png"),
-    );
-    expect(resolveResfileId("./local-file.png")).toBeNull();
-  });
+  it('resolves res imports to virtual module ids', () => {
+    expect(resolveResfileId('res:/icons/64/icon.png')).toBe(virtualIdForResPath('res:/icons/64/icon.png'))
+    expect(resolveResfileId('./local-file.png')).toBeNull()
+  })
 
-  it("extracts res paths from virtual ids", () => {
-    const virtualId = virtualIdForResPath("res:/icons/64/icon.png");
-    expect(resPathFromVirtualId(virtualId)).toBe("res:/icons/64/icon.png");
-  });
+  it('extracts res paths from virtual ids', () => {
+    const virtualId = virtualIdForResPath('res:/icons/64/icon.png')
+    expect(resPathFromVirtualId(virtualId)).toBe('res:/icons/64/icon.png')
+  })
 
-  it("throws when a res path is missing from the index", () => {
-    expect(() => lookupOrThrow(index, "res:/missing.png")).toThrow(
-      "res:/missing.png not found in resfileindex (build 123456).",
-    );
-  });
+  it('throws when a res path is missing from the index', () => {
+    expect(() => lookupOrThrow(index, 'res:/missing.png')).toThrow(
+      'res:/missing.png not found in resfileindex (build 123456).',
+    )
+  })
 
-  it("wraps generated module sources for Rolldown load hooks", () => {
+  it('wraps generated module sources for Rolldown load hooks', () => {
     expect(asJsLoadResult('export default "asset-url"')).toEqual({
       code: 'export default "asset-url"',
-      moduleType: "js",
-    });
-  });
+      moduleType: 'js',
+    })
+  })
 
-  it("returns dev proxy modules in watch mode", async () => {
+  it('returns dev proxy modules in watch mode', async () => {
     const moduleSource = await loadResfileAssetModule({
       watchMode: true,
-      assetOrigin: "https://resources.test",
+      assetOrigin: 'https://resources.test',
       index,
-      resPath: "res:/icons/64/icon.png",
-      emitAsset: () => "asset-ref",
+      resPath: 'res:/icons/64/icon.png',
+      emitAsset: () => 'asset-ref',
       formatAssetModule: formatRollupAssetModule,
-    });
+    })
 
-    expect(moduleSource).toBe('export default "/__eve_res__/icons%2F64%2Ficon.png"');
-  });
+    expect(moduleSource).toBe('export default "/__eve_res__/icons%2F64%2Ficon.png"')
+  })
 
-  it("fetches assets and emits file references in build mode", async () => {
+  it('fetches assets and emits file references in build mode', async () => {
     vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => new Response(Buffer.from("png-bytes"))),
-    );
+      'fetch',
+      vi.fn(async () => new Response(Buffer.from('png-bytes'))),
+    )
 
     const moduleSource = await loadResfileAssetModule({
       watchMode: false,
-      assetOrigin: "https://resources.test",
+      assetOrigin: 'https://resources.test',
       index,
-      resPath: "res:/icons/64/icon.png",
+      resPath: 'res:/icons/64/icon.png',
       emitAsset: (name, source) => {
-        expect(name).toBe("icon.png");
-        expect(source.toString()).toBe("png-bytes");
-        return "asset-ref";
+        expect(name).toBe('icon.png')
+        expect(source.toString()).toBe('png-bytes')
+        return 'asset-ref'
       },
       formatAssetModule: formatRollupAssetModule,
-    });
+    })
 
-    expect(moduleSource).toBe("export default import.meta.ROLLUP_FILE_URL_asset-ref");
-    vi.unstubAllGlobals();
-  });
+    expect(moduleSource).toBe('export default import.meta.ROLLUP_FILE_URL_asset-ref')
+    vi.unstubAllGlobals()
+  })
 
-  it("uses a custom asset module formatter in build mode", async () => {
+  it('uses a custom asset module formatter in build mode', async () => {
     vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => new Response(Buffer.from("png-bytes"))),
-    );
+      'fetch',
+      vi.fn(async () => new Response(Buffer.from('png-bytes'))),
+    )
 
     const moduleSource = await loadResfileAssetModule({
       watchMode: false,
-      assetOrigin: "https://resources.test",
+      assetOrigin: 'https://resources.test',
       index,
-      resPath: "res:/icons/64/icon.png",
-      emitAsset: () => "emitted/icon.png",
-      formatAssetModule: (filename) =>
-        `export default __webpack_public_path__ + ${JSON.stringify(filename)}`,
-    });
+      resPath: 'res:/icons/64/icon.png',
+      emitAsset: () => 'emitted/icon.png',
+      formatAssetModule: (filename) => `export default __webpack_public_path__ + ${JSON.stringify(filename)}`,
+    })
 
-    expect(moduleSource).toBe('export default __webpack_public_path__ + "emitted/icon.png"');
-    vi.unstubAllGlobals();
-  });
-});
+    expect(moduleSource).toBe('export default __webpack_public_path__ + "emitted/icon.png"')
+    vi.unstubAllGlobals()
+  })
+})

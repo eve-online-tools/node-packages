@@ -1,11 +1,11 @@
-import type { Middleware, MiddlewareAction } from "../../esi-provider/types";
-import { BucketGate } from "./concurrency";
+import type { Middleware, MiddlewareAction } from '../../esi-provider/types'
+import { BucketGate } from './concurrency'
 import {
   RATE_LIMIT_MIDDLEWARE_KEY,
   type RateLimitState,
   type SetBucketPayload,
   type SetPathGroupPayload,
-} from "./types";
+} from './types'
 import {
   applyInFlightPenalty,
   calculateWaitMs,
@@ -13,26 +13,23 @@ import {
   getBucket,
   parseRateLimitLimitHeader,
   sleep,
-} from "./utils";
+} from './utils'
 
 const initialState: RateLimitState = {
   buckets: {},
   pathGroups: {},
-};
+}
 
-const SET_BUCKET = "setBucket";
-const SET_PATH_GROUP = "setPathGroup";
+const SET_BUCKET = 'setBucket'
+const SET_PATH_GROUP = 'setPathGroup'
 
-const DEFAULT_IN_FLIGHT_TOKEN_COST = 2;
+const DEFAULT_IN_FLIGHT_TOKEN_COST = 2
 
-const reducer = (
-  state: RateLimitState,
-  action: MiddlewareAction,
-): RateLimitState => {
+const reducer = (state: RateLimitState, action: MiddlewareAction): RateLimitState => {
   switch (action.type) {
     case SET_BUCKET: {
-      const payload = action.payload as SetBucketPayload;
-      const groupBuckets = state.buckets[payload.group] ?? {};
+      const payload = action.payload as SetBucketPayload
+      const groupBuckets = state.buckets[payload.group] ?? {}
       return {
         ...state,
         buckets: {
@@ -48,87 +45,85 @@ const reducer = (
             },
           },
         },
-      };
+      }
     }
     case SET_PATH_GROUP: {
-      const payload = action.payload as SetPathGroupPayload;
+      const payload = action.payload as SetPathGroupPayload
       return {
         ...state,
         pathGroups: {
           ...state.pathGroups,
           [payload.schemaPath]: payload.group,
         },
-      };
+      }
     }
     default:
-      return state;
+      return state
   }
-};
+}
 
 export type RateLimitMiddlewareOptions = {
-  minTokens?: number;
-  usageThreshold?: number;
+  minTokens?: number
+  usageThreshold?: number
   /** Estimated token cost per in-flight request (ESI charges 2 for 2xx). */
-  inFlightTokenCost?: number;
-};
+  inFlightTokenCost?: number
+}
 
-export const createRateLimitMiddleware = (
-  options: RateLimitMiddlewareOptions = {},
-): Middleware<RateLimitState> => {
-  const minTokens = options.minTokens ?? 5;
-  const usageThreshold = options.usageThreshold ?? 0.5;
-  const inFlightTokenCost = options.inFlightTokenCost ?? DEFAULT_IN_FLIGHT_TOKEN_COST;
-  const gate = new BucketGate();
+export const createRateLimitMiddleware = (options: RateLimitMiddlewareOptions = {}): Middleware<RateLimitState> => {
+  const minTokens = options.minTokens ?? 5
+  const usageThreshold = options.usageThreshold ?? 0.5
+  const inFlightTokenCost = options.inFlightTokenCost ?? DEFAULT_IN_FLIGHT_TOKEN_COST
+  const gate = new BucketGate()
 
   return {
     key: RATE_LIMIT_MIDDLEWARE_KEY,
     initialState,
     reducer,
     onRequest: async ({ request, schemaPath, getState, id }) => {
-      const rateLimitKey = extractRateLimitKey(request);
-      const group = getState().pathGroups[schemaPath];
+      const rateLimitKey = extractRateLimitKey(request)
+      const group = getState().pathGroups[schemaPath]
       if (!group) {
-        return;
+        return
       }
 
-      const bucket = getBucket(getState().buckets, group, rateLimitKey);
+      const bucket = getBucket(getState().buckets, group, rateLimitKey)
       if (!bucket) {
-        return;
+        return
       }
 
       await gate.runWithBucket(id, group, rateLimitKey, async () => {
-        const inFlight = gate.getInFlight(group, rateLimitKey);
-        const adjustedBucket = applyInFlightPenalty(bucket, inFlight, inFlightTokenCost);
-        const waitMs = calculateWaitMs(adjustedBucket, { minTokens, usageThreshold });
+        const inFlight = gate.getInFlight(group, rateLimitKey)
+        const adjustedBucket = applyInFlightPenalty(bucket, inFlight, inFlightTokenCost)
+        const waitMs = calculateWaitMs(adjustedBucket, { minTokens, usageThreshold })
         if (waitMs > 0) {
-          await sleep(waitMs);
+          await sleep(waitMs)
         }
-      });
+      })
     },
     onResponse: ({ request, schemaPath, response, dispatch, id }) => {
-      gate.release(id);
+      gate.release(id)
 
-      const group = response.headers.get("X-Ratelimit-Group");
+      const group = response.headers.get('X-Ratelimit-Group')
       if (!group) {
-        return;
+        return
       }
 
-      const limitHeader = response.headers.get("X-Ratelimit-Limit");
-      const remainingHeader = response.headers.get("X-Ratelimit-Remaining");
-      const parsedLimit = parseRateLimitLimitHeader(limitHeader);
-      const remaining = Number(remainingHeader);
+      const limitHeader = response.headers.get('X-Ratelimit-Limit')
+      const remainingHeader = response.headers.get('X-Ratelimit-Remaining')
+      const parsedLimit = parseRateLimitLimitHeader(limitHeader)
+      const remaining = Number(remainingHeader)
 
       if (!parsedLimit || !Number.isFinite(remaining)) {
-        return;
+        return
       }
 
-      const rateLimitKey = extractRateLimitKey(request);
-      const updatedAt = Date.now();
+      const rateLimitKey = extractRateLimitKey(request)
+      const updatedAt = Date.now()
 
       dispatch({
         type: SET_PATH_GROUP,
         payload: { schemaPath, group },
-      });
+      })
 
       dispatch({
         type: SET_BUCKET,
@@ -141,10 +136,10 @@ export const createRateLimitMiddleware = (
           windowLabel: parsedLimit.windowLabel,
           updatedAt,
         },
-      });
+      })
     },
     onError: ({ id }) => {
-      gate.release(id);
+      gate.release(id)
     },
-  };
-};
+  }
+}
