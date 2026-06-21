@@ -1,6 +1,6 @@
 {
   "name": "@eve-online-tools/esi-provider",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "ESI provider for React",
   "license": "MIT",
   "publishConfig": {
