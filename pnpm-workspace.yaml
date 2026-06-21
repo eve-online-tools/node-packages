@@ -6,6 +6,8 @@ packages:
 catalog:
   '@mantine/core': 9.3.1
   '@mantine/hooks': 9.3.1
+  '@use-gesture/react': 10.3.1
+  motion: 12.41.0
   '@storybook/addon-essentials': 8.6.18
   '@storybook/react': 8.6.18
   '@storybook/react-vite': 8.6.18

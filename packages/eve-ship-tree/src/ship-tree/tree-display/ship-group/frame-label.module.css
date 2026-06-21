@@ -1,0 +1,8 @@
+.root {
+  fill: #fff;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: var(--mantine-font-size-sm);
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+}

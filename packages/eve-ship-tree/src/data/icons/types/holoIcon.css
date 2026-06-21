@@ -1,0 +1,2275 @@
+[data-type-id='582'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf1/icons/cf1_t1_isis.png');
+}
+
+[data-type-id='583'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf2/icons/cf2_t1_isis.png');
+}
+
+[data-type-id='584'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf4/icons/cf4_t1_isis.png');
+}
+
+[data-type-id='585'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf1/icons/mf1_t1_isis.png');
+}
+
+[data-type-id='586'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf2/icons/mf2_t1_isis.png');
+}
+
+[data-type-id='587'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf4/icons/mf4_t1_isis.png');
+}
+
+[data-type-id='588'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf3/icons/mf3_t1_isis.png');
+}
+
+[data-type-id='589'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af4/icons/af4_t1_isis.png');
+}
+
+[data-type-id='590'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af5/icons/af5_t1_isis.png');
+}
+
+[data-type-id='591'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af6/icons/af6_t1_isis.png');
+}
+
+[data-type-id='592'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf2/icons/gf2_t1_isis.png');
+}
+
+[data-type-id='593'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf3/icons/gf3_t1_isis.png');
+}
+
+[data-type-id='594'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf4/icons/gf4_t1_isis.png');
+}
+
+[data-type-id='595'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf8/icons/gf8_t1_isis.png');
+}
+
+[data-type-id='596'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af1/icons/af1_t1_isis.png');
+}
+
+[data-type-id='597'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af3/icons/af3_t1_isis.png');
+}
+
+[data-type-id='598'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf5/icons/mf5_t1_isis.png');
+}
+
+[data-type-id='599'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf6/icons/mf6_t1_isis.png');
+}
+
+[data-type-id='600'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf8/icons/mf8_t1_isis.png');
+}
+
+[data-type-id='601'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf5/icons/cf5_t1_isis.png');
+}
+
+[data-type-id='602'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf6/icons/cf6_t1_isis.png');
+}
+
+[data-type-id='603'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf7/icons/cf7_t1_isis.png');
+}
+
+[data-type-id='605'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf3/icons/cf3_t1_isis.png');
+}
+
+[data-type-id='606'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf1/icons/gf1_t1_isis.png');
+}
+
+[data-type-id='607'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf5/icons/gf5_t1_isis.png');
+}
+
+[data-type-id='608'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf6/icons/gf6_t1_isis.png');
+}
+
+[data-type-id='609'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf7/icons/gf7_t1_isis.png');
+}
+
+[data-type-id='613'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/frigate/angf2/icons/angf2_t1_isis.png');
+}
+
+[data-type-id='614'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/frigate/angf3/icons/angf3_t1_isis.png');
+}
+
+[data-type-id='615'] {
+  --types-holo-icon: url('res:/dx9/model/ship/sansha/frigate/sf3/icons/sf3_t1_isis.png');
+}
+
+[data-type-id='616'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/frigate/angf5/icons/angf5_t1_isis.png');
+}
+
+[data-type-id='617'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/frigate/angf6/icons/angf6_t1_isis.png');
+}
+
+[data-type-id='618'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/frigate/angf7/icons/angf7_t1_isis.png');
+}
+
+[data-type-id='619'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/frigate/angf4/icons/angf4_t1_isis.png');
+}
+
+[data-type-id='620'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc1/icons/cc1_t1_isis.png');
+}
+
+[data-type-id='621'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc3/icons/cc3_t1_isis.png');
+}
+
+[data-type-id='622'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc1/icons/mc1_t1_isis.png');
+}
+
+[data-type-id='623'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc2/icons/cc2_t1_isis.png');
+}
+
+[data-type-id='624'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac2/icons/ac2_t1_isis.png');
+}
+
+[data-type-id='625'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac3/icons/ac3_t1_isis.png');
+}
+
+[data-type-id='626'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc3/icons/gc3_t1_isis.png');
+}
+
+[data-type-id='627'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc4/icons/gc4_t1_isis.png');
+}
+
+[data-type-id='628'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac1/icons/ac1_t1_isis.png');
+}
+
+[data-type-id='629'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc2/icons/mc2_t1_isis.png');
+}
+
+[data-type-id='630'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc3/icons/mc3_t1_isis.png');
+}
+
+[data-type-id='631'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc4/icons/mc4_t1_isis.png');
+}
+
+[data-type-id='632'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc4/icons/cc4_t1_isis.png');
+}
+
+[data-type-id='633'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc1/icons/gc1_t1_isis.png');
+}
+
+[data-type-id='634'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc2/icons/gc2_t1_isis.png');
+}
+
+[data-type-id='635'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gy1/icons/gy1_t1_isis.png');
+}
+
+[data-type-id='638'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t1_isis.png');
+}
+
+[data-type-id='639'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t1_isis.png');
+}
+
+[data-type-id='640'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb2/icons/cb2_t1_isis.png');
+}
+
+[data-type-id='641'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t1_isis.png');
+}
+
+[data-type-id='642'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t1_isis.png');
+}
+
+[data-type-id='643'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab2/icons/ab2_t1_isis.png');
+}
+
+[data-type-id='644'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb1/icons/mb1_t1_isis.png');
+}
+
+[data-type-id='645'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb1/icons/gb1_t1_isis.png');
+}
+
+[data-type-id='648'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/industrial/ci1/icons/ci1_t1_isis.png');
+}
+
+[data-type-id='649'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/industrial/ci2/icons/ci2_t1_isis.png');
+}
+
+[data-type-id='650'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi1/icons/gi1_t1_isis.png');
+}
+
+[data-type-id='651'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/industrial/mi1/icons/mi1_t1_isis.png');
+}
+
+[data-type-id='652'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/industrial/mi2/icons/mi2_t1_isis.png');
+}
+
+[data-type-id='653'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/industrial/mi3/icons/mi3_t1_isis.png');
+}
+
+[data-type-id='654'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi2/icons/gi2_t1_isis.png');
+}
+
+[data-type-id='655'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi3/icons/gi3_t1_isis.png');
+}
+
+[data-type-id='656'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi4/icons/gi4_t1_isis.png');
+}
+
+[data-type-id='657'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi5/icons/gi5_t1_isis.png');
+}
+
+[data-type-id='670'] {
+  --types-holo-icon: url('res:/dx9/model/ship/jove/capsule/cap1/icons/cap1_t1_isis.png');
+}
+
+[data-type-id='671'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/titan/gt1/icons/gt1_t1_isis.png');
+}
+
+[data-type-id='672'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/shuttle/cs1/icons/cs1_t1_isis.png');
+}
+
+[data-type-id='1233'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf2/icons/conf2_t1_isis.png');
+}
+
+[data-type-id='1896'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf1/icons/conf1_t1_isis.png');
+}
+
+[data-type-id='1898'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf1/icons/conf1_t1_isis.png');
+}
+
+[data-type-id='1900'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf1/icons/conf1_t1_isis.png');
+}
+
+[data-type-id='1902'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf1/icons/conf1_t1_isis.png');
+}
+
+[data-type-id='1904'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/cruiser/conc1/icons/conc1_t1_isis.png');
+}
+
+[data-type-id='1912'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/battleship/conb1/icons/conb1_t1_isis.png');
+}
+
+[data-type-id='1914'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/battleship/conb1/icons/conb1_t1_isis.png');
+}
+
+[data-type-id='1916'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/battleship/conb1/icons/conb1_t1_isis.png');
+}
+
+[data-type-id='1918'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/battleship/conb1/icons/conb1_t1_isis.png');
+}
+
+[data-type-id='1944'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/industrial/ai1/icons/ai1_t1_isis.png');
+}
+
+[data-type-id='2006'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac4/icons/ac4_t1_isis.png');
+}
+
+[data-type-id='2078'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf5/icons/conf5_t1_isis.png');
+}
+
+[data-type-id='2161'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af2/icons/af2_t1_isis.png');
+}
+
+[data-type-id='2834'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf4/icons/gf4_tournament_isis.png');
+}
+
+[data-type-id='2836'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc4/icons/gc4_tournament_isis.png');
+}
+
+[data-type-id='2863'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/battleship/oreb1/icons/oreb1_t1a_isis.png');
+}
+
+[data-type-id='2998'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/battleship/oreb1/icons/oreb1_t1b_isis.png');
+}
+
+[data-type-id='3514'] {
+  --types-holo-icon: url('res:/dx9/model/ship/sansha/carrier/sca1/icons/sca1_t1_isis.png');
+}
+
+[data-type-id='3516'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af3/icons/af3_ix_isis.png');
+}
+
+[data-type-id='3518'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac2/icons/ac2_ix_isis.png');
+}
+
+[data-type-id='3532'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf3/icons/conf3_t1_isis.png');
+}
+
+[data-type-id='3628'] {
+  --types-holo-icon: url('res:/dx9/model/ship/sansha/carrier/sca1/icons/sca1_t1_isis.png');
+}
+
+[data-type-id='3751'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soct/frigate/soctf1/icons/soctf1_t1_isis.png');
+}
+
+[data-type-id='3753'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soct/destroyer/soctde1/icons/soctde1_t1_isis.png');
+}
+
+[data-type-id='3756'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soct/battlecruiser/soctbc1/icons/soctbc1_t1_isis.png');
+}
+
+[data-type-id='3764'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/titan/ct1/icons/ct1_t1_isis.png');
+}
+
+[data-type-id='3766'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf7/icons/mf7_t1_isis.png');
+}
+
+[data-type-id='3768'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af9/icons/af9_t1_isis.png');
+}
+
+[data-type-id='4005'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb2/icons/cb2_t1_isis.png');
+}
+
+[data-type-id='4302'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc3/icons/abc3_t1_isis.png');
+}
+
+[data-type-id='4306'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc3/icons/cbc3_t1_isis.png');
+}
+
+[data-type-id='4308'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battlecruiser/gbc3/icons/gbc3_t1_isis.png');
+}
+
+[data-type-id='4310'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battlecruiser/mbc3/icons/mbc3_t1_isis.png');
+}
+
+[data-type-id='4363'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi4/icons/gi4_t1_isis.png');
+}
+
+[data-type-id='4388'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi4/icons/gi4_t1_isis.png');
+}
+
+[data-type-id='9854'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf2/icons/conf2_t1_isis.png');
+}
+
+[data-type-id='9858'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf2/icons/conf2_t1_isis.png');
+}
+
+[data-type-id='9860'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf2/icons/conf2_t1_isis.png');
+}
+
+[data-type-id='9862'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf2/icons/conf2_t1_isis.png');
+}
+
+[data-type-id='11011'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc3/icons/gc3_t1_isis.png');
+}
+
+[data-type-id='11019'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf4/icons/conf4_t1_isis.png');
+}
+
+[data-type-id='11129'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gs1/icons/gs1_t1_isis.png');
+}
+
+[data-type-id='11132'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/shuttle/ms1/icons/ms1_t1_isis.png');
+}
+
+[data-type-id='11134'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/shuttle/as1/icons/as1_t1_isis.png');
+}
+
+[data-type-id='11172'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf5/icons/gf5_t2_isis.png');
+}
+
+[data-type-id='11174'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf7/icons/gf7_t2_isis.png');
+}
+
+[data-type-id='11176'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf2/icons/cf2_t2a_isis.png');
+}
+
+[data-type-id='11178'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf2/icons/cf2_t2b_isis.png');
+}
+
+[data-type-id='11182'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf2/icons/mf2_t2b_isis.png');
+}
+
+[data-type-id='11184'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af4/icons/af4_t2b_isis.png');
+}
+
+[data-type-id='11186'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af4/icons/af4_t2a_isis.png');
+}
+
+[data-type-id='11188'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af7/icons/af7_t2_isis.png');
+}
+
+[data-type-id='11190'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af2/icons/af2_t2_isis.png');
+}
+
+[data-type-id='11192'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf3/icons/cf3_t2_isis.png');
+}
+
+[data-type-id='11194'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf4/icons/cf4_t2_isis.png');
+}
+
+[data-type-id='11196'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf1/icons/mf1_t2a_isis.png');
+}
+
+[data-type-id='11198'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf1/icons/mf1_t2c_isis.png');
+}
+
+[data-type-id='11200'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf6/icons/gf6_t2b_isis.png');
+}
+
+[data-type-id='11202'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf6/icons/gf6_t2a_isis.png');
+}
+
+[data-type-id='11365'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af3/icons/af3_t2a_isis.png');
+}
+
+[data-type-id='11371'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf4/icons/mf4_t2a_isis.png');
+}
+
+[data-type-id='11373'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf4/icons/mf4_t1_isis.png');
+}
+
+[data-type-id='11375'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf3/icons/gf3_t1_isis.png');
+}
+
+[data-type-id='11377'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf3/icons/gf3_t2_isis.png');
+}
+
+[data-type-id='11379'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf7/icons/cf7_t2a_isis.png');
+}
+
+[data-type-id='11381'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf7/icons/cf7_t2b_isis.png');
+}
+
+[data-type-id='11383'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af1/icons/af1_t1_isis.png');
+}
+
+[data-type-id='11387'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf7/icons/mf7_t2c_isis.png');
+}
+
+[data-type-id='11389'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf7/icons/gf7_t2_isis.png');
+}
+
+[data-type-id='11393'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af3/icons/af3_t2b_isis.png');
+}
+
+[data-type-id='11400'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf4/icons/mf4_t2b_isis.png');
+}
+
+[data-type-id='11567'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/titan/at1/icons/at1_t1_isis.png');
+}
+
+[data-type-id='11936'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t1_isis.png');
+}
+
+[data-type-id='11938'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab2/icons/ab2_t1_isis.png');
+}
+
+[data-type-id='11940'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af7/icons/af7_i_isis.png');
+}
+
+[data-type-id='11942'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af7/icons/af7_i_isis.png');
+}
+
+[data-type-id='11957'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc4/icons/cc4_t2a_isis.png');
+}
+
+[data-type-id='11959'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc4/icons/cc4_t2b_isis.png');
+}
+
+[data-type-id='11961'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc3/icons/mc3_t2a_isis.png');
+}
+
+[data-type-id='11963'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc3/icons/mc3_t2c_isis.png');
+}
+
+[data-type-id='11965'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac1/icons/ac1_t2b_isis.png');
+}
+
+[data-type-id='11969'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc1/icons/gc1_t2a_isis.png');
+}
+
+[data-type-id='11971'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc1/icons/gc1_t2b_isis.png');
+}
+
+[data-type-id='11978'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc4/icons/mc4_t2c_isis.png');
+}
+
+[data-type-id='11985'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc1/icons/cc1_t2a_isis.png');
+}
+
+[data-type-id='11987'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac3/icons/ac3_t2_isis.png');
+}
+
+[data-type-id='11989'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc2/icons/gc2_t2_isis.png');
+}
+
+[data-type-id='11993'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc3/icons/cc3_t2_isis.png');
+}
+
+[data-type-id='11995'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc2/icons/cc2_t2a_isis.png');
+}
+
+[data-type-id='11999'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc1/icons/mc1_t2b_isis.png');
+}
+
+[data-type-id='12003'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac4/icons/ac4_t2_isis.png');
+}
+
+[data-type-id='12005'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc3/icons/gc3_t2_isis.png');
+}
+
+[data-type-id='12011'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc2/icons/cc2_t2b_isis.png');
+}
+
+[data-type-id='12013'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc2/icons/mc2_t2c_isis.png');
+}
+
+[data-type-id='12015'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc2/icons/mc2_t2a_isis.png');
+}
+
+[data-type-id='12017'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac2/icons/ac2_t2b_isis.png');
+}
+
+[data-type-id='12019'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac2/icons/ac2_t2a_isis.png');
+}
+
+[data-type-id='12021'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc4/icons/gc4_t2b_isis.png');
+}
+
+[data-type-id='12023'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc4/icons/gc4_t2a_isis.png');
+}
+
+[data-type-id='12032'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf6/icons/cf6_t2_isis.png');
+}
+
+[data-type-id='12034'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf5/icons/mf5_t2a_isis.png');
+}
+
+[data-type-id='12036'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf5/icons/mf5_t2a_isis.png');
+}
+
+[data-type-id='12038'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af5/icons/af5_t2_isis.png');
+}
+
+[data-type-id='12042'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf4/icons/gf4_t2a_isis.png');
+}
+
+[data-type-id='12044'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf4/icons/gf4_t2b_isis.png');
+}
+
+[data-type-id='12729'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/industrial/ci1/icons/ci1_t2_isis.png');
+}
+
+[data-type-id='12731'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/industrial/ci2/icons/ci2_t2_isis.png');
+}
+
+[data-type-id='12733'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/industrial/ai2/icons/ai2_t2_isis.png');
+}
+
+[data-type-id='12735'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/industrial/mi3/icons/mi3_t2c_isis.png');
+}
+
+[data-type-id='12743'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi4/icons/gi4_t2_isis.png');
+}
+
+[data-type-id='12745'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi2/icons/gi2_t2_isis.png');
+}
+
+[data-type-id='12747'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/industrial/mi2/icons/mi2_t2b_isis.png');
+}
+
+[data-type-id='12753'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/industrial/ai1/icons/ai1_t2_isis.png');
+}
+
+[data-type-id='13202'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t1_isis.png');
+}
+
+[data-type-id='16227'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc1/icons/cbc1_t1_isis.png');
+}
+
+[data-type-id='16229'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battlecruiser/gbc1/icons/gbc1_t1_isis.png');
+}
+
+[data-type-id='16231'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battlecruiser/mbc1/icons/mbc1_t1_isis.png');
+}
+
+[data-type-id='16233'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc1/icons/abc1_t1_isis.png');
+}
+
+[data-type-id='16236'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/destroyer/ade1/icons/ade1_t1_isis.png');
+}
+
+[data-type-id='16238'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde1/icons/cde1_t1_isis.png');
+}
+
+[data-type-id='16240'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde1/icons/gde1_t1_isis.png');
+}
+
+[data-type-id='16242'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/destroyer/mde1/icons/mde1_t1_isis.png');
+}
+
+[data-type-id='17360'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf2/icons/conf2_t1_isis.png');
+}
+
+[data-type-id='17476'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/barge/oreba3/icons/oreba3_t1_isis.png');
+}
+
+[data-type-id='17478'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/barge/oreba2/icons/oreba2_t1_isis.png');
+}
+
+[data-type-id='17480'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/barge/oreba1/icons/oreba1_t1_isis.png');
+}
+
+[data-type-id='17619'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf8/icons/cf8_t1_isis.png');
+}
+
+[data-type-id='17634'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc3/icons/cc3_t1_isis.png');
+}
+
+[data-type-id='17636'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t1_isis.png');
+}
+
+[data-type-id='17703'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af9/icons/af9_t1_isis.png');
+}
+
+[data-type-id='17705'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf7/icons/cf7_t1_isis.png');
+}
+
+[data-type-id='17707'] {
+  --types-holo-icon: url('res:/dx9/model/ship/mordu/frigate/morf1/icons/morf1_t1_isis.png');
+}
+
+[data-type-id='17709'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac4/icons/ac4_t1_isis.png');
+}
+
+[data-type-id='17713'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc1/icons/mc1_t1_isis.png');
+}
+
+[data-type-id='17715'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc2/icons/cc2_t1_isis.png');
+}
+
+[data-type-id='17718'] {
+  --types-holo-icon: url('res:/dx9/model/ship/sansha/cruiser/sc1/icons/sc1_t1_isis.png');
+}
+
+[data-type-id='17720'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/battlecruiser/angbc1/icons/angbc1_t1_isis.png');
+}
+
+[data-type-id='17722'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc4/icons/gc4_t1_isis.png');
+}
+
+[data-type-id='17726'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t1_isis.png');
+}
+
+[data-type-id='17728'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t1_isis.png');
+}
+
+[data-type-id='17732'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t1_isis.png');
+}
+
+[data-type-id='17736'] {
+  --types-holo-icon: url('res:/dx9/model/ship/sansha/battleship/sb1/icons/sb1_t1_isis.png');
+}
+
+[data-type-id='17738'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/battleship/angb1/icons/angb1_t1_isis.png');
+}
+
+[data-type-id='17740'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t1_isis.png');
+}
+
+[data-type-id='17812'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf8/icons/mf8_t1_isis.png');
+}
+
+[data-type-id='17841'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf8/icons/gf8_t1_isis.png');
+}
+
+[data-type-id='17843'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc3/icons/gc3_t1_isis.png');
+}
+
+[data-type-id='17918'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb2/icons/cb2_t1_isis.png');
+}
+
+[data-type-id='17920'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab2/icons/ab2_t1_isis.png');
+}
+
+[data-type-id='17922'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac6/icons/ac6_t1_isis.png');
+}
+
+[data-type-id='17924'] {
+  --types-holo-icon: url('res:/dx9/model/ship/sansha/frigate/sf1/icons/sf1_t1_isis.png');
+}
+
+[data-type-id='17926'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af8/icons/af8_t1_isis.png');
+}
+
+[data-type-id='17928'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/frigate/angf2/icons/angf2_t1_isis.png');
+}
+
+[data-type-id='17930'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf7/icons/cf7_t1_isis.png');
+}
+
+[data-type-id='17932'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/frigate/angf1/icons/angf1_t1_isis.png');
+}
+
+[data-type-id='19720'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/dreadnought/adn1/icons/adn1_t1_isis.png');
+}
+
+[data-type-id='19722'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/dreadnought/mdn1/icons/mdn1_t1_isis.png');
+}
+
+[data-type-id='19724'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/dreadnought/gdn1/icons/gdn1_t1_isis.png');
+}
+
+[data-type-id='19726'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/dreadnought/cdn1/icons/cdn1_t1_isis.png');
+}
+
+[data-type-id='19744'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/industrial/ai2/icons/ai2_t1_isis.png');
+}
+
+[data-type-id='20125'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac1/icons/ac1_t2a_isis.png');
+}
+
+[data-type-id='20183'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/freighter/afr1/icons/afr1_t1_isis.png');
+}
+
+[data-type-id='20185'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/freighter/cfr1/icons/cfr1_t1_isis.png');
+}
+
+[data-type-id='20187'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/freighter/gfr1/icons/gfr1_t1_isis.png');
+}
+
+[data-type-id='20189'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/freighter/mfr1/icons/mfr1_t1_isis.png');
+}
+
+[data-type-id='21097'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/shuttle/cs1/icons/cs1_t1_isis.png');
+}
+
+[data-type-id='21628'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/shuttle/cs1/icons/cs1_t1_isis.png');
+}
+
+[data-type-id='22428'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab2/icons/ab2_t2_isis.png');
+}
+
+[data-type-id='22430'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb1/icons/gb1_t2_isis.png');
+}
+
+[data-type-id='22436'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb2/icons/cb2_t2_isis.png');
+}
+
+[data-type-id='22440'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb1/icons/mb1_t2b_isis.png');
+}
+
+[data-type-id='22442'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battlecruiser/gbc2/icons/gbc2_t2_isis.png');
+}
+
+[data-type-id='22444'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battlecruiser/mbc2/icons/mbc2_t2_isis.png');
+}
+
+[data-type-id='22446'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc1/icons/cbc1_t2b_isis.png');
+}
+
+[data-type-id='22448'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc2/icons/abc2_t2_isis.png');
+}
+
+[data-type-id='22452'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/destroyer/ade1/icons/ade1_t2_isis.png');
+}
+
+[data-type-id='22456'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/destroyer/mde1/icons/mde1_t2c_isis.png');
+}
+
+[data-type-id='22460'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde1/icons/gde1_t2_isis.png');
+}
+
+[data-type-id='22464'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde1/icons/cde1_t2_isis.png');
+}
+
+[data-type-id='22466'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battlecruiser/gbc1/icons/gbc1_t2a_isis.png');
+}
+
+[data-type-id='22468'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battlecruiser/mbc1/icons/mbc1_t2c_isis.png');
+}
+
+[data-type-id='22470'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc2/icons/cbc2_t2_isis.png');
+}
+
+[data-type-id='22474'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc1/icons/abc1_t2a_isis.png');
+}
+
+[data-type-id='22544'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/barge/oreba3/icons/oreba3_t2_isis.png');
+}
+
+[data-type-id='22546'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/barge/oreba1/icons/oreba1_t2_isis.png');
+}
+
+[data-type-id='22548'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/barge/oreba2/icons/oreba2_t2_isis.png');
+}
+
+[data-type-id='22852'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/carrier/mca1/icons/mca1_t1_isis.png');
+}
+
+[data-type-id='23757'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/carrier/aca2/icons/aca2_t1_isis.png');
+}
+
+[data-type-id='23773'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/titan/mt1/icons/mt1_t1_isis.png');
+}
+
+[data-type-id='23911'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/carrier/gca2/icons/gca2_t1_isis.png');
+}
+
+[data-type-id='23913'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/carrier/gca1/icons/gca1_t1_isis.png');
+}
+
+[data-type-id='23915'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/carrier/cca1/icons/cca1_t1_isis.png');
+}
+
+[data-type-id='23917'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/carrier/cca2/icons/cca2_t1_isis.png');
+}
+
+[data-type-id='23919'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/carrier/aca1/icons/aca1_t1_isis.png');
+}
+
+[data-type-id='24483'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/carrier/mca2/icons/mca2_t1_isis.png');
+}
+
+[data-type-id='24688'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb3/icons/cb3_t1_isis.png');
+}
+
+[data-type-id='24690'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb3/icons/gb3_t1_isis.png');
+}
+
+[data-type-id='24692'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab3/icons/ab3_t1_isis.png');
+}
+
+[data-type-id='24694'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb3/icons/mb3_t1_isis.png');
+}
+
+[data-type-id='24696'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc2/icons/abc2_t1_isis.png');
+}
+
+[data-type-id='24698'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc2/icons/cbc2_t1_isis.png');
+}
+
+[data-type-id='24700'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battlecruiser/gbc2/icons/gbc2_t1_isis.png');
+}
+
+[data-type-id='24702'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battlecruiser/mbc2/icons/mbc2_t1_isis.png');
+}
+
+[data-type-id='25560'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gy1/icons/gy1_t1_isis.png');
+}
+
+[data-type-id='26840'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t1_isis.png');
+}
+
+[data-type-id='26842'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t1_isis.png');
+}
+
+[data-type-id='27299'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/shuttle/as1/icons/as1_t1_isis.png');
+}
+
+[data-type-id='27301'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/shuttle/cs1/icons/cs1_t1_isis.png');
+}
+
+[data-type-id='27303'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gs1/icons/gs1_t1_isis.png');
+}
+
+[data-type-id='27305'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/shuttle/ms1/icons/ms1_t1_isis.png');
+}
+
+[data-type-id='28352'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/capital/orecs1/icons/orecs1_t1_isis.png');
+}
+
+[data-type-id='28606'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/freighter/orefr1/icons/orefr1_t1_isis.png');
+}
+
+[data-type-id='28659'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t2_isis.png');
+}
+
+[data-type-id='28661'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t2_isis.png');
+}
+
+[data-type-id='28665'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t2a_isis.png');
+}
+
+[data-type-id='28710'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t2_isis.png');
+}
+
+[data-type-id='28844'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/freighter/cfr1/icons/cfr1_t2_isis.png');
+}
+
+[data-type-id='28846'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/freighter/mfr1/icons/mfr1_t2_isis.png');
+}
+
+[data-type-id='28848'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/freighter/gfr1/icons/gfr1_t2_isis.png');
+}
+
+[data-type-id='28850'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/freighter/afr1/icons/afr1_t2_isis.png');
+}
+
+[data-type-id='29248'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af7/icons/af7_t1_isis.png');
+}
+
+[data-type-id='29266'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soct/frigate/soctf1/icons/soctf1_t1_isis.png');
+}
+
+[data-type-id='29328'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/shuttle/as1/icons/as1_t1_isis.png');
+}
+
+[data-type-id='29330'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/shuttle/cs1/icons/cs1_t1_isis.png');
+}
+
+[data-type-id='29332'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gs1/icons/gs1_t1_isis.png');
+}
+
+[data-type-id='29334'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/shuttle/ms1/icons/ms1_t1_isis.png');
+}
+
+[data-type-id='29336'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc4/icons/mc4_t1_isis.png');
+}
+
+[data-type-id='29337'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac3/icons/ac3_t1_isis.png');
+}
+
+[data-type-id='29340'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc1/icons/cc1_fn_isis.png');
+}
+
+[data-type-id='29344'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc2/icons/gc2_t1_isis.png');
+}
+
+[data-type-id='29984'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/strategiccruiser/csc1/icons/csc1_t3_isis.png');
+}
+
+[data-type-id='29986'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/strategiccruiser/asc1/icons/asc1_t3_isis.png');
+}
+
+[data-type-id='29988'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/strategiccruiser/gsc1/icons/gsc1_t3_isis.png');
+}
+
+[data-type-id='29990'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/strategiccruiser/msc1/icons/msc1_t3_isis.png');
+}
+
+[data-type-id='30842'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gs1/icons/gs1_t1_isis.png');
+}
+
+[data-type-id='32207'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf4/icons/mf4_xviii_isis.png');
+}
+
+[data-type-id='32209'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc2/icons/mc2_vii_isis.png');
+}
+
+[data-type-id='32305'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab2/icons/ab2_t1_isis.png');
+}
+
+[data-type-id='32307'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb1/icons/gb1_t1_isis.png');
+}
+
+[data-type-id='32309'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb2/icons/cb2_t1_isis.png');
+}
+
+[data-type-id='32311'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb1/icons/mb1_t1_isis.png');
+}
+
+[data-type-id='32788'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf7/icons/cf7_x_isis.png');
+}
+
+[data-type-id='32790'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc1/icons/cc1_x_isis.png');
+}
+
+[data-type-id='32811'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi4/icons/gi4_t1_isis.png');
+}
+
+[data-type-id='32840'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde1/icons/gde1_t1_isis.png');
+}
+
+[data-type-id='32842'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde1/icons/gde1_t1_isis.png');
+}
+
+[data-type-id='32844'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde1/icons/gde1_t1_isis.png');
+}
+
+[data-type-id='32846'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde1/icons/gde1_t1_isis.png');
+}
+
+[data-type-id='32848'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde1/icons/gde1_t1_isis.png');
+}
+
+[data-type-id='32872'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde2/icons/gde2_t1_isis.png');
+}
+
+[data-type-id='32874'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/destroyer/ade2/icons/ade2_t1_isis.png');
+}
+
+[data-type-id='32876'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde2/icons/cde2_t1_isis.png');
+}
+
+[data-type-id='32878'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/destroyer/mde2/icons/mde2_t1_isis.png');
+}
+
+[data-type-id='32880'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/frigate/oref1/icons/oref1_t1_isis.png');
+}
+
+[data-type-id='32983'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf3/icons/cf3_t1_isis.png');
+}
+
+[data-type-id='32985'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf5/icons/gf5_t1_isis.png');
+}
+
+[data-type-id='32987'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af7/icons/af7_t1_isis.png');
+}
+
+[data-type-id='32989'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf2/icons/mf2_t1_isis.png');
+}
+
+[data-type-id='33079'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af1/icons/af1_t1_isis.png');
+}
+
+[data-type-id='33081'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf5/icons/cf5_t1_isis.png');
+}
+
+[data-type-id='33083'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf1/icons/gf1_t1_isis.png');
+}
+
+[data-type-id='33099'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/destroyer/mde1/icons/mde1_t1_isis.png');
+}
+
+[data-type-id='33151'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battlecruiser/gbc1/icons/gbc1_t1_isis.png');
+}
+
+[data-type-id='33153'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc2/icons/cbc2_t1_isis.png');
+}
+
+[data-type-id='33155'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc2/icons/abc2_t1_isis.png');
+}
+
+[data-type-id='33157'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battlecruiser/mbc2/icons/mbc2_t1_isis.png');
+}
+
+[data-type-id='33190'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af7/icons/af7_t1_isis.png');
+}
+
+[data-type-id='33328'] {
+  --types-holo-icon: url('res:/dx9/model/ship/jove/capsule/cap1/icons/cap1_t1_isis.png');
+}
+
+[data-type-id='33395'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/cruiser/angc1/icons/angc1_xi_isis.png');
+}
+
+[data-type-id='33397'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/frigate/angf1/icons/angf1_xi_isis.png');
+}
+
+[data-type-id='33468'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soe/frigate/soef1/icons/soef1_t1_isis.png');
+}
+
+[data-type-id='33470'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soe/cruiser/soec1/icons/soec1_t1_isis.png');
+}
+
+[data-type-id='33472'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soe/battleship/soeb1/icons/soeb1_t1_isis.png');
+}
+
+[data-type-id='33513'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/shuttle/ms1/icons/ms1_t1_isis.png');
+}
+
+[data-type-id='33553'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soe/cruiser/soec1/icons/soec1_t1_isis.png');
+}
+
+[data-type-id='33623'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab3/icons/ab3_t1_isis.png');
+}
+
+[data-type-id='33625'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab3/icons/ab3_t1_isis.png');
+}
+
+[data-type-id='33627'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb3/icons/cb3_t1_isis.png');
+}
+
+[data-type-id='33629'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb3/icons/cb3_t1_isis.png');
+}
+
+[data-type-id='33631'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb3/icons/mb3_t1_isis.png');
+}
+
+[data-type-id='33633'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb3/icons/mb3_t1_isis.png');
+}
+
+[data-type-id='33635'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb3/icons/gb3_t1_isis.png');
+}
+
+[data-type-id='33637'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb3/icons/gb3_t1_isis.png');
+}
+
+[data-type-id='33639'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac4/icons/ac4_t1_isis.png');
+}
+
+[data-type-id='33641'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac4/icons/ac4_t1_isis.png');
+}
+
+[data-type-id='33643'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc3/icons/cc3_t1_isis.png');
+}
+
+[data-type-id='33645'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc3/icons/cc3_t1_isis.png');
+}
+
+[data-type-id='33647'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc1/icons/mc1_t1_isis.png');
+}
+
+[data-type-id='33649'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc1/icons/mc1_t1_isis.png');
+}
+
+[data-type-id='33651'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc4/icons/gc4_t1_isis.png');
+}
+
+[data-type-id='33653'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc4/icons/gc4_t1_isis.png');
+}
+
+[data-type-id='33655'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af3/icons/af3_t1_isis.png');
+}
+
+[data-type-id='33657'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af3/icons/af3_t1_isis.png');
+}
+
+[data-type-id='33659'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf7/icons/cf7_t1_isis.png');
+}
+
+[data-type-id='33661'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf7/icons/cf7_t1_isis.png');
+}
+
+[data-type-id='33663'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf4/icons/mf4_t1_isis.png');
+}
+
+[data-type-id='33665'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf4/icons/mf4_t1_isis.png');
+}
+
+[data-type-id='33667'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf4/icons/gf4_t1_isis.png');
+}
+
+[data-type-id='33669'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf4/icons/gf4_t1_isis.png');
+}
+
+[data-type-id='33673'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf2/icons/cf2_xii_isis.png');
+}
+
+[data-type-id='33675'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc2/icons/cc2_xii_isis.png');
+}
+
+[data-type-id='33677'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf8/icons/gf8_t1_isis.png');
+}
+
+[data-type-id='33683'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/barge/oreba2/icons/oreba2_t1_isis.png');
+}
+
+[data-type-id='33685'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/freighter/orefr1/icons/orefr1_t1_isis.png');
+}
+
+[data-type-id='33687'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/capital/orecs1/icons/orecs1_t1_isis.png');
+}
+
+[data-type-id='33689'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/industrial/gi5/icons/gi5_t1_isis.png');
+}
+
+[data-type-id='33691'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/industrial/ci2/icons/ci2_t1_isis.png');
+}
+
+[data-type-id='33693'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/industrial/mi2/icons/mi2_t1_isis.png');
+}
+
+[data-type-id='33695'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/industrial/ai1/icons/ai1_t1_isis.png');
+}
+
+[data-type-id='33697'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/frigate/oref1/icons/oref1_t2b_isis.png');
+}
+
+[data-type-id='33816'] {
+  --types-holo-icon: url('res:/dx9/model/ship/mordu/frigate/morf1/icons/morf1_t1_isis.png');
+}
+
+[data-type-id='33818'] {
+  --types-holo-icon: url('res:/dx9/model/ship/mordu/cruiser/morc1/icons/morc1_t1_isis.png');
+}
+
+[data-type-id='33820'] {
+  --types-holo-icon: url('res:/dx9/model/ship/mordu/battleship/morb1/icons/morb1_t1_isis.png');
+}
+
+[data-type-id='33869'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battlecruiser/gbc1/icons/gbc1_t1_isis.png');
+}
+
+[data-type-id='33871'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battlecruiser/mbc1/icons/mbc1_t1_isis.png');
+}
+
+[data-type-id='33873'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc1/icons/cbc1_t1_isis.png');
+}
+
+[data-type-id='33875'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc1/icons/abc1_t1_isis.png');
+}
+
+[data-type-id='33877'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde1/icons/gde1_t1_isis.png');
+}
+
+[data-type-id='33879'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/destroyer/ade1/icons/ade1_t1_isis.png');
+}
+
+[data-type-id='33881'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde1/icons/cde1_t1_isis.png');
+}
+
+[data-type-id='33883'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/destroyer/mde1/icons/mde1_t1_isis.png');
+}
+
+[data-type-id='34118'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t1_isis.png');
+}
+
+[data-type-id='34151'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb2/icons/cb2_xii_isis.png');
+}
+
+[data-type-id='34213'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t1_isis.png');
+}
+
+[data-type-id='34215'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t1_isis.png');
+}
+
+[data-type-id='34217'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t1_isis.png');
+}
+
+[data-type-id='34219'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t2_isis.png');
+}
+
+[data-type-id='34221'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t2_isis.png');
+}
+
+[data-type-id='34223'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t2_isis.png');
+}
+
+[data-type-id='34225'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t1_isis.png');
+}
+
+[data-type-id='34227'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t1_isis.png');
+}
+
+[data-type-id='34229'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t1_isis.png');
+}
+
+[data-type-id='34231'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t2_isis.png');
+}
+
+[data-type-id='34233'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t2_isis.png');
+}
+
+[data-type-id='34235'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t2_isis.png');
+}
+
+[data-type-id='34237'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t1_isis.png');
+}
+
+[data-type-id='34239'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t1_isis.png');
+}
+
+[data-type-id='34241'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t2_isis.png');
+}
+
+[data-type-id='34243'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t2_isis.png');
+}
+
+[data-type-id='34245'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t2_isis.png');
+}
+
+[data-type-id='34247'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t1_isis.png');
+}
+
+[data-type-id='34249'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t1_isis.png');
+}
+
+[data-type-id='34251'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t1_isis.png');
+}
+
+[data-type-id='34253'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t2a_isis.png');
+}
+
+[data-type-id='34255'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t2a_isis.png');
+}
+
+[data-type-id='34257'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t2a_isis.png');
+}
+
+[data-type-id='34317'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/destroyer/ade3/icons/ade3_t3_isis.png');
+}
+
+[data-type-id='34328'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/capital/orecs2/icons/orecs2_t1_isis.png');
+}
+
+[data-type-id='34339'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/dreadnought/gdn1/icons/gdn1_t1_isis.png');
+}
+
+[data-type-id='34341'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/dreadnought/mdn1/icons/mdn1_t1_isis.png');
+}
+
+[data-type-id='34343'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/dreadnought/cdn1/icons/cdn1_t1_isis.png');
+}
+
+[data-type-id='34345'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/dreadnought/adn1/icons/adn1_t1_isis.png');
+}
+
+[data-type-id='34441'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb1/icons/gb1_t1_isis.png');
+}
+
+[data-type-id='34443'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf3/icons/gf3_t1_isis.png');
+}
+
+[data-type-id='34445'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc3/icons/gc3_t1_isis.png');
+}
+
+[data-type-id='34457'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab2/icons/ab2_t1_isis.png');
+}
+
+[data-type-id='34459'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab3/icons/ab3_t1_isis.png');
+}
+
+[data-type-id='34461'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/battleship/angb1/icons/angb1_t1_isis.png');
+}
+
+[data-type-id='34463'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb2/icons/cb2_t1_isis.png');
+}
+
+[data-type-id='34465'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb1/icons/gb1_t1_isis.png');
+}
+
+[data-type-id='34467'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battleship/gb2/icons/gb2_t1_isis.png');
+}
+
+[data-type-id='34469'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t1_isis.png');
+}
+
+[data-type-id='34471'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t1_isis.png');
+}
+
+[data-type-id='34473'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc2/icons/cbc2_t1_isis.png');
+}
+
+[data-type-id='34475'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc2/icons/cc2_t1_isis.png');
+}
+
+[data-type-id='34477'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/cruiser/cc2/icons/cc2_t2b_isis.png');
+}
+
+[data-type-id='34479'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc3/icons/gc3_t1_isis.png');
+}
+
+[data-type-id='34496'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf1/icons/conf1_t1_isis.png');
+}
+
+[data-type-id='34562'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/destroyer/mde3/icons/mde3_t3_isis.png');
+}
+
+[data-type-id='34590'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gy1/icons/gy1_t1_isis.png');
+}
+
+[data-type-id='34828'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde3/icons/cde3_t3_isis.png');
+}
+
+[data-type-id='35683'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde3/icons/gde3_t3_isis.png');
+}
+
+[data-type-id='35779'] {
+  --types-holo-icon: url('res:/dx9/model/ship/sansha/frigate/sf2/icons/sf2_xiii_isis.png');
+}
+
+[data-type-id='35781'] {
+  --types-holo-icon: url('res:/dx9/model/ship/sansha/cruiser/sc1/icons/sc1_xiii_isis.png');
+}
+
+[data-type-id='37135'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/frigate/oref1/icons/oref1_t2c_isis.png');
+}
+
+[data-type-id='37453'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af2/icons/af2_t1_isis.png');
+}
+
+[data-type-id='37454'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf7/icons/mf7_t1_isis.png');
+}
+
+[data-type-id='37455'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf4/icons/cf4_t1_isis.png');
+}
+
+[data-type-id='37456'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf7/icons/gf7_t1_isis.png');
+}
+
+[data-type-id='37457'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af5/icons/af5_t2b_isis.png');
+}
+
+[data-type-id='37458'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf1/icons/cf1_t2_isis.png');
+}
+
+[data-type-id='37459'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf2/icons/gf2_t2_isis.png');
+}
+
+[data-type-id='37460'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf6/icons/mf6_t2_isis.png');
+}
+
+[data-type-id='37480'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/destroyer/mde2/icons/mde2_t2_isis.png');
+}
+
+[data-type-id='37481'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/destroyer/ade2/icons/ade2_t2_isis.png');
+}
+
+[data-type-id='37482'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde2/icons/cde2_t2_isis.png');
+}
+
+[data-type-id='37483'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde2/icons/gde2_t2_isis.png');
+}
+
+[data-type-id='37604'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/forceauxillary/afaux1/icons/afaux1_t1_isis.png');
+}
+
+[data-type-id='37605'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/forceauxillary/cfaux1/icons/cfaux1_t1_isis.png');
+}
+
+[data-type-id='37606'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/forceauxillary/mfaux1/icons/mfaux1_t1_isis.png');
+}
+
+[data-type-id='37607'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/forceauxillary/gfaux1/icons/gfaux1_t1_isis.png');
+}
+
+[data-type-id='42124'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/dreadnought/gdn1/icons/gdn1_t1_isis.png');
+}
+
+[data-type-id='42125'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/carrier/gca1/icons/gca1_t1_isis.png');
+}
+
+[data-type-id='42126'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/titan/gt1/icons/gt1_t1_isis.png');
+}
+
+[data-type-id='42132'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/carrier/gca2/icons/gca2_t1_isis.png');
+}
+
+[data-type-id='42133'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/forceauxillary/gfaux1/icons/gfaux1_t1_isis.png');
+}
+
+[data-type-id='42241'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/titan/at1/icons/at1_t1_isis.png');
+}
+
+[data-type-id='42242'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/forceauxillary/afaux1/icons/afaux1_t1_isis.png');
+}
+
+[data-type-id='42243'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/dreadnought/adn1/icons/adn1_t1_isis.png');
+}
+
+[data-type-id='42244'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/battleship/oreb1/icons/oreb1_t1c_isis.png');
+}
+
+[data-type-id='42245'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac6/icons/ac6_xiv_isis.png');
+}
+
+[data-type-id='42246'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af8/icons/af8_xiv_isis.png');
+}
+
+[data-type-id='42685'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soct/destroyer/soctde1/icons/soctde1_t1_isis.png');
+}
+
+[data-type-id='44993'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf1/icons/conf1_t1_isis.png');
+}
+
+[data-type-id='44995'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/cruiser/conc1/icons/conc1_t1_isis.png');
+}
+
+[data-type-id='44996'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/battleship/conb1/icons/conb1_t1_isis.png');
+}
+
+[data-type-id='45530'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf3/icons/gf3_t2_isis.png');
+}
+
+[data-type-id='45531'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc1/icons/gc1_t1_isis.png');
+}
+
+[data-type-id='45534'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/cruiser/conc1/icons/conc1_t2b_isis.png');
+}
+
+[data-type-id='45645'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/forceauxillary/cfaux1/icons/cfaux1_t1_isis.png');
+}
+
+[data-type-id='45647'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/dreadnought/cdn1/icons/cdn1_t1_isis.png');
+}
+
+[data-type-id='45649'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/titan/ct1/icons/ct1_t1_isis.png');
+}
+
+[data-type-id='47269'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/frigate/tgf01/icons/tgf01_t1_isis.png');
+}
+
+[data-type-id='47270'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/cruiser/tgc01/icons/tgc01_t1_isis.png');
+}
+
+[data-type-id='47271'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/battleship/tgb01/icons/tgb01_t1_isis.png');
+}
+
+[data-type-id='47466'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soct/battleship/soctb1/icons/soctb1_t1_isis.png');
+}
+
+[data-type-id='47727'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t2a_isis.png');
+}
+
+[data-type-id='47728'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battleship/mb2/icons/mb2_t2a_isis.png');
+}
+
+[data-type-id='48635'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/cruiser/tgc01/icons/tgc01_t1_isis.png');
+}
+
+[data-type-id='48636'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/frigate/tgf01/icons/tgf01_t1_isis.png');
+}
+
+[data-type-id='48648'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/frigate/oref1/icons/oref1_t1_isis.png');
+}
+
+[data-type-id='49710'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/destroyer/tgde01/icons/tgde01_t1_isis.png');
+}
+
+[data-type-id='49711'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/battlecruiser/tgbc01/icons/tgbc01_t1_isis.png');
+}
+
+[data-type-id='49712'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/cruiser/tgc02/icons/tgc02_t1_isis.png');
+}
+
+[data-type-id='49713'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/cruiser/tgc02/icons/tgc02_t2_isis.png');
+}
+
+[data-type-id='52250'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/frigate/tgf01/icons/tgf01_t2_isis.png');
+}
+
+[data-type-id='52252'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/cruiser/tgc01/icons/tgc01_t2_isis.png');
+}
+
+[data-type-id='52254'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/destroyer/tgde01/icons/tgde01_t2_isis.png');
+}
+
+[data-type-id='52267'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac2/icons/ac2_t1_isis.png');
+}
+
+[data-type-id='52907'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/dreadnought/tgdn01/icons/tgdn01_t1_isis.png');
+}
+
+[data-type-id='54731'] {
+  --types-holo-icon: url('res:/dx9/model/ship/upwell/frigate/uwf01/icons/uwf01_t1_isis.png');
+}
+
+[data-type-id='54732'] {
+  --types-holo-icon: url('res:/dx9/model/ship/upwell/cruiser/uwc01/icons/uwc01_t1_isis.png');
+}
+
+[data-type-id='54733'] {
+  --types-holo-icon: url('res:/dx9/model/ship/upwell/battleship/uwb01/icons/uwb01_t1_isis.png');
+}
+
+[data-type-id='58745'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soe/frigate/soef1/icons/soef1_t1_isis.png');
+}
+
+[data-type-id='60764'] {
+  --types-holo-icon: url('res:/dx9/model/ship/mordu/cruiser/morc1/icons/morc1_xvii_isis.png');
+}
+
+[data-type-id='60765'] {
+  --types-holo-icon: url('res:/dx9/model/ship/mordu/frigate/morf1/icons/morf1_xvii_isis.png');
+}
+
+[data-type-id='64034'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/shuttle/cs1/icons/cs1_t1_isis.png');
+}
+
+[data-type-id='72811'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battlecruiser/mbc1/icons/mbc1_t1_isis.png');
+}
+
+[data-type-id='72812'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc1/icons/cbc1_t1_isis.png');
+}
+
+[data-type-id='72869'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battlecruiser/gbc2/icons/gbc2_t1_isis.png');
+}
+
+[data-type-id='72872'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc1/icons/abc1_t1_isis.png');
+}
+
+[data-type-id='72903'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf2/icons/mf2_t1_isis.png');
+}
+
+[data-type-id='72904'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf3/icons/cf3_t1_isis.png');
+}
+
+[data-type-id='72907'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af7/icons/af7_t1_isis.png');
+}
+
+[data-type-id='72913'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf5/icons/gf5_t1_isis.png');
+}
+
+[data-type-id='73787'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/dreadnought/mdn1/icons/mdn1_fn_isis.png');
+}
+
+[data-type-id='73789'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/destroyer/ade1/icons/ade1_fn_isis.png');
+}
+
+[data-type-id='73790'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/dreadnought/adn1/icons/adn1_fn_isis.png');
+}
+
+[data-type-id='73792'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/dreadnought/gdn1/icons/gdn1_fn_isis.png');
+}
+
+[data-type-id='73793'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/dreadnought/cdn1/icons/cdn1_fn_isis.png');
+}
+
+[data-type-id='73794'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/destroyer/mde1/icons/mde1_fn_isis.png');
+}
+
+[data-type-id='73795'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde1/icons/cde1_fn_isis.png');
+}
+
+[data-type-id='73796'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde1/icons/gde1_fn_isis.png');
+}
+
+[data-type-id='74141'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf4/icons/mf4_xviii_isis.png');
+}
+
+[data-type-id='74316'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/cruiser/mc2/icons/mc2_vii_isis.png');
+}
+
+[data-type-id='77114'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soct/frigate/soctf2/icons/soctf2_t1_isis.png');
+}
+
+[data-type-id='77281'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/dreadnought/gdn1/icons/gdn1_fn_isis.png');
+}
+
+[data-type-id='77283'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/dreadnought/adn1/icons/adn1_fn_isis.png');
+}
+
+[data-type-id='77284'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/dreadnought/cdn1/icons/cdn1_fn_isis.png');
+}
+
+[data-type-id='77288'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/dreadnought/mdn1/icons/mdn1_fn_isis.png');
+}
+
+[data-type-id='77726'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/cruiser/gc4/icons/gc4_tournament_isis.png');
+}
+
+[data-type-id='78333'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/destroyer/angde1/icons/angde1_t1_isis.png');
+}
+
+[data-type-id='78366'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc2/icons/cbc2_t1_isis.png');
+}
+
+[data-type-id='78367'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde2/icons/cde2_t1_isis.png');
+}
+
+[data-type-id='78369'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/battlecruiser/angbc2/icons/angbc2_t1_isis.png');
+}
+
+[data-type-id='78414'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf4/icons/gf4_tournament_isis.png');
+}
+
+[data-type-id='78576'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/titan/angt1/icons/angt1_t1_isis.png');
+}
+
+[data-type-id='81008'] {
+  --types-holo-icon: url('res:/dx9/model/ship/upwell/industrial/uwi01/icons/uwi01_t1_isis.png');
+}
+
+[data-type-id='81040'] {
+  --types-holo-icon: url('res:/dx9/model/ship/upwell/freighter/uwfr01/icons/uwfr01_t1_isis.png');
+}
+
+[data-type-id='81046'] {
+  --types-holo-icon: url('res:/dx9/model/ship/upwell/industrial/uwi01/icons/uwi01_t2a_isis.png');
+}
+
+[data-type-id='81047'] {
+  --types-holo-icon: url('res:/dx9/model/ship/upwell/industrial/uwi01/icons/uwi01_t2b_isis.png');
+}
+
+[data-type-id='85062'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/frigate/conf1/icons/conf1_xx_isis.png');
+}
+
+[data-type-id='85086'] {
+  --types-holo-icon: url('res:/dx9/model/ship/deathless/battlecruiser/deabc1/icons/deabc1_t1_isis.png');
+}
+
+[data-type-id='85087'] {
+  --types-holo-icon: url('res:/dx9/model/ship/deathless/destroyer/deade1/icons/deade1_t1_isis.png');
+}
+
+[data-type-id='85229'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/cruiser/conc1/icons/conc1_xx_isis.png');
+}
+
+[data-type-id='85236'] {
+  --types-holo-icon: url('res:/dx9/model/ship/concord/battleship/conb1/icons/conb1_xx_isis.png');
+}
+
+[data-type-id='87381'] {
+  --types-holo-icon: url('res:/dx9/model/ship/angel/dreadnought/angdn1/icons/angdn1_t1_isis.png');
+}
+
+[data-type-id='88001'] {
+  --types-holo-icon: url('res:/dx9/model/ship/triglavian/battleship/tgb01/icons/tgb01_t2_isis.png');
+}
+
+[data-type-id='89240'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/destroyer/orede1/icons/orede1_t1_isis.png');
+}
+
+[data-type-id='89607'] {
+  --types-holo-icon: url('res:/dx9/model/ship/soe/battlecruiser/soebc1/icons/soebc1_t1_isis.png');
+}
+
+[data-type-id='89647'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/destroyer/orede1/icons/orede1_fn_isis.png');
+}
+
+[data-type-id='89648'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/frigate/oref1/icons/oref1_t1_isis.png');
+}
+
+[data-type-id='89649'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/destroyer/orede1/icons/orede1_t2b_isis.png');
+}
+
+[data-type-id='89807'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc3/icons/cbc3_xxi_isis.png');
+}
+
+[data-type-id='89808'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde3/icons/cde3_xxi_isis.png');
+}
+
+[data-type-id='91174'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/destroyer/orede1/icons/orede1_t2c_isis.png');
+}
+
+[data-type-id='91775'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/destroyer/ade2/icons/ade2_fn_isis.png');
+}
+
+[data-type-id='91849'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/destroyer/gde2/icons/gde2_fn_isis.png');
+}
+
+[data-type-id='91857'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/destroyer/cde2/icons/cde2_fn_isis.png');
+}
+
+[data-type-id='91858'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/destroyer/mde2/icons/mde2_fn_isis.png');
+}
+
+[data-type-id='92282'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gy1/icons/gy1_t1_isis.png');
+}
+
+[data-type-id='92283'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gy1/icons/gy1_t1_isis.png');
+}
+
+[data-type-id='92284'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/shuttle/gy1/icons/gy1_t1_isis.png');
+}
+
+[data-type-id='92822'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/carrier/aca2/icons/aca2_t2_isis.png');
+}
+
+[data-type-id='92823'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/carrier/cca1/icons/cca1_t2_isis.png');
+}
+
+[data-type-id='92824'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/carrier/gca2/icons/gca2_t2_isis.png');
+}
+
+[data-type-id='92825'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/carrier/mca2/icons/mca2_t2_isis.png');
+}

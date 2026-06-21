@@ -1,0 +1,19 @@
+{
+  "500001": "res:/ui/texture/classes/shiptree/factionbg/caldari.png",
+  "500002": "res:/ui/texture/classes/shiptree/factionbg/minmatar.png",
+  "500003": "res:/ui/texture/classes/shiptree/factionbg/amarr.png",
+  "500004": "res:/ui/texture/classes/shiptree/factionbg/gallente.png",
+  "500006": "res:/ui/texture/classes/shiptree/factionbg/concord.png",
+  "500010": "res:/ui/texture/classes/shiptree/factionbg/guristas.png",
+  "500011": "res:/ui/texture/classes/shiptree/factionbg/angelcartel.png",
+  "500012": "res:/ui/texture/classes/shiptree/factionbg/bloodraiders.png",
+  "500014": "res:/ui/texture/classes/shiptree/factionbg/ore.png",
+  "500016": "res:/ui/texture/classes/shiptree/factionbg/soe.png",
+  "500017": "res:/ui/texture/classes/shiptree/factionbg/soct.png",
+  "500018": "res:/ui/texture/classes/shiptree/factionbg/mordus.png",
+  "500019": "res:/ui/texture/classes/shiptree/factionbg/sanshasnation.png",
+  "500020": "res:/ui/texture/classes/shiptree/factionbg/serpentis.png",
+  "500026": "res:/ui/texture/classes/shiptree/factionbg/triglaviancollective.png",
+  "500027": "res:/ui/texture/classes/shiptree/factionbg/edencom.png",
+  "500029": "res:/ui/texture/classes/shiptree/factionbg/deathless.png"
+}

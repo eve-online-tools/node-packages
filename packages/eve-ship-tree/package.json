@@ -1,0 +1,67 @@
+{
+  "name": "@eve-online-tools/eve-ship-tree",
+  "version": "0.0.1",
+  "description": "Mantine components for EVE Online",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eve-online-tools/node-packages.git",
+    "directory": "packages/eve-ship-tree"
+  },
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.mts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    },
+    "./data/generated/*": "./dist/data/generated/*",
+    "./styles.css": "./dist/styles.css",
+    "./styles.layer.css": "./dist/styles.layer.css"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "pnpm run clean && rollup -c rollup.config.ts --configPlugin esbuild && tsx ../../internal/mantine-build/post-build.ts",
+    "typecheck": "pnpm exec tsc --noEmit -p tsconfig.json",
+    "test": "pnpm --workspace-root vitest run packages/eve-ship-tree",
+    "lint": "pnpm exec oxlint src",
+    "format:check": "pnpm exec oxfmt --check \"src/**/*.{ts,tsx,css}\"",
+    "sde:update": "tsx scripts/sde-update.ts"
+  },
+  "sideEffects": [
+    "**/*.css",
+    "**/*.css.js",
+    "**/*.css.cjs",
+    "**/*.css.mjs"
+  ],
+  "dependencies": {
+    "@eve-online-tools/eve-sde": "workspace:*",
+    "@eve-online-tools/eve-resfile": "workspace:*"
+  },
+  "peerDependencies": {
+    "@mantine/core": "^9.0.0",
+    "@mantine/hooks": "^9.0.0",
+    "@use-gesture/react": "^10.0.0",
+    "motion": "^12.0.0",
+    "react": "^18.x || ^19.x",
+    "react-dom": "^18.x || ^19.x"
+  },
+  "devDependencies": {
+    "@use-gesture/react": "catalog:",
+    "motion": "catalog:"
+  }
+}

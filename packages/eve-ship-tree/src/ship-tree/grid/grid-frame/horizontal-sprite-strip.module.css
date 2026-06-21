@@ -1,0 +1,53 @@
+.root {
+  --sprite-strip-width: 40;
+  --sprite-strip-cap-left-width: 2;
+  --sprite-strip-cap-right-width: 2;
+  --sprite-strip-height: 2;
+  --sprite-strip-middle-width: calc(
+    var(--sprite-strip-width) - var(--sprite-strip-cap-left-width) - var(--sprite-strip-cap-right-width)
+  );
+
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: calc(var(--sprite-strip-height) * 1px);
+}
+
+.capLeft {
+  flex: 0 0 calc(var(--sprite-strip-cap-left-width) * 1px);
+  width: calc(var(--sprite-strip-cap-left-width) * 1px);
+  height: calc(var(--sprite-strip-height) * 1px);
+  background-image: var(--sprite-strip-image);
+  background-size: calc(var(--sprite-strip-width) * 1px) calc(var(--sprite-strip-height) * 1px);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+
+.capRight {
+  flex: 0 0 calc(var(--sprite-strip-cap-right-width) * 1px);
+  width: calc(var(--sprite-strip-cap-right-width) * 1px);
+  height: calc(var(--sprite-strip-height) * 1px);
+  background-image: var(--sprite-strip-image);
+  background-size: calc(var(--sprite-strip-width) * 1px) calc(var(--sprite-strip-height) * 1px);
+  background-repeat: no-repeat;
+  background-position: calc(-1 * (var(--sprite-strip-width) - var(--sprite-strip-cap-right-width)) * 1px) 0;
+}
+
+.stretch {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: calc(var(--sprite-strip-height) * 1px);
+  overflow: hidden;
+}
+
+.stretch::before {
+  content: '';
+  display: block;
+  width: calc(100% * var(--sprite-strip-width) / var(--sprite-strip-middle-width));
+  height: calc(var(--sprite-strip-height) * 1px);
+  margin-left: calc(-100% * var(--sprite-strip-cap-left-width) / var(--sprite-strip-middle-width));
+  background-image: var(--sprite-strip-image);
+  background-size: 100% calc(var(--sprite-strip-height) * 1px);
+  background-repeat: no-repeat;
+}

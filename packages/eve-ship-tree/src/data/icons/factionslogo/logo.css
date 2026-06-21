@@ -1,0 +1,67 @@
+[data-faction='500001'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/caldari.png');
+}
+
+[data-faction='500002'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/minmatar.png');
+}
+
+[data-faction='500003'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/amarr.png');
+}
+
+[data-faction='500004'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/gallente.png');
+}
+
+[data-faction='500006'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/concord.png');
+}
+
+[data-faction='500010'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/guristas.png');
+}
+
+[data-faction='500011'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/angel.png');
+}
+
+[data-faction='500012'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/bloodraiders.png');
+}
+
+[data-faction='500014'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/ore.png');
+}
+
+[data-faction='500016'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/soe.png');
+}
+
+[data-faction='500017'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/soct.png');
+}
+
+[data-faction='500018'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/mordus.png');
+}
+
+[data-faction='500019'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/sansha.png');
+}
+
+[data-faction='500020'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/serpentis.png');
+}
+
+[data-faction='500026'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/triglaviancollective.png');
+}
+
+[data-faction='500027'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/edencom.png');
+}
+
+[data-faction='500029'] {
+  --factionslogo-logo: url('res:/ui/texture/classes/shiptree/factions/deathless.png');
+}

@@ -30,6 +30,20 @@ export default defineConfig({
         `
       },
     },
+    {
+      name: 'resfile-stub',
+      enforce: 'pre',
+      resolveId(source) {
+        if (source.startsWith('res:')) {
+          return `\0${source}`
+        }
+      },
+      load(id) {
+        if (id.startsWith('\0res:')) {
+          return `export default ${JSON.stringify(id.slice(1))};`
+        }
+      },
+    },
     react(),
     {
       name: 'css-module-stub',

@@ -1,0 +1,67 @@
+[data-faction='500001'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/classes/shiptree/factions/caldari.png');
+}
+
+[data-faction='500002'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/classes/shiptree/factions/minmatar.png');
+}
+
+[data-faction='500003'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/classes/shiptree/factions/amarr.png');
+}
+
+[data-faction='500004'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/classes/shiptree/factions/gallente.png');
+}
+
+[data-faction='500006'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_16.png');
+}
+
+[data-faction='500010'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_10.png');
+}
+
+[data-faction='500011'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_11.png');
+}
+
+[data-faction='500012'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_20.png');
+}
+
+[data-faction='500014'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_13.png');
+}
+
+[data-faction='500016'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_15.png');
+}
+
+[data-faction='500017'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_6.png');
+}
+
+[data-faction='500018'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_17.png');
+}
+
+[data-faction='500019'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_18.png');
+}
+
+[data-faction='500020'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/75_32_19.png');
+}
+
+[data-faction='500026'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/triglaviancollective.png');
+}
+
+[data-faction='500027'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/icons/triglaviancollective.png');
+}
+
+[data-faction='500029'] {
+  --ship-tree-factions-icon: url('res:/ui/texture/classes/shiptree/factions/deathless.png');
+}

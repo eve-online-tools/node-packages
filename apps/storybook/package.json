@@ -10,6 +10,8 @@
   "dependencies": {
     "@mantine/core": "catalog:",
     "@mantine/hooks": "catalog:",
+    "@use-gesture/react": "catalog:",
+    "motion": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

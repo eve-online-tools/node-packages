@@ -1,0 +1,30 @@
+{"_key":7,"description":{"en":"Defensive system that utilizes low-level fitting slots and does not regenerate on its own."},"name":{"en":"Armor"}}
+{"_key":8,"description":{"en":"Instant-hitting weapon system with non-delayed reload using crystals as charges. Deals EM and Thermal damage types."},"name":{"en":"Energy Turrets"}}
+{"_key":9,"description":{"en":"Guided weapon system with delayed impact and broad selection of damage types."},"name":{"en":"Missiles"}}
+{"_key":10,"description":{"en":"Instant-hitting weapon system requiring no capacitor to fire. Use ammunition dealing a broad selection of damage types."},"name":{"en":"Projectile Turrets"}}
+{"_key":11,"description":{"en":"Unmanned and deployable craft with versatile functions and broad selection of damage types."},"name":{"en":"Drones"}}
+{"_key":12,"description":{"en":"Instant-hitting weapon system with fast reload time. Deals Kinetic and Thermal damage types."},"name":{"en":"Hybrid Turrets"}}
+{"_key":13,"description":{"en":"Disruption system that either leeches or neutralizes enemy capacitors, causing active modules to shut down."},"name":{"en":"Energy Destabilization"}}
+{"_key":14,"description":{"en":"Disruption system that cripples targeting range and scan resolution, making it more difficult for enemies to acquire targets."},"name":{"en":"Sensor Dampening"}}
+{"_key":15,"description":{"en":"Disruption system that has a chance to disable the targeting systems of enemy ships."},"name":{"en":"ECM"}}
+{"_key":16,"description":{"en":"Disruption system that increases enemy signature radius, making them easier to hit."},"name":{"en":"Target Painting"}}
+{"_key":17,"description":{"en":"Disruption systems that reduce performance of enemy turrets."},"name":{"en":"Weapon Disruption"}}
+{"_key":18,"description":{"en":"Tackling system that reduces speed of enemy ships."},"name":{"en":"Stasis Webifying"}}
+{"_key":19,"description":{"en":"Tackling system that prevents warping for enemy ships."},"name":{"en":"Warp Prevention"}}
+{"_key":20,"description":{"en":"Defensive system that utilizes medium-level fitting slots and regenerates slowly on its own."},"name":{"en":"Shields"}}
+{"_key":22,"description":{"en":"Hulls with good damage and mobility. Recommended for attrition, hit-and-run, and pursuit tactics."},"name":{"en":"Attack"}}
+{"_key":23,"description":{"en":"Hulls with good damage and defenses. Recommended for heavy frontline brawling."},"name":{"en":"Combat"}}
+{"_key":24,"description":{"en":"Hulls able to field debilitating systems with great proficiency. Recommend as force multipliers in fleet engagements."},"name":{"en":"Disruption"}}
+{"_key":25,"description":{"en":"Hulls able to repair or assist other vessels in combat. Recommended as force multipliers in fleet engagements."},"name":{"en":"Support"}}
+{"_key":26,"description":{"en":"Hulls capable of transporting a massive quantity of goods. Recommended for industrial or logistical purposes."},"name":{"en":"Hauling"}}
+{"_key":27,"description":{"en":"Hulls capable of all kinds of material collecting activities. Recommended for any gathering operation."},"name":{"en":"Resource Harvesting"}}
+{"_key":28,"description":{"en":"Hulls made to scout and chart hostile space. Recommended for any reconnaissance operation."},"name":{"en":"Exploration"}}
+{"_key":29,"description":{"en":"Hulls capable of pinning the enemy down. Recommended to prevent the target from escaping."},"name":{"en":"Tackling"}}
+{"_key":30,"description":{"en":"Primarily fitted with Small Modules."},"name":{"en":"Small"}}
+{"_key":31,"description":{"en":"Primarily fitted with Medium Modules."},"name":{"en":"Medium"}}
+{"_key":32,"description":{"en":"Primarily fitted with Large Modules."},"name":{"en":"Large"}}
+{"_key":33,"description":{"en":"Primarily fitted with Capital Modules."},"name":{"en":"X-Large"}}
+{"_key":45,"description":{"en":"Precursor Weapon system with increasing damage for each cycle on a target. Uses Exotic Plasma charges and deals Thermal and Explosive damage types."},"name":{"en":"Entropic Disintegrators"}}
+{"_key":2046,"description":{"en":"Equally capable at using either armor or shield defenses."},"name":{"en":"Armor or Shields"}}
+{"_key":2048,"description":{"en":"Arcing weapon system that hits multiple targets. Deals EM and Kinetic damage types."},"name":{"en":"Vorton Projectors"}}
+{"_key":2056,"description":{"en":"Boarding party weapon system that applies steady damage over time and bypasses damage resistances."},"name":{"en":"Breacher Pods"}}

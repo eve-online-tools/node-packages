@@ -38,7 +38,7 @@ export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
     }
 
     aliases.push({
-      find: packageJson.name,
+      find: `${packageJson.name}$`,
       replacement: indexFile,
     })
 

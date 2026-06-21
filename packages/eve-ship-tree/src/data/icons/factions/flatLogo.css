@@ -1,0 +1,67 @@
+[data-faction='500001'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/caldari_logo_256px.png');
+}
+
+[data-faction='500002'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/minmatar_logo_256px.png');
+}
+
+[data-faction='500003'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/amarr_logo_256px.png');
+}
+
+[data-faction='500004'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/gallente_logo_256px.png');
+}
+
+[data-faction='500006'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/concord_logo_256px.png');
+}
+
+[data-faction='500010'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/guristas_logo_256px.png');
+}
+
+[data-faction='500011'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/angel_cartel_logo_256px.png');
+}
+
+[data-faction='500012'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/blood_raiders_logo_256px.png');
+}
+
+[data-faction='500014'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/ore_logo_256px.png');
+}
+
+[data-faction='500016'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/soe_logo_256px.png');
+}
+
+[data-faction='500017'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/soct_logo_256px.png');
+}
+
+[data-faction='500018'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/mordus_legion_logo_256px.png');
+}
+
+[data-faction='500019'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/sansha_logo_256px.png');
+}
+
+[data-faction='500020'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/serpentis_logo_256px.png');
+}
+
+[data-faction='500026'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/triglavian_logo_256px.png');
+}
+
+[data-faction='500027'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/edencom_logo_256px.png');
+}
+
+[data-faction='500029'] {
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/deathless_logo_256px.png');
+}

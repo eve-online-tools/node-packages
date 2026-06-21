@@ -1,0 +1,54 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  flex: 0 0 auto;
+  align-items: flex-start;
+
+  --top-frame-font-weight: var(--mantine-font-weight-bold);
+  --top-frame-font-size: var(--mantine-font-size-xs);
+  --top-frame-line-height: calc(var(--mantine-line-height-xs) * 1.25);
+  --top-frame-font-family: var(--mantine-font-family-monospace);
+  --top-frame-font-color: #000;
+
+  user-select: none;
+  pointer-events: none;
+}
+
+.left {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.label {
+  display: block;
+  font-weight: var(--top-frame-font-weight);
+  font-size: var(--top-frame-font-size);
+  line-height: var(--top-frame-line-height);
+  font-family: var(--top-frame-font-family);
+  text-transform: uppercase;
+  color: var(--top-frame-font-color);
+  user-select: none;
+}
+
+.middle {
+  display: flex;
+  flex: 0 0 auto;
+  align-self: stretch;
+  align-items: flex-start;
+  width: fit-content;
+  font-family: monospace;
+  white-space: nowrap;
+  background-image: url('res:/ui/texture/classes/shiptree/frame/topmiddle.png');
+  background-repeat: repeat-x;
+  background-position: top left;
+}
+
+.line {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 26px;
+  align-self: flex-start;
+}
