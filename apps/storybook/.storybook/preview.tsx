@@ -1,13 +1,13 @@
-import "@mantine/core/styles.css";
-import "@eve-online-tools/mantine-ui/styles.css";
-import { MantineProvider } from "@mantine/core";
-import { useGlobals } from "@storybook/preview-api";
-import type { Preview } from "@storybook/react";
-import React, { useEffect } from "react";
+import '@mantine/core/styles.css'
+import '@eve-online-tools/mantine-ui/styles.css'
+import { MantineProvider } from '@mantine/core'
+import { useGlobals } from '@storybook/preview-api'
+import type { Preview } from '@storybook/react'
+import React, { useEffect } from 'react'
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -17,44 +17,44 @@ const preview: Preview = {
   },
   globalTypes: {
     theme: {
-      name: "Theme",
-      description: "Mantine color scheme",
-      defaultValue: "light",
+      name: 'Theme',
+      description: 'Mantine color scheme',
+      defaultValue: 'light',
       toolbar: {
-        icon: "mirror",
+        icon: 'mirror',
         items: [
-          { value: "light", title: "Light" },
-          { value: "dark", title: "Dark" },
+          { value: 'light', title: 'Light' },
+          { value: 'dark', title: 'Dark' },
         ],
       },
     },
   },
   decorators: [
     (renderStory, context) => {
-      const [{ theme }, updateGlobals] = useGlobals();
+      const [{ theme }, updateGlobals] = useGlobals()
 
       useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
-          const isMod = event.metaKey || event.ctrlKey;
-          const isJ = event.code === "KeyJ";
+          const isMod = event.metaKey || event.ctrlKey
+          const isJ = event.code === 'KeyJ'
 
           if (!isMod || !isJ) {
-            return;
+            return
           }
 
-          event.preventDefault();
-          updateGlobals({ theme: theme === "dark" ? "light" : "dark" });
-        };
+          event.preventDefault()
+          updateGlobals({ theme: theme === 'dark' ? 'light' : 'dark' })
+        }
 
-        window.addEventListener("keydown", onKeyDown);
-        return () => window.removeEventListener("keydown", onKeyDown);
-      }, [theme, updateGlobals]);
+        window.addEventListener('keydown', onKeyDown)
+        return () => window.removeEventListener('keydown', onKeyDown)
+      }, [theme, updateGlobals])
 
-      const scheme = (context.globals.theme || "light") as "light" | "dark";
+      const scheme = (context.globals.theme || 'light') as 'light' | 'dark'
 
-      return <MantineProvider forceColorScheme={scheme}>{renderStory()}</MantineProvider>;
+      return <MantineProvider forceColorScheme={scheme}>{renderStory()}</MantineProvider>
     },
   ],
-};
+}
 
-export default preview;
+export default preview

@@ -1,113 +1,111 @@
-import { mkdtemp, rm } from "node:fs/promises";
-import { join } from "node:path";
-import { tmpdir } from "node:os";
+import { mkdtemp, rm } from 'node:fs/promises'
+import { join } from 'node:path'
+import { tmpdir } from 'node:os'
 
-import { eveResfile } from "./plugin";
+import { eveResfile } from './plugin'
 
-const getHook = <T extends (...args: never[]) => unknown>(
-  hook: T | { handler: T } | undefined,
-): T | undefined => {
+const getHook = <T extends (...args: never[]) => unknown>(hook: T | { handler: T } | undefined): T | undefined => {
   if (!hook) {
-    return undefined;
+    return undefined
   }
-  if (typeof hook === "function") {
-    return hook;
+  if (typeof hook === 'function') {
+    return hook
   }
-  return hook.handler;
-};
+  return hook.handler
+}
 
-describe("vite plugin", () => {
-  let cacheDir: string;
+describe('vite plugin', () => {
+  let cacheDir: string
 
   beforeEach(async () => {
-    cacheDir = await mkdtemp(join(tmpdir(), "eve-resfile-vite-"));
-  });
+    cacheDir = await mkdtemp(join(tmpdir(), 'eve-resfile-vite-'))
+  })
 
   afterEach(async () => {
-    await rm(cacheDir, { recursive: true, force: true });
-    vi.restoreAllMocks();
-  });
+    await rm(cacheDir, { recursive: true, force: true })
+    vi.restoreAllMocks()
+  })
 
   const stubIndexFetch = () => {
     vi.stubGlobal(
-      "fetch",
+      'fetch',
       vi.fn(async (url: string | URL) => {
-        const href = String(url);
+        const href = String(url)
 
-        if (href.endsWith("/eveonline_123456.txt")) {
-          return new Response("app:/resfileindex.txt,resindex/resfileindex.txt,hash");
+        if (href.endsWith('/eveonline_123456.txt')) {
+          return new Response('app:/resfileindex.txt,resindex/resfileindex.txt,hash')
         }
 
-        if (href.endsWith("/resindex/resfileindex.txt")) {
-          return new Response("res:/icons/64/icon.png,icons/icon_123.png,hash");
+        if (href.endsWith('/resindex/resfileindex.txt')) {
+          return new Response('res:/icons/64/icon.png,icons/icon_123.png,hash')
         }
 
-        if (href.endsWith("/icons/icon_123.png")) {
-          return new Response(Buffer.from("png-bytes"));
+        if (href.endsWith('/icons/icon_123.png')) {
+          return new Response(Buffer.from('png-bytes'))
         }
 
-        throw new Error(`Unexpected fetch: ${href}`);
+        throw new Error(`Unexpected fetch: ${href}`)
       }),
-    );
-  };
+    )
+  }
 
-  it("resolves res imports and loads dev proxy modules in watch mode", async () => {
-    stubIndexFetch();
+  it('resolves res imports and loads dev proxy modules in watch mode', async () => {
+    stubIndexFetch()
 
-    const plugin = eveResfile({ buildNumber: "123456", cacheDir, root: cacheDir });
+    const plugin = eveResfile({ buildNumber: '123456', cacheDir, root: cacheDir })
     const context = {
       meta: { watchMode: true },
       info: vi.fn(),
-      emitFile: vi.fn(() => "asset-ref"),
-    };
+      emitFile: vi.fn(() => 'asset-ref'),
+    }
 
-    await getHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never);
-    await getHook(plugin.buildStart)?.call(context as never, {} as never);
+    await getHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never)
+    await getHook(plugin.buildStart)?.call(context as never, {} as never)
 
     const resolvedId = await getHook(plugin.resolveId)?.call(
       context as never,
-      "res:/icons/64/icon.png",
+      'res:/icons/64/icon.png',
       undefined,
       {} as never,
-    );
-    expect(resolvedId).toContain("res:/icons/64/icon.png");
+    )
+    expect(resolvedId).toContain('res:/icons/64/icon.png')
 
-    const moduleSource = await getHook(plugin.load)?.call(context as never, resolvedId as string);
+    const moduleSource = await getHook(plugin.load)?.call(context as never, resolvedId as string)
     expect(moduleSource).toEqual({
       code: 'export default "/__eve_res__/icons%2F64%2Ficon.png"',
-      moduleType: "js",
-    });
-  });
+      moduleType: 'js',
+    })
+  })
 
-  it("emits CDN assets in production builds", async () => {
-    stubIndexFetch();
+  it('emits CDN assets in production builds', async () => {
+    stubIndexFetch()
 
-    const plugin = eveResfile({ buildNumber: "123456", cacheDir, root: cacheDir });
+    const plugin = eveResfile({ buildNumber: '123456', cacheDir, root: cacheDir })
     const context = {
       meta: { watchMode: false },
       info: vi.fn(),
-      emitFile: vi.fn(() => "asset-ref"),
-    };
+      emitFile: vi.fn(() => 'asset-ref'),
+    }
 
-    await getHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never);
-    await getHook(plugin.buildStart)?.call(context as never, {} as never);
+    await getHook(plugin.configResolved)?.call(context as never, { root: cacheDir } as never)
+    await getHook(plugin.buildStart)?.call(context as never, {} as never)
 
     const resolvedId = await getHook(plugin.resolveId)?.call(
       context as never,
-      "res:/icons/64/icon.png",
+      'res:/icons/64/icon.png',
       undefined,
       {} as never,
-    );
+    )
 
-    const moduleSource = await getHook(plugin.load)?.call(context as never, resolvedId as string);
+    const moduleSource = await getHook(plugin.load)?.call(context as never, resolvedId as string)
     expect(moduleSource).toEqual({
-      code: "export default import.meta.ROLLUP_FILE_URL_asset-ref",
-      moduleType: "js",
-    });
+      code: 'export default import.meta.ROLLUP_FILE_URL_asset-ref',
+      moduleType: 'js',
+    })
     expect(context.emitFile).toHaveBeenCalledWith({
-      type: "asset",
-      name: "icon.png",
-      source: Buffer.from("png-bytes"),
-    });
-  });
-});
+      type: 'asset',
+      name: 'icon.png',
+      source: Buffer.from('png-bytes'),
+    })
+  })
+})
