@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { generateIndexTs } from "./output-files";
+import { generateIndexTs, generateTypesDts } from "./output-files";
 import { extractBaseUrlFromSpec, stripGlobalHeaders } from "./spec";
 
 describe("stripGlobalHeaders", () => {
@@ -56,8 +56,21 @@ describe("extractBaseUrlFromSpec", () => {
   });
 });
 
+describe("generateTypesDts", () => {
+  it("defines response helpers from the generated schema without re-exporting paths", () => {
+    const content = generateTypesDts();
+
+    expect(content).toContain('from "./esi-schema"');
+    expect(content).toContain("export type ResponseFor<");
+    expect(content).toContain("export type ResponseForOperation<");
+    expect(content).toContain('Client<paths, "application/json">');
+    expect(content).not.toContain("export type { paths");
+    expect(content).not.toContain("export type { operations");
+  });
+});
+
 describe("generateIndexTs", () => {
-  it("includes editable banner, baseUrl, and createESIProvider helper", () => {
+  it("includes editable banner, baseUrl, createESIProvider helper, and type re-exports", () => {
     const content = generateIndexTs(
       { servers: [{ url: "https://esi.evetech.net" }] },
       "https://fallback.example",
@@ -68,6 +81,10 @@ describe("generateIndexTs", () => {
     expect(content).toContain("export const createESIProvider");
     expect(content).toContain("CreateProviderResult<paths>");
     expect(content).toContain('from "@eve-online-tools/esi-provider"');
+    expect(content).toContain('export type { paths, operations } from "./esi-schema"');
+    expect(content).toContain('export type {');
+    expect(content).toContain('} from "./types"');
+    expect(content).toContain("ResponseFor");
   });
 
   it("uses fallback baseUrl when servers are missing", () => {

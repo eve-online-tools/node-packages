@@ -17,23 +17,24 @@ The package includes a CLI for maintaining generated ESI artifacts in your proje
 Fetches the latest compatibility date from ESI and updates `compatibility-date.ts` only. Does not download the spec or regenerate types.
 
 ```bash
-npx @eve-online-tools/esi-provider update-compatibility-date -o ./src/esi
+npx @eve-online-tools/esi-provider update-compatibility-date -o ./src/esi/generated
 ```
 
 ### `download-spec`
 
-Fetches the OpenAPI spec (using the compatibility date in the output dir), strips global CompatibilityDate/Tenant params, and generates types:
+Fetches the OpenAPI spec (using the compatibility date in the output dir), and generates types:
 
 ```bash
-npx @eve-online-tools/esi-provider download-spec -o ./src/esi
+npx @eve-online-tools/esi-provider download-spec -o ./src/esi/generated
 ```
 
 Writes or updates:
 
 - `openapi.json` — stripped spec (the provider sets CompatibilityDate/Tenant headers)
 - `esi-schema.d.ts` — types generated via `openapi-typescript`
+- `types.d.ts` — helper types for extracting response bodies from paths and operations
 - `compatibility-date.ts` — created automatically if missing
-- `index.ts` — created on first run only; includes a `createESIProvider` helper
+- `index.ts` — created on first run only; includes a `createESIProvider` helper and re-exports schema/types helpers
 
 ### `download-spec --update-only`
 
@@ -106,6 +107,33 @@ function Dashboard() {
   // client.GET("/status/", ...) — typed against your OpenAPI schema
   // rateLimits?.groups — per-group token usage for UI
 }
+```
+
+### Calling ESI
+
+The generated types contain a `ResponseFor` helper to type response bodies.
+
+```tsx
+import { ESIError } from "./error";
+import type { Client, ResponseFor } from "./generated"; // 
+import { useESIClient } from "./provider";
+
+type StatusResponse = ResponseFor<"/status/", "get", 200>;
+type ErrorResponse = ResponseFor<"/status/", "get", "default">;
+
+export const getServerStatus = async (client: Client) => {
+  const response = await client.GET("/status/");
+
+  switch (response.response.status) {
+    case 200:
+      return response.data as StatusResponse;
+    default:
+      throw new ESIError<ErrorResponse>(
+        "Failed to get server status",
+        response.error,
+      );
+  }
+};
 ```
 
 ### Middleware

@@ -56,8 +56,9 @@ export const downloadSpec = async ({
 
   if (changed) {
     console.log(`Wrote OpenAPI spec to ${path}.`);
-    const schemaPath = await generateSchema(outputDir);
+    const { schemaPath, typesPath } = await generateSchema(outputDir);
     console.log(`Wrote schema to ${schemaPath}.`);
+    console.log(`Wrote types to ${typesPath}.`);
   } else {
     console.log(`OpenAPI spec is already up to date (${path}).`);
   }
