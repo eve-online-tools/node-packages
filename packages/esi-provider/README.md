@@ -8,6 +8,15 @@ React provider for typed [ESI](https://developers.eveonline.com/docs/services/es
 pnpm add @eve-online-tools/esi-provider openapi-fetch openapi-typescript react react-dom
 ```
 
+## Package exports
+
+From `@eve-online-tools/esi-provider`:
+
+- `createESIProvider` — factory that returns `[ESIProvider, useESIClient]`
+- `createRateLimitMiddleware`, `useRateLimits` — built-in rate-limit middleware
+- `useMiddleware`, `useMiddlewareState` — access custom middleware state
+- Types: `NewProviderProps`, `CreateProviderResult`, `Middleware`, and related middleware types
+
 ## Generating ESI types
 
 The package includes a CLI for maintaining generated ESI artifacts in your project.
@@ -30,67 +39,46 @@ npx @eve-online-tools/esi-provider download-spec -o ./src/esi/generated
 
 Writes or updates:
 
-- `openapi.json` — stripped spec (the provider sets CompatibilityDate/Tenant headers)
+- `openapi.json` — stripped spec (the provider sets `X-Compatibility-Date` / `X-Tenant` headers)
 - `esi-schema.d.ts` — types generated via `openapi-typescript`
 - `types.d.ts` — helper types for extracting response bodies from paths and operations
 - `compatibility-date.ts` — created automatically if missing
-- `index.ts` — created on first run only; includes a `createESIProvider` helper and re-exports schema/types helpers
+- `index.ts` — created on first run only; includes a `createESIProvider` wrapper pre-bound to `baseUrl` and `compatibilityDate`
 
 ### `download-spec --update-only`
 
 Updates `compatibility-date.ts` first, then downloads and regenerates the spec only if the compatibility date changed:
 
 ```bash
-npx @eve-online-tools/esi-provider download-spec -o ./src/esi --update-only
-```
-
-### Recommended usage (after `download-spec`)
-
-```tsx
-import { createRateLimitMiddleware, useRateLimits } from "@eve-online-tools/esi-provider";
-import { createESIProvider } from "./esi";
-
-const rateLimit = createRateLimitMiddleware();
-
-const [ESIProvider, useESIClient] = createESIProvider({
-  appName: "my-app",
-  appVersion: "1.0.0",
-  appContact: "mailto:dev@example.com",
-  middleware: [rateLimit],
-});
-```
-
-`createESIProvider` applies the generated `baseUrl` and `compatibilityDate` automatically. Pass any `NewProviderProps` field to override defaults (for example `tenant` or `middleware`).
-
-### Manual setup
-
-If you manage the schema yourself, use `newESIProvider<paths>(...)` directly:
-
-```tsx
-import type { paths } from "./esi-schema";
-import { newESIProvider } from "@eve-online-tools/esi-provider";
-
-const [ESIProvider, useESIClient] = newESIProvider<paths>({
-  appName: "my-app",
-  appVersion: "1.0.0",
-  appContact: "mailto:dev@example.com",
-});
+npx @eve-online-tools/esi-provider download-spec -o ./src/esi/generated --update-only
 ```
 
 ## Usage
 
+After running `download-spec`, wire up a provider module that re-exports the generated factory result:
+
 ```tsx
-import { createRateLimitMiddleware, useRateLimits } from "@eve-online-tools/esi-provider";
-import { createESIProvider } from "./esi";
+// src/esi/provider.tsx
+import { createRateLimitMiddleware } from "@eve-online-tools/esi-provider";
+import { createESIProvider } from "./generated";
 
 const rateLimit = createRateLimitMiddleware();
 
-const [ESIProvider, useESIClient] = createESIProvider({
+export const [ESIProvider, useESIClient] = createESIProvider({
   appName: "my-app",
   appVersion: "1.0.0",
   appContact: "mailto:dev@example.com",
   middleware: [rateLimit],
 });
+```
+
+The generated `createESIProvider` wrapper applies `baseUrl` and `compatibilityDate` from your generated files automatically. Pass any `NewProviderProps` field to override defaults (for example `tenant`, `fetch`, or additional `middleware`).
+
+Mount the provider once near the root of your app:
+
+```tsx
+import { createRateLimitMiddleware, useRateLimits } from "@eve-online-tools/esi-provider";
+import { ESIProvider, useESIClient } from "./esi/provider";
 
 function App() {
   return (
@@ -109,31 +97,48 @@ function Dashboard() {
 }
 ```
 
-### Calling ESI
+### Manual setup
 
-The generated types contain a `ResponseFor` helper to type response bodies.
+If you manage the schema yourself instead of using the generated wrapper, call `createESIProvider` from the package directly and supply `baseUrl` and `compatibilityDate` yourself:
 
 ```tsx
-import { ESIError } from "./error";
-import type { Client, ResponseFor } from "./generated"; // 
-import { useESIClient } from "./provider";
+import { createESIProvider } from "@eve-online-tools/esi-provider";
+import type { paths } from "./esi/generated/esi-schema";
+import compatibilityDate from "./esi/generated/compatibility-date";
+
+export const [ESIProvider, useESIClient] = createESIProvider<paths>({
+  baseUrl: "https://esi.evetech.net",
+  compatibilityDate,
+  appName: "my-app",
+  appVersion: "1.0.0",
+  appContact: "mailto:dev@example.com",
+});
+```
+
+### Calling ESI
+
+The generated `types.d.ts` file exports a `ResponseFor` helper to type response bodies:
+
+```tsx
+import type { Client, ResponseFor } from "./esi/generated/types";
+import { useESIClient } from "./esi/provider";
 
 type StatusResponse = ResponseFor<"/status/", "get", 200>;
-type ErrorResponse = ResponseFor<"/status/", "get", "default">;
 
 export const getServerStatus = async (client: Client) => {
-  const response = await client.GET("/status/");
+  const { data, error, response } = await client.GET("/status/");
 
-  switch (response.response.status) {
-    case 200:
-      return response.data as StatusResponse;
-    default:
-      throw new ESIError<ErrorResponse>(
-        "Failed to get server status",
-        response.error,
-      );
+  if (response.status === 200 && data) {
+    return data as StatusResponse;
   }
+
+  throw new Error("Failed to get server status", { cause: error });
 };
+
+export function StatusPanel() {
+  const client = useESIClient();
+  // ...
+}
 ```
 
 ### Middleware
@@ -141,6 +146,8 @@ export const getServerStatus = async (client: Client) => {
 Middleware plugs into the provider reducer and openapi-fetch. Each middleware has a unique `key`, `initialState`, `reducer`, and optional `onRequest` / `onResponse` / `onError` handlers.
 
 `createRateLimitMiddleware` learns ESI rate-limit groups from response headers, tracks token usage per group and character, and proactively delays outbound requests when a bucket is low.
+
+Use `useMiddleware("rateLimit")` or `useMiddlewareState("rateLimit")` to read custom middleware state directly.
 
 ## Development
 
