@@ -1,0 +1,8 @@
+{
+  "extends": "../../internal/tsconfig/node.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node", "vitest/globals"]
+  }
+}
