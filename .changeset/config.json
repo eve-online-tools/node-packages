@@ -1,6 +1,9 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "eve-online-tools/node-packages" }],
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "eve-online-tools/node-packages", "disableThanks": true }
+  ],
   "commit": false,
   "fixed": [],
   "linked": [],

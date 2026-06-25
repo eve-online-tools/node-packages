@@ -1,0 +1,68 @@
+version: 2
+
+updates:
+  # pnpm workspace: only configure the repository root so lockfile updates stay consistent.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: chore(deps)
+      include: scope
+    labels:
+      - dependencies
+    groups:
+      changesets:
+        patterns:
+          - '@changesets/*'
+      mantine:
+        patterns:
+          - '@mantine/*'
+          - '@mantine-tests/*'
+      rollup:
+        patterns:
+          - '@rollup/*'
+          - rollup
+          - rollup-*
+      storybook:
+        patterns:
+          - '@storybook/*'
+          - storybook
+      testing-library:
+        patterns:
+          - '@testing-library/*'
+      types:
+        patterns:
+          - '@types/*'
+      use-gesture:
+        patterns:
+          - '@use-gesture/*'
+      vitejs:
+        patterns:
+          - '@vitejs/*'
+      npm-unscoped:
+        patterns:
+          - '*'
+        exclude-patterns:
+          - '@*/*'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
+    labels:
+      - dependencies
+    groups:
+      actions:
+        patterns:
+          - actions/*
+      pnpm:
+        patterns:
+          - pnpm/*
