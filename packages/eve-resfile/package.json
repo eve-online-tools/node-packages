@@ -46,18 +46,45 @@
         "default": "./dist/rollup/index.cjs"
       }
     },
+    "./postcss": {
+      "import": {
+        "types": "./dist/postcss/index.d.ts",
+        "default": "./dist/postcss/index.js"
+      },
+      "require": {
+        "types": "./dist/postcss/index.d.ts",
+        "default": "./dist/postcss/index.cjs"
+      }
+    },
+    "./integration": {
+      "import": {
+        "types": "./dist/integration/index.d.ts",
+        "default": "./dist/integration/index.js"
+      },
+      "require": {
+        "types": "./dist/integration/index.d.ts",
+        "default": "./dist/integration/index.cjs"
+      }
+    },
     "./client": {
       "types": "./dist/vite/client.d.ts"
     }
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "ARCHITECTURE.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/vite/index.ts src/rollup/index.ts --format cjs,esm --dts --external vite --external rollup && mkdir -p dist/vite && cp src/vite/client.d.ts dist/vite/client.d.ts",
+    "build": "tsup src/index.ts src/integration/index.ts src/vite/index.ts src/rollup/index.ts src/postcss/index.ts --format cjs,esm --dts --clean --splitting false --external vite --external rollup --external postcss && mkdir -p dist/vite && cp src/vite/client.d.ts dist/vite/client.d.ts",
     "typecheck": "tsc --noEmit",
-    "test": "pnpm --workspace-root vitest run packages/eve-resfile"
+    "test": "pnpm --workspace-root vitest run packages/eve-resfile",
+    "lint": "pnpm exec oxlint src",
+    "format:check": "pnpm exec oxfmt --check \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "postcss": "^8.5.4",
+    "postcss-value-parser": "^4.2.0"
   },
   "peerDependencies": {
     "rollup": "^4.0.0",

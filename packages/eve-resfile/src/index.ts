@@ -1,13 +1,24 @@
 export {
-  DEFAULT_ASSET_ORIGIN,
-  DEFAULT_CACHE_DIR,
-  DEFAULT_INDEX_ORIGIN,
-  DEV_PROXY_PREFIX,
-  EVE_CLIENT_MANIFEST,
-  RESFILE_INDEX_PATH,
-  RES_IMPORT_PREFIX,
+  defaultAssetOrigin,
+  defaultAssetsDir,
+  defaultCacheDir,
+  defaultDistDir,
+  defaultIndexOrigin,
+  defaultAllowedHosts,
+  devProxyPrefix,
+  emptyResfileUrl,
+  eveClientManifest,
+  resfileIndexPath,
+  resImportPrefix,
 } from './constants'
 export { loadResfileIndexData } from './index-loader'
 export { devProxyUrl, lookupCdnPath, normalizeResPath, resPathFromDevProxyUrl } from './lookup'
+export { emptyResfileModule, isEmptyResfileUrl, resolveEveResfileOptions } from './plugin-core'
 export { findResfileIndexCdnPath, parseFirstTwoColumns, parseResfileIndex } from './parse'
-export type { EveClientManifest, EveResfileOptions, ResfileIndex, ResolvedEveResfileOptions } from './types'
+export type {
+  EveClientManifest,
+  EveResfileOptions,
+  MissingResPathBehavior,
+  ResfileIndex,
+  ResolvedEveResfileOptions,
+} from './types'

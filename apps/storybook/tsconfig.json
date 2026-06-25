@@ -1,7 +1,10 @@
 {
-  "extends": "../../internal/tsconfig/react.json",
-  "include": [".storybook", "../../@types"],
-  "compilerOptions": {
-    "noEmit": true
-  }
+  "extends": "../../internal/tsconfig/stories.json",
+  "include": [
+    ".storybook",
+    "src",
+    "../../@types",
+    "../../packages/*/src/**/*.story.tsx",
+    "../../packages/*/src/styles.d.ts"
+  ]
 }

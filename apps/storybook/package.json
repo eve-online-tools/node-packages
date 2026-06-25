@@ -14,6 +14,7 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
+    "@eve-online-tools/eve-resfile": "workspace:*",
     "@storybook/addon-essentials": "catalog:",
     "@storybook/react": "catalog:",
     "@storybook/react-vite": "catalog:",

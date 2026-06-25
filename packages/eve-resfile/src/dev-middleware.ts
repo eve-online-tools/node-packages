@@ -1,9 +1,9 @@
 import { contentTypeForPath } from './content-type'
-import { DEV_PROXY_PREFIX } from './constants'
+import { devProxyPrefix } from './constants'
 import { fetchBuffer } from './fetch'
 import { resPathFromDevProxyUrl } from './lookup'
-import { lookupOrThrow } from './plugin-core'
-import type { ResfileIndex } from './types'
+import { lookupResPath, warnMissingResPath } from './plugin-core'
+import type { MissingResPathBehavior, ResfileIndex } from './types'
 
 type DevServerRequest = {
   url?: string
@@ -26,8 +26,14 @@ export type DevProxyMiddleware = (
 
 export const createDevProxyMiddleware = (
   ensureIndex: () => Promise<ResfileIndex>,
-  assetOrigin: string,
+  assetOrigin: string | (() => string),
+  missingResPath: MissingResPathBehavior | (() => MissingResPathBehavior) = 'warn-and-empty',
+  fetchTimeoutMs?: number | (() => number | undefined),
 ): DevProxyMiddleware => {
+  const readAssetOrigin = () => (typeof assetOrigin === 'function' ? assetOrigin() : assetOrigin)
+  const readMissingResPath = () => (typeof missingResPath === 'function' ? missingResPath() : missingResPath)
+  const readFetchTimeoutMs = () => (typeof fetchTimeoutMs === 'function' ? fetchTimeoutMs() : fetchTimeoutMs)
+
   return async (req, res, next) => {
     if (!req.url || req.method !== 'GET') {
       next()
@@ -35,7 +41,7 @@ export const createDevProxyMiddleware = (
     }
 
     const pathname = req.url.split(/[?#]/)[0] ?? req.url
-    if (!pathname.startsWith(DEV_PROXY_PREFIX)) {
+    if (!pathname.startsWith(devProxyPrefix)) {
       next()
       return
     }
@@ -47,10 +53,18 @@ export const createDevProxyMiddleware = (
       return
     }
 
-    let cdnPath: string
+    const missingBehavior = readMissingResPath()
+
+    let cdnPath: string | undefined
     try {
       const index = await ensureIndex()
-      cdnPath = lookupOrThrow(index, resPath)
+      const lookup = lookupResPath(index, resPath, missingBehavior)
+      if (!lookup.ok) {
+        res.statusCode = 404
+        res.end('Resfile not found.')
+        return
+      }
+      cdnPath = lookup.cdnPath
     } catch (error) {
       res.statusCode = 404
       res.end(error instanceof Error ? error.message : 'Resfile not found.')
@@ -58,12 +72,25 @@ export const createDevProxyMiddleware = (
     }
 
     try {
-      const buffer = await fetchBuffer(`${assetOrigin}/${cdnPath}`)
+      const buffer = await fetchBuffer(`${readAssetOrigin()}/${cdnPath}`, {
+        timeoutMs: readFetchTimeoutMs(),
+      })
       res.statusCode = 200
       res.setHeader('Content-Type', contentTypeForPath(resPath))
       res.setHeader('Cache-Control', 'public, max-age=86400')
       res.end(buffer)
     } catch (error) {
+      if (missingBehavior === 'warn-and-empty') {
+        const index = await ensureIndex()
+        warnMissingResPath(resPath, index.buildNumber, 'Failed to fetch resfile from CDN', {
+          error,
+          cdnUrl: `${readAssetOrigin()}/${cdnPath}`,
+        })
+        res.statusCode = 404
+        res.end('Resfile not found.')
+        return
+      }
+
       res.statusCode = 502
       res.end(error instanceof Error ? error.message : 'Failed to fetch resfile from CDN.')
     }

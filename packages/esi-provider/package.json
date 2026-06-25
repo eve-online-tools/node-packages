@@ -48,5 +48,9 @@
   "dependencies": {
     "openapi-fetch": "^0.17.0",
     "openapi-typescript": "^7.13.0"
+  },
+  "devDependencies": {
+    "@eve-online-tools/eve-resfile": "workspace:*",
+    "@eve-online-tools/eve-sde": "workspace:*"
   }
 }

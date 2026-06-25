@@ -1,6 +1,6 @@
 import { extname } from 'node:path'
 
-const CONTENT_TYPES: Record<string, string> = {
+const contentTypesByExtension: Record<string, string> = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -22,4 +22,4 @@ const CONTENT_TYPES: Record<string, string> = {
 }
 
 export const contentTypeForPath = (resPath: string): string =>
-  CONTENT_TYPES[extname(resPath).toLowerCase()] ?? 'application/octet-stream'
+  contentTypesByExtension[extname(resPath).toLowerCase()] ?? 'application/octet-stream'

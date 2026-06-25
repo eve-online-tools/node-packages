@@ -1,36 +1,42 @@
-import { RES_IMPORT_PREFIX } from './constants'
+import { devProxyPrefix, resImportPrefix } from './constants'
+
+export const resPathLookupKey = (resPath: string): string => resPath.toLowerCase()
 
 export const normalizeResPath = (source: string): string => {
   const withoutQuery = source.split(/[?#]/)[0] ?? source
 
-  if (withoutQuery.startsWith(RES_IMPORT_PREFIX)) {
-    return withoutQuery
-  }
+  let normalized: string
 
-  if (withoutQuery.startsWith('res:')) {
+  if (withoutQuery.startsWith(resImportPrefix)) {
+    normalized = withoutQuery
+  } else if (withoutQuery.startsWith('res:')) {
     const path = withoutQuery.slice('res:'.length)
-    return path.startsWith('/') ? `res:${path}` : `res:/${path}`
+    normalized = path.startsWith('/') ? `res:${path}` : `res:/${path}`
+  } else {
+    throw new Error(`Invalid res import "${source}". Expected a path starting with "res:/".`)
   }
 
-  throw new Error(`Invalid res import "${source}". Expected a path starting with "res:/".`)
+  return resPathLookupKey(normalized)
 }
 
-export const lookupCdnPath = (index: Map<string, string>, resPath: string): string | undefined => index.get(resPath)
+export const lookupCdnPath = (index: Map<string, string>, resPath: string): string | undefined => {
+  return index.get(resPathLookupKey(resPath))
+}
 
 export const devProxyUrl = (resPath: string): string => {
-  const encoded = encodeURIComponent(resPath.slice(RES_IMPORT_PREFIX.length))
-  return `/__eve_res__/${encoded}`
+  const encoded = encodeURIComponent(resPath.slice(resImportPrefix.length))
+  return `${devProxyPrefix}${encoded}`
 }
 
 export const resPathFromDevProxyUrl = (pathname: string): string | null => {
-  if (!pathname.startsWith('/__eve_res__/')) {
+  if (!pathname.startsWith(devProxyPrefix)) {
     return null
   }
 
-  const encoded = pathname.slice('/__eve_res__/'.length)
+  const encoded = pathname.slice(devProxyPrefix.length)
   if (!encoded) {
     return null
   }
 
-  return `${RES_IMPORT_PREFIX}${decodeURIComponent(encoded)}`
+  return `${resImportPrefix}${decodeURIComponent(encoded)}`
 }

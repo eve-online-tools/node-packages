@@ -50,7 +50,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
-    include: ['packages/**/src/**/*.test.{ts,tsx}'],
+    include: ['packages/**/src/**/*.test.{ts,tsx}', 'internal/**/*.test.ts'],
     server: {
       deps: {
         inline: ['@mantine-tests/core', '@mantine/core', '@mantine/hooks', 'react', 'react-dom'],

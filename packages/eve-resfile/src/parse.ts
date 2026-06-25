@@ -1,4 +1,24 @@
-import { RESFILE_INDEX_PATH } from './constants'
+import { eveClientManifest, resfileIndexPath } from './constants'
+import { resPathLookupKey } from './lookup'
+import type { EveClientManifest } from './types'
+
+export const parseEveClientManifest = (json: unknown, host: string): EveClientManifest => {
+  if (typeof json !== 'object' || json === null) {
+    throw new Error(`Invalid ${eveClientManifest} from ${host}: expected an object.`)
+  }
+
+  const buildNumber = (json as { buildNumber?: unknown }).buildNumber
+
+  if (buildNumber === undefined || buildNumber === null) {
+    throw new Error(`Invalid ${eveClientManifest} from ${host}: missing buildNumber.`)
+  }
+
+  if (typeof buildNumber !== 'string' && typeof buildNumber !== 'number') {
+    throw new Error(`Invalid ${eveClientManifest} from ${host}: buildNumber must be a string or number.`)
+  }
+
+  return { buildNumber: String(buildNumber) }
+}
 
 export const parseFirstTwoColumns = (line: string): [string, string] | null => {
   const commaIndex = line.indexOf(',')
@@ -32,7 +52,7 @@ export const parseResfileIndex = (content: string): Map<string, string> => {
     }
 
     const [resPath, cdnPath] = parsed
-    map.set(resPath, cdnPath)
+    map.set(resPathLookupKey(resPath), cdnPath)
   }
 
   return map
@@ -51,10 +71,10 @@ export const findResfileIndexCdnPath = (buildIndex: string): string => {
     }
 
     const [path, cdnPath] = parsed
-    if (path === RESFILE_INDEX_PATH) {
+    if (path === resfileIndexPath) {
       return cdnPath
     }
   }
 
-  throw new Error(`${RESFILE_INDEX_PATH} not found in build index.`)
+  throw new Error(`${resfileIndexPath} not found in build index.`)
 }
