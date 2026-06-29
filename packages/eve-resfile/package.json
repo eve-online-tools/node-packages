@@ -83,7 +83,7 @@
     "format:check": "pnpm exec oxfmt --check \"src/**/*.ts\""
   },
   "dependencies": {
-    "postcss": "^8.5.4",
+    "postcss": "^8.5.16",
     "postcss-value-parser": "^4.2.0"
   },
   "peerDependencies": {

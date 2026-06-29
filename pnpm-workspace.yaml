@@ -12,8 +12,8 @@ catalog:
   '@types/react': ^19
   '@types/react-dom': ^19
   '@vitejs/plugin-react': ^5.2.0
-  react: 19.2.4
-  react-dom: 19.2.4
+  react: 19.2.7
+  react-dom: 19.2.7
   storybook: 8.6.18
-  typescript: 6.0.2
-  vite: ^8.0.0
+  typescript: 6.0.3
+  vite: ^8.1.0
