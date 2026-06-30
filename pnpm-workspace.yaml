@@ -22,7 +22,7 @@ catalog:
   '@types/react': ^19
   '@types/react-dom': ^19
   '@use-gesture/react': 10.3.1
-  '@vitejs/plugin-react': ^5.2.0
+  '@vitejs/plugin-react': ^6.0.3
   esbuild: ^0.27.0
   jsdom: ^26.1.0
   motion: 12.41.0
