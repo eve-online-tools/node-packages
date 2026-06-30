@@ -3,6 +3,9 @@ packages:
   - apps/*
   - internal/*
 
+allowBuilds:
+  esbuild: false
+
 catalog:
   '@mantine/core': 9.3.1
   '@mantine/hooks': 9.3.1
