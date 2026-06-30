@@ -7,15 +7,15 @@ catalog:
   '@mantine/core': 9.3.1
   '@mantine/hooks': 9.3.1
   '@use-gesture/react': 10.3.1
-  motion: 12.41.0
+  motion: 12.42.2
   '@storybook/addon-essentials': 8.6.18
   '@storybook/react': 8.6.18
   '@storybook/react-vite': 8.6.18
   '@types/react': ^19
   '@types/react-dom': ^19
   '@vitejs/plugin-react': ^5.2.0
-  react: 19.2.4
-  react-dom: 19.2.4
+  react: 19.2.7
+  react-dom: 19.2.7
   storybook: 8.6.18
-  typescript: 6.0.2
-  vite: ^8.0.0
+  typescript: 6.0.3
+  vite: ^8.1.2
