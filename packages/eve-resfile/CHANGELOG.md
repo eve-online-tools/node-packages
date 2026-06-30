@@ -1,5 +1,11 @@
 # @eve-online-tools/eve-resfile
 
+## 0.3.0
+
+### Minor Changes
+
+- [#10](https://github.com/eve-online-tools/node-packages/pull/10) [`e8541ae`](https://github.com/eve-online-tools/node-packages/commit/e8541aec5eb374719d253c13cdb33789b41e9eed) - feat(eve-resfile): support postcss for importing resfiles in css
+
 ## 0.2.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@eve-online-tools/eve-resfile",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "EVE Online resfile index loader with Vite and Rollup plugins",
   "license": "MIT",
   "publishConfig": {

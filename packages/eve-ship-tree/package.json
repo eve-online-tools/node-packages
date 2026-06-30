@@ -1,6 +1,6 @@
 {
   "name": "@eve-online-tools/eve-ship-tree",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Mantine components for EVE Online",
   "license": "MIT",
   "publishConfig": {
