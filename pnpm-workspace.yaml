@@ -7,8 +7,8 @@ allowBuilds:
   esbuild: false
 
 catalog:
-  '@mantine/core': 9.3.1
-  '@mantine/hooks': 9.3.1
+  '@mantine/core': 9.4.1
+  '@mantine/hooks': 9.4.1
   '@rollup/plugin-node-resolve': ^16.0.1
   '@rollup/plugin-replace': ^6.0.2
   '@storybook/addon-essentials': 8.6.18
