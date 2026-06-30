@@ -228,7 +228,7 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
       storybook:
-        specifier: 10.4.6
+        specifier: 'catalog:'
         version: 10.4.6(@testing-library/dom@10.4.1)(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.4)
       stylelint:
         specifier: ^16.20.0
@@ -8272,7 +8272,7 @@ snapshots:
       '@vitest/expect': 3.2.4
       '@vitest/spy': 3.2.4
       '@webcontainer/env': 1.1.1
-      esbuild: 0.27.7
+      esbuild: 0.28.1
       open: 10.2.0
       oxc-parser: 0.127.0
       oxc-resolver: 11.21.3
