@@ -34,7 +34,7 @@
     "test": "pnpm --workspace-root vitest run packages/__PACKAGE_SLUG__"
   },
   "devDependencies": {
-    "@types/node": "^22.15.24",
+    "@types/node": "catalog:",
     "typescript": "catalog:"
   }
 }

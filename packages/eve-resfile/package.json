@@ -83,7 +83,7 @@
     "format:check": "pnpm exec oxfmt --check \"src/**/*.ts\""
   },
   "dependencies": {
-    "postcss": "^8.5.4",
+    "postcss": "catalog:",
     "postcss-value-parser": "^4.2.0"
   },
   "peerDependencies": {
@@ -99,8 +99,8 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^22.15.24",
-    "rollup": "^4.41.1",
+    "@types/node": "catalog:",
+    "rollup": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:"
   }
