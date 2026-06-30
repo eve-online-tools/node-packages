@@ -1,0 +1,119 @@
+[data-element='7'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/armor.png');
+}
+
+[data-element='8'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/energy_turrets.png');
+}
+
+[data-element='9'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/missiles.png');
+}
+
+[data-element='10'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/gunnery.png');
+}
+
+[data-element='11'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/drones.png');
+}
+
+[data-element='12'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/hybrid_turrets.png');
+}
+
+[data-element='13'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/capacitor_warfare.png');
+}
+
+[data-element='14'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/sensor_dampening.png');
+}
+
+[data-element='15'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/ecm.png');
+}
+
+[data-element='16'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/target_painting.png');
+}
+
+[data-element='17'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/tracking_disruption.png');
+}
+
+[data-element='18'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/stasis_webifying.png');
+}
+
+[data-element='19'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/warp_prevention.png');
+}
+
+[data-element='20'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/shields.png');
+}
+
+[data-element='22'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/attack.png');
+}
+
+[data-element='23'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/combat.png');
+}
+
+[data-element='24'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/disruption.png');
+}
+
+[data-element='25'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/fleet_support.png');
+}
+
+[data-element='26'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/hauling.png');
+}
+
+[data-element='27'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/resource_harvesting.png');
+}
+
+[data-element='28'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/explorer.png');
+}
+
+[data-element='29'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/tackling.png');
+}
+
+[data-element='30'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/small.png');
+}
+
+[data-element='31'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/medium.png');
+}
+
+[data-element='32'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/large.png');
+}
+
+[data-element='33'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/extra_large.png');
+}
+
+[data-element='45'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/precursor.png');
+}
+
+[data-element='2046'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/shields_armor.png');
+}
+
+[data-element='2048'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/vorton_projector.png');
+}
+
+[data-element='2056'] {
+  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/damage_over_time.png');
+}

@@ -1,0 +1,4 @@
+{
+  "extends": "../../internal/tsconfig/stories.json",
+  "include": ["src/**/*.story.tsx", "src/resfile.d.ts", "../../@types"]
+}

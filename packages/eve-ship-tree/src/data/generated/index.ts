@@ -1,0 +1,15 @@
+export const filenames = [
+  'certificates.jsonl',
+  'cloneGrades.jsonl',
+  'factions.jsonl',
+  'groups.jsonl',
+  'masteries.jsonl',
+  'requiredSkills.jsonl',
+  'shipSizes.jsonl',
+  'shipTreeElements.jsonl',
+  'shipTreeFactions.jsonl',
+  'shipTreeGroups.jsonl',
+  'typeBonus.jsonl',
+  'typeElements.jsonl',
+  'types.jsonl',
+] as const

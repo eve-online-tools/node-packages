@@ -1,0 +1,19 @@
+{
+  "500001": "res:/UI/Texture/Classes/ShipTree/factions/caldari.png",
+  "500002": "res:/UI/Texture/Classes/ShipTree/factions/minmatar.png",
+  "500003": "res:/UI/Texture/Classes/ShipTree/factions/amarr.png",
+  "500004": "res:/UI/Texture/Classes/ShipTree/factions/gallente.png",
+  "500006": "res:/UI/Texture/Classes/ShipTree/factions/concord.png",
+  "500010": "res:/UI/Texture/Classes/ShipTree/factions/guristas.png",
+  "500011": "res:/UI/Texture/Classes/ShipTree/factions/angel.png",
+  "500012": "res:/UI/Texture/Classes/ShipTree/factions/bloodRaiders.png",
+  "500014": "res:/UI/Texture/Classes/ShipTree/factions/ORE.png",
+  "500016": "res:/UI/Texture/Classes/ShipTree/factions/soe.png",
+  "500017": "res:/UI/Texture/Classes/ShipTree/factions/soct.png",
+  "500018": "res:/UI/Texture/Classes/ShipTree/factions/mordus.png",
+  "500019": "res:/UI/Texture/Classes/ShipTree/factions/sansha.png",
+  "500020": "res:/UI/Texture/Classes/ShipTree/factions/serpentis.png",
+  "500026": "res:/UI/Texture/Classes/ShipTree/factions/triglavianCollective.png",
+  "500027": "res:/UI/Texture/Classes/ShipTree/factions/edencom.png",
+  "500029": "res:/UI/Texture/Classes/ShipTree/factions/deathless.png"
+}

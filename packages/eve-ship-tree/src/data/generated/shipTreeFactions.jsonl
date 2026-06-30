@@ -1,0 +1,17 @@
+{"_key":500001,"description":{"en":"Favor missiles and Hybrid Turrets. Prioritize shields over speed."},"elements":[{"_key":1,"_value":9},{"_key":2,"_value":12},{"_key":3,"_value":20},{"_key":4,"_value":15}]}
+{"_key":500002,"description":{"en":"Prefer Projectile Turrets. Balance shield and armor with speed."},"elements":[{"_key":1,"_value":10},{"_key":2,"_value":9},{"_key":3,"_value":7},{"_key":4,"_value":20},{"_key":5,"_value":16},{"_key":6,"_value":18}]}
+{"_key":500003,"description":{"en":"Excel at engagements using Energy Turrets, backed up by drones. Prioritize armor over speed."},"elements":[{"_key":1,"_value":8},{"_key":2,"_value":11},{"_key":3,"_value":7},{"_key":4,"_value":17},{"_key":5,"_value":13}]}
+{"_key":500004,"description":{"en":"Rely on Hybrid Turrets, backed up by drones. Balance armor with speed."},"elements":[{"_key":1,"_value":12},{"_key":2,"_value":11},{"_key":3,"_value":7},{"_key":4,"_value":14},{"_key":5,"_value":19}]}
+{"_key":500006,"description":{"en":"Favors versatility with support for all weapon types. Balance speed with either armor or shields."},"elements":[{"_key":1,"_value":2046}]}
+{"_key":500010,"description":{"en":"Combines missiles and drones. Uses shields to outlast opponents."},"elements":[{"_key":1,"_value":11},{"_key":2,"_value":9},{"_key":3,"_value":20}]}
+{"_key":500011,"description":{"en":"Masters of Projectile Turrets. Favor speed."},"elements":[{"_key":1,"_value":10},{"_key":2,"_value":20}]}
+{"_key":500012,"description":{"en":"Specialize in electronic warfare and Energy Turrets. Prefer armor for anyone who gets too close."},"elements":[{"_key":1,"_value":8},{"_key":2,"_value":7},{"_key":3,"_value":13},{"_key":4,"_value":18}]}
+{"_key":500014,"description":{"en":"Industrial backbone of New Eden. Depend on others to fight for them. Rely on shields if all else fails."},"elements":[{"_key":1,"_value":20}]}
+{"_key":500016,"description":{"en":"Balance drones with Energy Turrets. High agility but low speed."},"elements":[{"_key":1,"_value":11},{"_key":2,"_value":8},{"_key":3,"_value":7}]}
+{"_key":500017,"description":{"en":"Favors versatility with support for all weapon types. Lack speed but capable with either armor or shields."},"elements":[{"_key":1,"_value":28},{"_key":2,"_value":2046}]}
+{"_key":500018,"description":{"en":"Proficient missile users. Rely on speed and shields for defense."},"elements":[{"_key":1,"_value":9},{"_key":2,"_value":20},{"_key":3,"_value":19}]}
+{"_key":500019,"description":{"en":"Prefer Energy Turrets. Use strong defensive shields."},"elements":[{"_key":1,"_value":8},{"_key":2,"_value":20}]}
+{"_key":500020,"description":{"en":"Favor Hybrid Turrets. Combine armor with acceleration."},"elements":[{"_key":1,"_value":12},{"_key":2,"_value":7},{"_key":3,"_value":18}]}
+{"_key":500026,"description":{"en":"Use Entropic Disintegrators. Heavily favor armor."},"elements":[{"_key":1,"_value":45},{"_key":2,"_value":7},{"_key":3,"_value":13}]}
+{"_key":500027,"description":{"en":"Use Vorton Projectors. Heavily favor shields."},"elements":[{"_key":1,"_value":2048},{"_key":2,"_value":20}]}
+{"_key":500029,"description":{"en":"Use Breacher Pod Launchers. Favors Projectile Turrets and hit-and-run tactics."},"elements":[{"_key":1,"_value":2056},{"_key":2,"_value":10},{"_key":3,"_value":9},{"_key":4,"_value":20}]}

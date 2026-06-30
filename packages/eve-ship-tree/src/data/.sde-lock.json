@@ -1,0 +1,81 @@
+{
+  "lockSchemaVersion": 2,
+  "buildNumber": "3409592",
+  "tables": [],
+  "jsonSpace": null,
+  "processors": [
+    {
+      "id": "certificates",
+      "version": "en"
+    },
+    {
+      "id": "cloneGrades",
+      "version": "en"
+    },
+    {
+      "id": "dogmaAttributeIdentifiers",
+      "version": "1"
+    },
+    {
+      "id": "factions",
+      "version": "en"
+    },
+    {
+      "id": "groups",
+      "version": "1"
+    },
+    {
+      "id": "masteries",
+      "version": "en"
+    },
+    {
+      "id": "shipSizes",
+      "version": "1"
+    },
+    {
+      "id": "shipTreeElements",
+      "version": "en"
+    },
+    {
+      "id": "shipTreeFactionIdentifiers",
+      "version": "1"
+    },
+    {
+      "id": "shipTreeFactions",
+      "version": "en"
+    },
+    {
+      "id": "shipTreeGroupIdentifiers",
+      "version": "1"
+    },
+    {
+      "id": "shipTreeGroups",
+      "version": "en"
+    },
+    {
+      "id": "shipTypeRequirements",
+      "version": "1"
+    },
+    {
+      "id": "staticDataFiles",
+      "version": ".jsonl"
+    },
+    {
+      "id": "staticExtra",
+      "version": "factionsbg+factionslogo"
+    },
+    {
+      "id": "typeBonus",
+      "version": "en"
+    },
+    {
+      "id": "typeElements",
+      "version": "en"
+    },
+    {
+      "id": "types",
+      "version": "en"
+    }
+  ],
+  "generatedAt": "2026-06-29T21:26:35.546Z"
+}

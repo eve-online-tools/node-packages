@@ -1,0 +1,16 @@
+ship-tree/ - the entire tree display; contains the background with faction logo
+ship-tree/grid/ - the blueprint-style grid used
+ship-tree/grid/grid-frame/ - the top- and bottom-frame of the grid
+ship-tree/tree-display/ - used as the content of the grid; displays a single ship tree
+ship-tree/tree-display/* - components used to draw the ship tree
+ship-tree/svg/ - re-usable SVG components used inside the ship tree
+ship-tree/theme-provider/ - method of making theme configuration available throughout the entire tree
+
+Normal way of rendering:
+- <ShipTree>
+- - renders its own background
+- - wraps content in <ThemeProvider> with theme config
+- - content: <Grid>
+- - - renders the grid + top/bottom frames
+- - - content: <TreeDisplay>
+- - - - renders a ship tree as a SVG

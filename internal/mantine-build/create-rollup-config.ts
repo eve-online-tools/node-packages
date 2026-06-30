@@ -10,6 +10,7 @@ import type { InputPluginOption, RollupOptions } from 'rollup'
 import banner from 'rollup-plugin-banner2'
 import esbuild from 'rollup-plugin-esbuild'
 import nodeExternals from 'rollup-plugin-node-externals'
+import postcssImport from 'postcss-import'
 import postcss from 'rollup-plugin-postcss'
 
 export interface MantineRollupConfigOptions {
@@ -31,7 +32,10 @@ export function createMantineRollupConfig({
   const outputDir = path.join(packageDir, 'dist')
   const tsconfigBuildPath = path.join(packageDir, 'tsconfig.build.json')
   const resfileIntegration = resfile
-    ? createEveResfileIntegration({ ...resfile, root: resfile.root ?? packageDir })
+    ? createEveResfileIntegration({
+        ...resfile,
+        root: resfile.root ?? packageDir,
+      })
     : null
 
   return {
@@ -69,7 +73,7 @@ export function createMantineRollupConfig({
         extract: true,
         modules: { generateScopedName: createGenerateScopedName(cssPrefix) },
         minimize: true,
-        plugins: resfileIntegration ? [postcssPlugin(resfileIntegration)] : undefined,
+        plugins: [postcssImport(), ...(resfileIntegration ? [postcssPlugin(resfileIntegration)] : [])],
       }),
       banner((chunk) => {
         if (chunk.fileName !== 'index.js' && chunk.fileName !== 'index.mjs') {

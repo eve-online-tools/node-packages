@@ -1,0 +1,67 @@
+[data-faction='500001'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/caldari.png');
+}
+
+[data-faction='500002'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/minmatar.png');
+}
+
+[data-faction='500003'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/amarr.png');
+}
+
+[data-faction='500004'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/gallente.png');
+}
+
+[data-faction='500006'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/concord.png');
+}
+
+[data-faction='500010'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/guristas.png');
+}
+
+[data-faction='500011'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/angelcartel.png');
+}
+
+[data-faction='500012'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/bloodraiders.png');
+}
+
+[data-faction='500014'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/ore.png');
+}
+
+[data-faction='500016'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/soe.png');
+}
+
+[data-faction='500017'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/soct.png');
+}
+
+[data-faction='500018'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/mordus.png');
+}
+
+[data-faction='500019'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/sanshasnation.png');
+}
+
+[data-faction='500020'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/serpentis.png');
+}
+
+[data-faction='500026'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/triglaviancollective.png');
+}
+
+[data-faction='500027'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/edencom.png');
+}
+
+[data-faction='500029'] {
+  --factionsbg-background: url('res:/ui/texture/classes/shiptree/factionbg/deathless.png');
+}

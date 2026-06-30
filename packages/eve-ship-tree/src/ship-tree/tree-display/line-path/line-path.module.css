@@ -1,0 +1,11 @@
+.root {
+  pointer-events: none;
+}
+
+.root[data-color='locked'] {
+  opacity: 0.45;
+}
+
+.root[data-color='unlocked'] {
+  opacity: 1;
+}

@@ -18,6 +18,12 @@ function getAbsolutePath(value: string): string {
 
 const config: StorybookConfig = {
   stories: ['../../../packages/*/src/**/*.story.@(js|jsx|mjs|ts|tsx)'],
+  staticDirs: [
+    {
+      from: path.join(monorepoRoot, 'packages/eve-ship-tree/src/data/generated'),
+      to: '/ship-tree-data',
+    },
+  ],
   addons: [getAbsolutePath('@storybook/addon-essentials')],
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),

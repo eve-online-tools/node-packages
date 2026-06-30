@@ -1,0 +1,75 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  width: 100%;
+  flex: 0 0 auto;
+  align-items: flex-end;
+
+  --bottom-frame-font-size: calc(var(--mantine-font-size-xs) * 0.66);
+  --bottom-frame-line-height: var(--mantine-line-height-xs);
+  --bottom-frame-font-family: var(--mantine-font-family-monospace);
+  --bottom-frame-font-color: #aacbe7;
+
+  user-select: none;
+  pointer-events: none;
+}
+
+.leftSection {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.left,
+.separator {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.versionLabel,
+.labelLine,
+.disclaimer {
+  font-size: var(--bottom-frame-font-size);
+  line-height: var(--bottom-frame-line-height);
+  font-family: var(--bottom-frame-font-family);
+  color: var(--bottom-frame-font-color);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.versionLabel {
+  position: absolute;
+  bottom: 0;
+  left: calc(50% + 2px);
+  transform: translateX(-100%);
+  white-space: nowrap;
+  margin-bottom: 3px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.labelLine {
+  display: block;
+}
+
+.disclaimer {
+  flex: 0 0 auto;
+  font-family: monospace;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.line {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 2px;
+  align-self: flex-end;
+}

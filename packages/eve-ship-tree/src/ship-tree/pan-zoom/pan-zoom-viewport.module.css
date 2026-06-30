@@ -1,0 +1,25 @@
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+}
+
+.root:active {
+  cursor: grabbing;
+}
+
+.transformLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.content {
+  width: max-content;
+  height: max-content;
+}
