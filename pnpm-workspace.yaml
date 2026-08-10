@@ -15,9 +15,9 @@ catalog:
   '@storybook/react': 10.4.6
   '@storybook/react-vite': 10.4.6
   '@testing-library/dom': ^10.4.0
-  '@testing-library/jest-dom': ^6.6.3
+  '@testing-library/jest-dom': ^7.0.0
   '@testing-library/react': ^16.3.0
-  '@testing-library/user-event': ^14.6.1
+  '@testing-library/user-event': ^14.6.3
   '@types/node': ^26.0.1
   '@types/react': ^19
   '@types/react-dom': ^19
