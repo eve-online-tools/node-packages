@@ -13,6 +13,16 @@ updates:
       include: scope
     labels:
       - dependencies
+    ignore:
+      # tsup dts build needs the TS JS compiler API, removed in TS 7
+      - dependency-name: typescript
+        versions: ['>=7']
+      # eve-ship-tree peer range is ^12
+      - dependency-name: motion
+        versions: ['>=13']
+      # match node runtime in .nvmrc
+      - dependency-name: '@types/node'
+        versions: ['>=25']
     groups:
       changesets:
         patterns:
