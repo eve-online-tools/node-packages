@@ -11,21 +11,21 @@ export const identifiers = {
   requiredSkill5Level: 1287,
   requiredSkill5: 1289,
   rigSize: 1547,
-} as const
+} as const;
 
-export type Identifier = (typeof identifiers)[keyof typeof identifiers]
+export type Identifier = (typeof identifiers)[keyof typeof identifiers];
 
 export const names = {
-  182: 'requiredSkill1',
-  183: 'requiredSkill2',
-  184: 'requiredSkill3',
-  277: 'requiredSkill1Level',
-  278: 'requiredSkill2Level',
-  279: 'requiredSkill3Level',
-  422: 'techLevel',
-  1285: 'requiredSkill4',
-  1286: 'requiredSkill4Level',
-  1287: 'requiredSkill5Level',
-  1289: 'requiredSkill5',
-  1547: 'rigSize',
-} as const
+  182: "requiredSkill1",
+  183: "requiredSkill2",
+  184: "requiredSkill3",
+  277: "requiredSkill1Level",
+  278: "requiredSkill2Level",
+  279: "requiredSkill3Level",
+  422: "techLevel",
+  1285: "requiredSkill4",
+  1286: "requiredSkill4Level",
+  1287: "requiredSkill5Level",
+  1289: "requiredSkill5",
+  1547: "rigSize",
+} as const;

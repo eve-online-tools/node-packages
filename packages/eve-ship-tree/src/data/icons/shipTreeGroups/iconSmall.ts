@@ -1,20 +1,20 @@
-import resUiTextureSharedBracketsBattlecruiser16Png from 'res:/ui/texture/shared/brackets/battlecruiser_16.png'
-import resUiTextureSharedBracketsBattleship16Png from 'res:/ui/texture/shared/brackets/battleship_16.png'
-import resUiTextureSharedBracketsCapsule16Png from 'res:/ui/texture/shared/brackets/capsule_16.png'
-import resUiTextureSharedBracketsCarrier16Png from 'res:/ui/texture/shared/brackets/carrier_16.png'
-import resUiTextureSharedBracketsCruiser16Png from 'res:/ui/texture/shared/brackets/cruiser_16.png'
-import resUiTextureSharedBracketsDestroyer16Png from 'res:/ui/texture/shared/brackets/destroyer_16.png'
-import resUiTextureSharedBracketsDreadnought16Png from 'res:/ui/texture/shared/brackets/dreadnought_16.png'
-import resUiTextureSharedBracketsFreighter16Png from 'res:/ui/texture/shared/brackets/freighter_16.png'
-import resUiTextureSharedBracketsFrigate16Png from 'res:/ui/texture/shared/brackets/frigate_16.png'
-import resUiTextureSharedBracketsIndustrial16Png from 'res:/ui/texture/shared/brackets/industrial_16.png'
-import resUiTextureSharedBracketsIndustrialcommand16Png from 'res:/ui/texture/shared/brackets/industrialcommand_16.png'
-import resUiTextureSharedBracketsMiningbarge16Png from 'res:/ui/texture/shared/brackets/miningbarge_16.png'
-import resUiTextureSharedBracketsMiningdestroyer16Png from 'res:/ui/texture/shared/brackets/miningdestroyer_16.png'
-import resUiTextureSharedBracketsMiningfrigate16Png from 'res:/ui/texture/shared/brackets/miningfrigate_16.png'
-import resUiTextureSharedBracketsRookie16Png from 'res:/ui/texture/shared/brackets/rookie_16.png'
-import resUiTextureSharedBracketsShuttle16Png from 'res:/ui/texture/shared/brackets/shuttle_16.png'
-import resUiTextureSharedBracketsTitan16Png from 'res:/ui/texture/shared/brackets/titan_16.png'
+import resUiTextureSharedBracketsBattlecruiser16Png from "res:/ui/texture/shared/brackets/battlecruiser_16.png";
+import resUiTextureSharedBracketsBattleship16Png from "res:/ui/texture/shared/brackets/battleship_16.png";
+import resUiTextureSharedBracketsCapsule16Png from "res:/ui/texture/shared/brackets/capsule_16.png";
+import resUiTextureSharedBracketsCarrier16Png from "res:/ui/texture/shared/brackets/carrier_16.png";
+import resUiTextureSharedBracketsCruiser16Png from "res:/ui/texture/shared/brackets/cruiser_16.png";
+import resUiTextureSharedBracketsDestroyer16Png from "res:/ui/texture/shared/brackets/destroyer_16.png";
+import resUiTextureSharedBracketsDreadnought16Png from "res:/ui/texture/shared/brackets/dreadnought_16.png";
+import resUiTextureSharedBracketsFreighter16Png from "res:/ui/texture/shared/brackets/freighter_16.png";
+import resUiTextureSharedBracketsFrigate16Png from "res:/ui/texture/shared/brackets/frigate_16.png";
+import resUiTextureSharedBracketsIndustrial16Png from "res:/ui/texture/shared/brackets/industrial_16.png";
+import resUiTextureSharedBracketsIndustrialcommand16Png from "res:/ui/texture/shared/brackets/industrialcommand_16.png";
+import resUiTextureSharedBracketsMiningbarge16Png from "res:/ui/texture/shared/brackets/miningbarge_16.png";
+import resUiTextureSharedBracketsMiningdestroyer16Png from "res:/ui/texture/shared/brackets/miningdestroyer_16.png";
+import resUiTextureSharedBracketsMiningfrigate16Png from "res:/ui/texture/shared/brackets/miningfrigate_16.png";
+import resUiTextureSharedBracketsRookie16Png from "res:/ui/texture/shared/brackets/rookie_16.png";
+import resUiTextureSharedBracketsShuttle16Png from "res:/ui/texture/shared/brackets/shuttle_16.png";
+import resUiTextureSharedBracketsTitan16Png from "res:/ui/texture/shared/brackets/titan_16.png";
 
 export const iconSmall = {
   4: resUiTextureSharedBracketsRookie16Png,
@@ -69,4 +69,4 @@ export const iconSmall = {
   2111: resUiTextureSharedBracketsMiningfrigate16Png,
   2112: resUiTextureSharedBracketsMiningdestroyer16Png,
   2113: resUiTextureSharedBracketsCarrier16Png,
-} as const
+} as const;

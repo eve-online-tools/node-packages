@@ -1,20 +1,20 @@
-import resUiTextureSharedBracketsNpcbattlecruiser16Png from 'res:/ui/texture/shared/brackets/npcbattlecruiser_16.png'
-import resUiTextureSharedBracketsNpcbattleship16Png from 'res:/ui/texture/shared/brackets/npcbattleship_16.png'
-import resUiTextureSharedBracketsNpccapital16Png from 'res:/ui/texture/shared/brackets/npccapital_16.png'
-import resUiTextureSharedBracketsNpccapsule16Png from 'res:/ui/texture/shared/brackets/npccapsule_16.png'
-import resUiTextureSharedBracketsNpccruiser16Png from 'res:/ui/texture/shared/brackets/npccruiser_16.png'
-import resUiTextureSharedBracketsNpcdestroyer16Png from 'res:/ui/texture/shared/brackets/npcdestroyer_16.png'
-import resUiTextureSharedBracketsNpcfreighter16Png from 'res:/ui/texture/shared/brackets/npcfreighter_16.png'
-import resUiTextureSharedBracketsNpcfrigate16Png from 'res:/ui/texture/shared/brackets/npcfrigate_16.png'
-import resUiTextureSharedBracketsNpcindustrial16Png from 'res:/ui/texture/shared/brackets/npcindustrial_16.png'
-import resUiTextureSharedBracketsNpcindustrialcommand16Png from 'res:/ui/texture/shared/brackets/npcindustrialcommand_16.png'
-import resUiTextureSharedBracketsNpcminingbarge16Png from 'res:/ui/texture/shared/brackets/npcminingbarge_16.png'
-import resUiTextureSharedBracketsNpcminingdestroyer16Png from 'res:/ui/texture/shared/brackets/npcminingdestroyer_16.png'
-import resUiTextureSharedBracketsNpcminingfrigate16Png from 'res:/ui/texture/shared/brackets/npcminingfrigate_16.png'
-import resUiTextureSharedBracketsNpcrookie16Png from 'res:/ui/texture/shared/brackets/npcrookie_16.png'
-import resUiTextureSharedBracketsNpcshuttle16Png from 'res:/ui/texture/shared/brackets/npcshuttle_16.png'
-import resUiTextureSharedBracketsNpcsupercapital16Png from 'res:/ui/texture/shared/brackets/npcsupercapital_16.png'
-import resUiTextureSharedBracketsNpctitan16Png from 'res:/ui/texture/shared/brackets/npctitan_16.png'
+import resUiTextureSharedBracketsNpcbattlecruiser16Png from "res:/ui/texture/shared/brackets/npcbattlecruiser_16.png";
+import resUiTextureSharedBracketsNpcbattleship16Png from "res:/ui/texture/shared/brackets/npcbattleship_16.png";
+import resUiTextureSharedBracketsNpccapital16Png from "res:/ui/texture/shared/brackets/npccapital_16.png";
+import resUiTextureSharedBracketsNpccapsule16Png from "res:/ui/texture/shared/brackets/npccapsule_16.png";
+import resUiTextureSharedBracketsNpccruiser16Png from "res:/ui/texture/shared/brackets/npccruiser_16.png";
+import resUiTextureSharedBracketsNpcdestroyer16Png from "res:/ui/texture/shared/brackets/npcdestroyer_16.png";
+import resUiTextureSharedBracketsNpcfreighter16Png from "res:/ui/texture/shared/brackets/npcfreighter_16.png";
+import resUiTextureSharedBracketsNpcfrigate16Png from "res:/ui/texture/shared/brackets/npcfrigate_16.png";
+import resUiTextureSharedBracketsNpcindustrial16Png from "res:/ui/texture/shared/brackets/npcindustrial_16.png";
+import resUiTextureSharedBracketsNpcindustrialcommand16Png from "res:/ui/texture/shared/brackets/npcindustrialcommand_16.png";
+import resUiTextureSharedBracketsNpcminingbarge16Png from "res:/ui/texture/shared/brackets/npcminingbarge_16.png";
+import resUiTextureSharedBracketsNpcminingdestroyer16Png from "res:/ui/texture/shared/brackets/npcminingdestroyer_16.png";
+import resUiTextureSharedBracketsNpcminingfrigate16Png from "res:/ui/texture/shared/brackets/npcminingfrigate_16.png";
+import resUiTextureSharedBracketsNpcrookie16Png from "res:/ui/texture/shared/brackets/npcrookie_16.png";
+import resUiTextureSharedBracketsNpcshuttle16Png from "res:/ui/texture/shared/brackets/npcshuttle_16.png";
+import resUiTextureSharedBracketsNpcsupercapital16Png from "res:/ui/texture/shared/brackets/npcsupercapital_16.png";
+import resUiTextureSharedBracketsNpctitan16Png from "res:/ui/texture/shared/brackets/npctitan_16.png";
 
 export const iconSmallNPC = {
   4: resUiTextureSharedBracketsNpcrookie16Png,
@@ -69,4 +69,4 @@ export const iconSmallNPC = {
   2111: resUiTextureSharedBracketsNpcminingfrigate16Png,
   2112: resUiTextureSharedBracketsNpcminingdestroyer16Png,
   2113: resUiTextureSharedBracketsNpcsupercapital16Png,
-} as const
+} as const;

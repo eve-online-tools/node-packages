@@ -16,26 +16,26 @@ export const identifiers = {
   triglavianCollective: 500026,
   edencom: 500027,
   deathlessCircle: 500029,
-} as const
+} as const;
 
-export type Identifier = (typeof identifiers)[keyof typeof identifiers]
+export type Identifier = (typeof identifiers)[keyof typeof identifiers];
 
 export const names = {
-  500001: 'Caldari State',
-  500002: 'Minmatar Republic',
-  500003: 'Amarr Empire',
-  500004: 'Gallente Federation',
-  500006: 'CONCORD Assembly',
-  500010: 'Guristas Pirates',
-  500011: 'Angel Cartel',
-  500012: 'Blood Raider Covenant',
-  500014: 'ORE',
-  500016: 'Servant Sisters of EVE',
-  500017: 'The Society of Conscious Thought',
+  500001: "Caldari State",
+  500002: "Minmatar Republic",
+  500003: "Amarr Empire",
+  500004: "Gallente Federation",
+  500006: "CONCORD Assembly",
+  500010: "Guristas Pirates",
+  500011: "Angel Cartel",
+  500012: "Blood Raider Covenant",
+  500014: "ORE",
+  500016: "Servant Sisters of EVE",
+  500017: "The Society of Conscious Thought",
   500018: "Mordu's Legion Command",
   500019: "Sansha's Nation",
-  500020: 'Serpentis',
-  500026: 'Triglavian Collective',
-  500027: 'EDENCOM',
-  500029: 'Deathless Circle',
-} as const
+  500020: "Serpentis",
+  500026: "Triglavian Collective",
+  500027: "EDENCOM",
+  500029: "Deathless Circle",
+} as const;

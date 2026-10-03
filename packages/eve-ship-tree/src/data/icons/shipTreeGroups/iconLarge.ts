@@ -1,20 +1,20 @@
-import resUiTextureClassesShiptreeGroupiconsBattlecruiser64Png from 'res:/ui/texture/classes/shiptree/groupicons/battlecruiser_64.png'
-import resUiTextureClassesShiptreeGroupiconsBattleship64Png from 'res:/ui/texture/classes/shiptree/groupicons/battleship_64.png'
-import resUiTextureClassesShiptreeGroupiconsCapital64Png from 'res:/ui/texture/classes/shiptree/groupicons/capital_64.png'
-import resUiTextureClassesShiptreeGroupiconsCapsule64Png from 'res:/ui/texture/classes/shiptree/groupicons/capsule_64.png'
-import resUiTextureClassesShiptreeGroupiconsCruiser64Png from 'res:/ui/texture/classes/shiptree/groupicons/cruiser_64.png'
-import resUiTextureClassesShiptreeGroupiconsDestroyer64Png from 'res:/ui/texture/classes/shiptree/groupicons/destroyer_64.png'
-import resUiTextureClassesShiptreeGroupiconsFreighter64Png from 'res:/ui/texture/classes/shiptree/groupicons/freighter_64.png'
-import resUiTextureClassesShiptreeGroupiconsFrigate64Png from 'res:/ui/texture/classes/shiptree/groupicons/frigate_64.png'
-import resUiTextureClassesShiptreeGroupiconsIndustrial64Png from 'res:/ui/texture/classes/shiptree/groupicons/industrial_64.png'
-import resUiTextureClassesShiptreeGroupiconsIndustrialcommand64Png from 'res:/ui/texture/classes/shiptree/groupicons/industrialcommand_64.png'
-import resUiTextureClassesShiptreeGroupiconsMiningbarge64Png from 'res:/ui/texture/classes/shiptree/groupicons/miningbarge_64.png'
-import resUiTextureClassesShiptreeGroupiconsMiningdestroyer64Png from 'res:/ui/texture/classes/shiptree/groupicons/miningdestroyer_64.png'
-import resUiTextureClassesShiptreeGroupiconsMiningfrigate64Png from 'res:/ui/texture/classes/shiptree/groupicons/miningfrigate_64.png'
-import resUiTextureClassesShiptreeGroupiconsRookie64Png from 'res:/ui/texture/classes/shiptree/groupicons/rookie_64.png'
-import resUiTextureClassesShiptreeGroupiconsShuttle64Png from 'res:/ui/texture/classes/shiptree/groupicons/shuttle_64.png'
-import resUiTextureClassesShiptreeGroupiconsSupercapital64Png from 'res:/ui/texture/classes/shiptree/groupicons/supercapital_64.png'
-import resUiTextureClassesShiptreeGroupiconsTitan64Png from 'res:/ui/texture/classes/shiptree/groupicons/titan_64.png'
+import resUiTextureClassesShiptreeGroupiconsBattlecruiser64Png from "res:/ui/texture/classes/shiptree/groupicons/battlecruiser_64.png";
+import resUiTextureClassesShiptreeGroupiconsBattleship64Png from "res:/ui/texture/classes/shiptree/groupicons/battleship_64.png";
+import resUiTextureClassesShiptreeGroupiconsCapital64Png from "res:/ui/texture/classes/shiptree/groupicons/capital_64.png";
+import resUiTextureClassesShiptreeGroupiconsCapsule64Png from "res:/ui/texture/classes/shiptree/groupicons/capsule_64.png";
+import resUiTextureClassesShiptreeGroupiconsCruiser64Png from "res:/ui/texture/classes/shiptree/groupicons/cruiser_64.png";
+import resUiTextureClassesShiptreeGroupiconsDestroyer64Png from "res:/ui/texture/classes/shiptree/groupicons/destroyer_64.png";
+import resUiTextureClassesShiptreeGroupiconsFreighter64Png from "res:/ui/texture/classes/shiptree/groupicons/freighter_64.png";
+import resUiTextureClassesShiptreeGroupiconsFrigate64Png from "res:/ui/texture/classes/shiptree/groupicons/frigate_64.png";
+import resUiTextureClassesShiptreeGroupiconsIndustrial64Png from "res:/ui/texture/classes/shiptree/groupicons/industrial_64.png";
+import resUiTextureClassesShiptreeGroupiconsIndustrialcommand64Png from "res:/ui/texture/classes/shiptree/groupicons/industrialcommand_64.png";
+import resUiTextureClassesShiptreeGroupiconsMiningbarge64Png from "res:/ui/texture/classes/shiptree/groupicons/miningbarge_64.png";
+import resUiTextureClassesShiptreeGroupiconsMiningdestroyer64Png from "res:/ui/texture/classes/shiptree/groupicons/miningdestroyer_64.png";
+import resUiTextureClassesShiptreeGroupiconsMiningfrigate64Png from "res:/ui/texture/classes/shiptree/groupicons/miningfrigate_64.png";
+import resUiTextureClassesShiptreeGroupiconsRookie64Png from "res:/ui/texture/classes/shiptree/groupicons/rookie_64.png";
+import resUiTextureClassesShiptreeGroupiconsShuttle64Png from "res:/ui/texture/classes/shiptree/groupicons/shuttle_64.png";
+import resUiTextureClassesShiptreeGroupiconsSupercapital64Png from "res:/ui/texture/classes/shiptree/groupicons/supercapital_64.png";
+import resUiTextureClassesShiptreeGroupiconsTitan64Png from "res:/ui/texture/classes/shiptree/groupicons/titan_64.png";
 
 export const iconLarge = {
   4: resUiTextureClassesShiptreeGroupiconsRookie64Png,
@@ -69,4 +69,4 @@ export const iconLarge = {
   2111: resUiTextureClassesShiptreeGroupiconsMiningfrigate64Png,
   2112: resUiTextureClassesShiptreeGroupiconsMiningdestroyer64Png,
   2113: resUiTextureClassesShiptreeGroupiconsSupercapital64Png,
-} as const
+} as const;
