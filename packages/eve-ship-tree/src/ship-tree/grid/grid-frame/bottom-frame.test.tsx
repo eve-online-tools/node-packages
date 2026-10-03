@@ -1,10 +1,9 @@
-import { MantineProvider } from '@mantine/core'
 import { render, screen } from '@testing-library/react'
 import type { ReactElement } from 'react'
 
 import { BottomFrame } from './bottom-frame'
 
-const renderBottomFrame = (ui: ReactElement) => render(<MantineProvider>{ui}</MantineProvider>)
+const renderBottomFrame = (ui: ReactElement) => render(ui)
 
 describe('BottomFrame', () => {
   it('renders version label when provided', () => {

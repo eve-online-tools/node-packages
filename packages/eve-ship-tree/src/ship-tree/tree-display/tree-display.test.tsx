@@ -1,4 +1,3 @@
-import { MantineProvider } from '@mantine/core'
 import { render, screen } from '@testing-library/react'
 import type { ReactElement } from 'react'
 
@@ -26,13 +25,9 @@ describe('TreeDisplay', () => {
   it('throws when used outside DataProvider', () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-    expect(() =>
-      render(
-        <MantineProvider>
-          <TreeDisplay faction={500001} />
-        </MantineProvider>,
-      ),
-    ).toThrow('useProcessedData must be used within a DataProvider')
+    expect(() => render(<TreeDisplay faction={500001} />)).toThrow(
+      'useProcessedData must be used within a DataProvider',
+    )
 
     consoleError.mockRestore()
   })

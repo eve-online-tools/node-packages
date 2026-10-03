@@ -13,7 +13,7 @@ import nodeExternals from 'rollup-plugin-node-externals'
 import postcssImport from 'postcss-import'
 import postcss from 'rollup-plugin-postcss'
 
-export interface MantineRollupConfigOptions {
+export interface ReactRollupConfigOptions {
   packageDir: string
   cssPrefix: string
   /** Runs before resfile so generated artifacts can reference res:/ imports. */
@@ -22,13 +22,13 @@ export interface MantineRollupConfigOptions {
   plugins?: InputPluginOption[]
 }
 
-export function createMantineRollupConfig({
+export function createReactRollupConfig({
   packageDir,
   cssPrefix,
   sde: sdeOptions,
   resfile,
   plugins,
-}: MantineRollupConfigOptions): RollupOptions {
+}: ReactRollupConfigOptions): RollupOptions {
   const outputDir = path.join(packageDir, 'dist')
   const tsconfigBuildPath = path.join(packageDir, 'tsconfig.build.json')
   const resfileIntegration = resfile

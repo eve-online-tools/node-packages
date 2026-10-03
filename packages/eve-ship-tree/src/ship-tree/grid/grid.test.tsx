@@ -1,10 +1,9 @@
-import { MantineProvider } from '@mantine/core'
 import { render, screen } from '@testing-library/react'
 import type { ReactElement } from 'react'
 
 import { Grid } from './grid'
 
-const renderGrid = (ui: ReactElement) => render(<MantineProvider>{ui}</MantineProvider>)
+const renderGrid = (ui: ReactElement) => render(ui)
 
 describe('Grid', () => {
   it('renders children inside the content slot', () => {

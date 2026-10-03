@@ -1,11 +1,5 @@
 export { TreeDisplay } from './tree-display'
-export type {
-  TreeDisplayCssVariables,
-  TreeDisplayFactory,
-  TreeDisplayProps,
-  TreeDisplayStylesNames,
-  TreeDisplayVariant,
-} from './tree-display'
+export type { TreeDisplayProps, TreeDisplayStylesNames } from './tree-display'
 export {
   collectLayout,
   computeViewBox,

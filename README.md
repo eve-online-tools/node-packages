@@ -1,6 +1,6 @@
 # node-packages monorepo
 
-pnpm + Turborepo monorepo for `@eve-online-tools/*` packages: Mantine component libraries and pure TypeScript utilities.
+pnpm + Turborepo monorepo for `@eve-online-tools/*` packages: React component libraries and pure TypeScript utilities.
 
 ## Structure
 
@@ -11,7 +11,7 @@ apps/
 packages/
   eve-resfile/   resfile index loader for Vite and Rollup
 internal/
-  mantine-build/ Shared Rollup + post-build pipeline (@repo/mantine-build)
+  react-build/   Shared Rollup + post-build pipeline (@repo/react-build)
   tsconfig/      Shared TypeScript configs (@repo/tsconfig)
   vite-config/   Workspace source aliases for Vite dev HMR (@repo/vite-config)
 ```
@@ -36,7 +36,7 @@ pnpm test
 | `pnpm storybook` | Storybook at http://localhost:8271 |
 | `pnpm build` | Build all packages and apps |
 | `pnpm test` | Full quality gate (syncpack, format, typecheck, lint, tests) |
-| `pnpm create-package` | Scaffold a new `ts` or `mantine` package |
+| `pnpm create-package` | Scaffold a new `ts` or `react` package |
 
 Stories live next to components: `packages/*/src/**/*.story.tsx`.
 
@@ -48,7 +48,7 @@ Vite and Storybook alias workspace packages to `packages/*/src` for HMR. Subpath
 
 ```bash
 pnpm create-package ts my-utils
-pnpm create-package mantine market-ui
+pnpm create-package react market-ui
 pnpm install
 pnpm build
 ```

@@ -35,7 +35,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "pnpm run clean && rollup -c rollup.config.ts --configPlugin esbuild && tsx ../../internal/mantine-build/post-build.ts && tsup --config tsup.cli.config.ts",
+    "build": "pnpm run clean && rollup -c rollup.config.ts --configPlugin esbuild && tsx ../../internal/react-build/post-build.ts && tsup --config tsup.cli.config.ts",
     "typecheck": "pnpm exec tsc --noEmit -p tsconfig.json",
     "test": "pnpm --workspace-root vitest run packages/esi-provider"
   },

@@ -1,6 +1,6 @@
 # eve-sde architecture
 
-`@eve-online-tools/eve-sde` downloads CCP's Static Data Export (SDE), caches and parses JSONL tables, runs optional processors, and writes generated artifacts for downstream packages (`eve-ship-tree`, mantine-build rollups, etc.).
+`@eve-online-tools/eve-sde` downloads CCP's Static Data Export (SDE), caches and parses JSONL tables, runs optional processors, and writes generated artifacts for downstream packages (`eve-ship-tree`, react-build rollups, etc.).
 
 ## Pipeline overview
 

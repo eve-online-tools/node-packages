@@ -1,56 +1,23 @@
-import { createVarsResolver, factory, Factory, StylesApiProps, useProps, useStyles } from '@mantine/core'
-import type { CSSProperties } from 'react'
-
 import { holoIcon } from '../../../data/icons/types'
 import { useShipTreeTheme } from '../../theme-provider'
 import { ColorMaskedSprite } from '../../svg'
 import { groupIconLargeSize } from '../layout-constants'
 import classes from './capsule.module.css'
+import { createGetStyles, type StylesApiProps } from '../../styles-api'
 
 const capsuleTypeId = 670
 const goldenCapsuleColor = '#FCD17E'
 
 export type CapsuleStylesNames = 'root' | 'icon'
-export type CapsuleCssVariables = Record<string, never>
 
-export interface CapsuleProps extends StylesApiProps<CapsuleFactory> {
+export interface CapsuleProps extends StylesApiProps<CapsuleStylesNames> {
   x: number
   y: number
   size?: number
-  className?: string
-  style?: CSSProperties
 }
 
-export type CapsuleFactory = Factory<{
-  props: CapsuleProps
-  ref: SVGGElement
-  stylesNames: CapsuleStylesNames
-  vars: CapsuleCssVariables
-}>
-
-const defaultProps = {
-  size: groupIconLargeSize,
-} satisfies Partial<CapsuleProps>
-
-const varsResolver = createVarsResolver<CapsuleFactory>((_theme, _props) => ({}))
-
-export const Capsule = factory<CapsuleFactory>((_props) => {
-  const props = useProps('Capsule', defaultProps, _props)
-  const { x, y, size, className, style, classNames, styles, unstyled, vars, attributes, ref, ...others } = props
-
-  const getStyles = useStyles<CapsuleFactory>({
-    name: 'Capsule',
-    classes,
-    props,
-    className,
-    style,
-    classNames,
-    styles,
-    unstyled,
-    attributes,
-    vars,
-    varsResolver,
-  })
+export const Capsule = ({ x, y, size = groupIconLargeSize, className, style, classNames, styles }: CapsuleProps) => {
+  const getStyles = createGetStyles<CapsuleStylesNames>(classes, { className, style, classNames, styles })
 
   const { goldenCapsule = false } = useShipTreeTheme()
   const iconStyles = getStyles('icon')
@@ -58,11 +25,9 @@ export const Capsule = factory<CapsuleFactory>((_props) => {
 
   return (
     <g
-      ref={ref}
       {...getStyles('root')}
       data-golden-capsule={goldenCapsule || undefined}
       transform={`translate(${x}, ${y})`}
-      {...others}
     >
       <ColorMaskedSprite
         className={iconStyles.className}
@@ -76,14 +41,6 @@ export const Capsule = factory<CapsuleFactory>((_props) => {
       />
     </g>
   )
-})
+}
 
 Capsule.displayName = '@eve-online-tools/eve-ship-tree/Capsule'
-Capsule.classes = classes
-
-export namespace Capsule {
-  export type Props = CapsuleProps
-  export type StylesNames = CapsuleStylesNames
-  export type CssVariables = CapsuleCssVariables
-  export type Factory = CapsuleFactory
-}

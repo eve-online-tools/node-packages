@@ -5,10 +5,11 @@
   flex: 0 0 auto;
   align-items: flex-start;
 
-  --top-frame-font-weight: var(--mantine-font-weight-bold);
-  --top-frame-font-size: var(--mantine-font-size-xs);
-  --top-frame-line-height: calc(var(--mantine-line-height-xs) * 1.25);
-  --top-frame-font-family: var(--mantine-font-family-monospace);
+  --top-frame-font-weight: 700;
+  --top-frame-font-size: 12px;
+  --top-frame-line-height: 1.75;
+  --top-frame-font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --top-frame-font-color: #000;
 
   user-select: none;

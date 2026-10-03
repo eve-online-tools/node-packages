@@ -1,4 +1,3 @@
-import { MantineProvider } from '@mantine/core'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { filenames } from '../../data/generated'
@@ -39,23 +38,21 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <MantineProvider>
-        <SkillsProvider skills={{}}>
-          <DataProvider data={emptyData()}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                height: 480,
-                width: 640,
-                backgroundColor: '#070d13',
-              }}
-            >
-              <Story />
-            </div>
-          </DataProvider>
-        </SkillsProvider>
-      </MantineProvider>
+      <SkillsProvider skills={{}}>
+        <DataProvider data={emptyData()}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: 480,
+              width: 640,
+              backgroundColor: '#070d13',
+            }}
+          >
+            <Story />
+          </div>
+        </DataProvider>
+      </SkillsProvider>
     ),
   ],
 } satisfies Meta<typeof TreeDisplay>

@@ -1,7 +1,7 @@
 .root {
   fill: #fff;
-  font-family: var(--mantine-font-family-monospace);
-  font-size: var(--mantine-font-size-sm);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 14px;
   text-transform: uppercase;
   pointer-events: none;
   user-select: none;

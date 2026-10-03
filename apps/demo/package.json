@@ -9,8 +9,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@mantine/core": "catalog:",
-    "@mantine/hooks": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

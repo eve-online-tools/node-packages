@@ -4,7 +4,7 @@ import path from 'node:path'
 import signale from 'signale'
 import { rebaseStylesCssUrls } from './prepare-styles'
 
-const packageDir = process.env.MANTINE_PACKAGE_DIR ?? process.cwd()
+const packageDir = process.env.REACT_PACKAGE_DIR ?? process.cwd()
 
 function loadPackageJson(): Record<string, any> {
   const packageJsonPath = path.join(packageDir, 'package.json')
@@ -52,7 +52,7 @@ function prepareStyles(): void {
   }
 
   fs.writeFileSync(path.join(packageDir, 'dist/styles.css'), content)
-  fs.writeFileSync(path.join(packageDir, 'dist/styles.layer.css'), `@layer mantine {${content}}`)
+  fs.writeFileSync(path.join(packageDir, 'dist/styles.layer.css'), `@layer eve-online-tools {${content}}`)
 
   fs.rmSync(rollupCssFilePath)
   fs.rmSync(path.join(packageDir, 'dist/cjs/index.css'))
@@ -64,7 +64,7 @@ async function postBuild(): Promise<void> {
     prepareStyles()
     signale.success(`Post-build complete for ${path.basename(packageDir)}`)
   } catch (err) {
-    signale.error('Mantine package post-build failed')
+    signale.error('Package post-build failed')
     signale.error(err)
     process.exit(1)
   }

@@ -1,4 +1,3 @@
-import { MantineProvider } from '@mantine/core'
 import { render, screen, waitFor } from '@testing-library/react'
 import type { ReactElement } from 'react'
 
@@ -45,7 +44,7 @@ describe('ShipTree', () => {
     )
 
     expect(screen.queryByText('ship tree child')).not.toBeInTheDocument()
-    expect(document.querySelector('.mantine-LoadingOverlay-root')).toBeTruthy()
+    expect(screen.getByTestId('ship-tree-loading')).toBeInTheDocument()
   })
 
   it('shows error on fetch failure', async () => {
@@ -112,18 +111,16 @@ describe('ShipTree', () => {
     expect(root).toHaveAttribute('data-faction', '500001')
 
     rerender(
-      <MantineProvider>
-        <SkillsProvider skills={{}}>
-          <DataProvider data={emptyData()}>
-            <ShipTree
-              faction={500004}
-              data-testid="ship-tree-root"
-            >
-              <span>child</span>
-            </ShipTree>
-          </DataProvider>
-        </SkillsProvider>
-      </MantineProvider>,
+      <SkillsProvider skills={{}}>
+        <DataProvider data={emptyData()}>
+          <ShipTree
+            faction={500004}
+            data-testid="ship-tree-root"
+          >
+            <span>child</span>
+          </ShipTree>
+        </DataProvider>
+      </SkillsProvider>,
     )
 
     expect(container.querySelector('[data-testid="ship-tree-root"]')).toHaveAttribute('data-faction', '500004')
@@ -144,13 +141,11 @@ describe('ShipTree', () => {
 
     expect(() =>
       render(
-        <MantineProvider>
-          <DataProvider data={emptyData()}>
-            <ShipTree>
-              <span>child</span>
-            </ShipTree>
-          </DataProvider>
-        </MantineProvider>,
+        <DataProvider data={emptyData()}>
+          <ShipTree>
+            <span>child</span>
+          </ShipTree>
+        </DataProvider>,
       ),
     ).toThrow('useSkills must be used within a SkillProvider')
 

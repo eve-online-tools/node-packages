@@ -13,7 +13,7 @@
   "ignore": [
     "@eve-online-tools/demo",
     "@eve-online-tools/storybook",
-    "@repo/mantine-build",
+    "@repo/react-build",
     "@repo/tsconfig",
     "@repo/vite-config"
   ]

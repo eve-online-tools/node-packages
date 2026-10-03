@@ -1,4 +1,3 @@
-import { MantineProvider } from '@mantine/core'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { Grid } from './grid'
@@ -22,19 +21,17 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <MantineProvider>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: 'calc(100vh - 2rem)',
-            width: 'calc(100vw - 2rem)',
-            backgroundColor: '#070d13',
-          }}
-        >
-          <Story />
-        </div>
-      </MantineProvider>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: 'calc(100vh - 2rem)',
+          width: 'calc(100vw - 2rem)',
+          backgroundColor: '#070d13',
+        }}
+      >
+        <Story />
+      </div>
     ),
   ],
 } satisfies Meta<typeof Grid>

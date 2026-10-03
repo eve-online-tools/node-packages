@@ -1,46 +1,17 @@
-import { createVarsResolver, factory, Factory, StylesApiProps, useProps, useStyles } from '@mantine/core'
-import type { CSSProperties } from 'react'
-
 import { useShipTreeTheme } from '../../theme-provider'
 import classes from './omega-icon.module.css'
+import { createGetStyles, type StylesApiProps } from '../../styles-api'
 import omegaIconSprite from 'res:/ui/texture/classes/clonegrade/omega_64.png'
 
 export type OmegaIconStylesNames = 'root' | 'icon'
-export type OmegaIconCssVariables = Record<string, never>
 
-export interface OmegaIconProps extends StylesApiProps<OmegaIconFactory> {
+export interface OmegaIconProps extends StylesApiProps<OmegaIconStylesNames> {
   x: number
   y: number
-  className?: string
-  style?: CSSProperties
 }
 
-export type OmegaIconFactory = Factory<{
-  props: OmegaIconProps
-  ref: SVGGElement
-  stylesNames: OmegaIconStylesNames
-  vars: OmegaIconCssVariables
-}>
-
-const varsResolver = createVarsResolver<OmegaIconFactory>((_theme, _props) => ({}))
-
-export const OmegaIcon = factory<OmegaIconFactory>((_props) => {
-  const props = useProps('OmegaIcon', null, _props)
-  const { x, y, className, style, classNames, styles, unstyled, vars, attributes, ref, ...others } = props
-
-  const getStyles = useStyles<OmegaIconFactory>({
-    name: 'OmegaIcon',
-    classes,
-    props,
-    className,
-    style,
-    classNames,
-    styles,
-    unstyled,
-    attributes,
-    vars,
-    varsResolver,
-  })
+export const OmegaIcon = ({ x, y, className, style, classNames, styles }: OmegaIconProps) => {
+  const getStyles = createGetStyles<OmegaIconStylesNames>(classes, { className, style, classNames, styles })
 
   const { isOmega = false } = useShipTreeTheme()
   const size = isOmega ? 32 : 64
@@ -50,10 +21,8 @@ export const OmegaIcon = factory<OmegaIconFactory>((_props) => {
 
   return (
     <g
-      ref={ref}
       {...getStyles('root')}
       transform={`translate(${x}, ${y})`}
-      {...others}
     >
       <image
         className={iconStyles.className}
@@ -67,14 +36,6 @@ export const OmegaIcon = factory<OmegaIconFactory>((_props) => {
       />
     </g>
   )
-})
+}
 
 OmegaIcon.displayName = '@eve-online-tools/eve-ship-tree/OmegaIcon'
-OmegaIcon.classes = classes
-
-export namespace OmegaIcon {
-  export type Props = OmegaIconProps
-  export type StylesNames = OmegaIconStylesNames
-  export type CssVariables = OmegaIconCssVariables
-  export type Factory = OmegaIconFactory
-}
