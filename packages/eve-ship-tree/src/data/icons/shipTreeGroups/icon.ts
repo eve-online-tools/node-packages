@@ -1,20 +1,20 @@
-import resUiTextureClassesShiptreeGroupiconsBattlecruiserPng from "res:/ui/texture/classes/shiptree/groupicons/battlecruiser.png";
-import resUiTextureClassesShiptreeGroupiconsBattleshipPng from "res:/ui/texture/classes/shiptree/groupicons/battleship.png";
-import resUiTextureClassesShiptreeGroupiconsCapitalPng from "res:/ui/texture/classes/shiptree/groupicons/capital.png";
-import resUiTextureClassesShiptreeGroupiconsCapsulePng from "res:/ui/texture/classes/shiptree/groupicons/capsule.png";
-import resUiTextureClassesShiptreeGroupiconsCruiserPng from "res:/ui/texture/classes/shiptree/groupicons/cruiser.png";
-import resUiTextureClassesShiptreeGroupiconsDestroyerPng from "res:/ui/texture/classes/shiptree/groupicons/destroyer.png";
-import resUiTextureClassesShiptreeGroupiconsFreighterPng from "res:/ui/texture/classes/shiptree/groupicons/freighter.png";
-import resUiTextureClassesShiptreeGroupiconsFrigatePng from "res:/ui/texture/classes/shiptree/groupicons/frigate.png";
-import resUiTextureClassesShiptreeGroupiconsIndustrialPng from "res:/ui/texture/classes/shiptree/groupicons/industrial.png";
-import resUiTextureClassesShiptreeGroupiconsIndustrialcommandPng from "res:/ui/texture/classes/shiptree/groupicons/industrialcommand.png";
-import resUiTextureClassesShiptreeGroupiconsMiningbargePng from "res:/ui/texture/classes/shiptree/groupicons/miningbarge.png";
-import resUiTextureClassesShiptreeGroupiconsMiningdestroyerPng from "res:/ui/texture/classes/shiptree/groupicons/miningdestroyer.png";
-import resUiTextureClassesShiptreeGroupiconsMiningfrigatePng from "res:/ui/texture/classes/shiptree/groupicons/miningfrigate.png";
-import resUiTextureClassesShiptreeGroupiconsRookiePng from "res:/ui/texture/classes/shiptree/groupicons/rookie.png";
-import resUiTextureClassesShiptreeGroupiconsShuttlePng from "res:/ui/texture/classes/shiptree/groupicons/shuttle.png";
-import resUiTextureClassesShiptreeGroupiconsSupercapitalPng from "res:/ui/texture/classes/shiptree/groupicons/supercapital.png";
-import resUiTextureClassesShiptreeGroupiconsTitanPng from "res:/ui/texture/classes/shiptree/groupicons/titan.png";
+import resUiTextureClassesShiptreeGroupiconsBattlecruiserPng from 'res:/ui/texture/classes/shiptree/groupicons/battlecruiser.png'
+import resUiTextureClassesShiptreeGroupiconsBattleshipPng from 'res:/ui/texture/classes/shiptree/groupicons/battleship.png'
+import resUiTextureClassesShiptreeGroupiconsCapitalPng from 'res:/ui/texture/classes/shiptree/groupicons/capital.png'
+import resUiTextureClassesShiptreeGroupiconsCapsulePng from 'res:/ui/texture/classes/shiptree/groupicons/capsule.png'
+import resUiTextureClassesShiptreeGroupiconsCruiserPng from 'res:/ui/texture/classes/shiptree/groupicons/cruiser.png'
+import resUiTextureClassesShiptreeGroupiconsDestroyerPng from 'res:/ui/texture/classes/shiptree/groupicons/destroyer.png'
+import resUiTextureClassesShiptreeGroupiconsFreighterPng from 'res:/ui/texture/classes/shiptree/groupicons/freighter.png'
+import resUiTextureClassesShiptreeGroupiconsFrigatePng from 'res:/ui/texture/classes/shiptree/groupicons/frigate.png'
+import resUiTextureClassesShiptreeGroupiconsIndustrialPng from 'res:/ui/texture/classes/shiptree/groupicons/industrial.png'
+import resUiTextureClassesShiptreeGroupiconsIndustrialcommandPng from 'res:/ui/texture/classes/shiptree/groupicons/industrialcommand.png'
+import resUiTextureClassesShiptreeGroupiconsMiningbargePng from 'res:/ui/texture/classes/shiptree/groupicons/miningbarge.png'
+import resUiTextureClassesShiptreeGroupiconsMiningdestroyerPng from 'res:/ui/texture/classes/shiptree/groupicons/miningdestroyer.png'
+import resUiTextureClassesShiptreeGroupiconsMiningfrigatePng from 'res:/ui/texture/classes/shiptree/groupicons/miningfrigate.png'
+import resUiTextureClassesShiptreeGroupiconsRookiePng from 'res:/ui/texture/classes/shiptree/groupicons/rookie.png'
+import resUiTextureClassesShiptreeGroupiconsShuttlePng from 'res:/ui/texture/classes/shiptree/groupicons/shuttle.png'
+import resUiTextureClassesShiptreeGroupiconsSupercapitalPng from 'res:/ui/texture/classes/shiptree/groupicons/supercapital.png'
+import resUiTextureClassesShiptreeGroupiconsTitanPng from 'res:/ui/texture/classes/shiptree/groupicons/titan.png'
 
 export const icon = {
   4: resUiTextureClassesShiptreeGroupiconsRookiePng,
@@ -69,4 +69,4 @@ export const icon = {
   2111: resUiTextureClassesShiptreeGroupiconsMiningfrigatePng,
   2112: resUiTextureClassesShiptreeGroupiconsMiningdestroyerPng,
   2113: resUiTextureClassesShiptreeGroupiconsSupercapitalPng,
-} as const;
+} as const

@@ -1,1 +1,1 @@
-export * from "./flatLogo";
+export * from './flatLogo'
