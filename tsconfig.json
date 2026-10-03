@@ -11,7 +11,7 @@
   ],
   "exclude": ["**/*.story.tsx", "**/*.story.ts"],
   "compilerOptions": {
-    "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom/vitest"],
     "noEmit": true
   }
 }

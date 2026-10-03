@@ -27,7 +27,7 @@
     "format:write": "oxfmt --write \"**/*.{ts,tsx,css}\"",
     "oxlint": "oxlint .",
     "stylelint": "stylelint '**/*.css' --cache --allow-empty-input",
-    "syncpack": "syncpack list-mismatches",
+    "syncpack": "syncpack lint --dependency-types prod,dev",
     "syncpack:format": "syncpack format",
     "test:unit": "vitest run",
     "test:watch": "vitest",

@@ -10,7 +10,7 @@
   ],
   "compilerOptions": {
     "lib": ["ESNext", "DOM"],
-    "types": ["node", "vitest/globals", "@testing-library/jest-dom", "vite/client"],
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom/vitest", "vite/client"],
     "noEmit": true
   }
 }
