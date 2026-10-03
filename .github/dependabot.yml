@@ -27,10 +27,6 @@ updates:
       changesets:
         patterns:
           - '@changesets/*'
-      mantine:
-        patterns:
-          - '@mantine/*'
-          - '@mantine-tests/*'
       rollup:
         patterns:
           - '@rollup/*'

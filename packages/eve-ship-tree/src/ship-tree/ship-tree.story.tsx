@@ -1,4 +1,3 @@
-import { MantineProvider } from '@mantine/core'
 import type { Meta, StoryObj } from '@storybook/react'
 import type { CSSProperties } from 'react'
 
@@ -65,23 +64,21 @@ const meta = {
   },
   decorators: [
     (Story, context) => (
-      <MantineProvider>
-        <div style={context.parameters.viewportShellStyle ?? defaultViewportShellStyle}>
-          <ShipTree.Root
-            skills={storySkills}
-            baseUrl="/ship-tree-data"
-            faction={context.args.faction ?? 500001}
-            backgroundColor={context.args.backgroundColor}
-            goldenCapsule={context.args.goldenCapsule}
-            isOmega={context.args.isOmega}
-            strictMode={context.args.strictMode}
-            panZoom={context.args.panZoom}
-            style={{ flex: 1, minHeight: 0, width: '100%' }}
-          >
-            <Story />
-          </ShipTree.Root>
-        </div>
-      </MantineProvider>
+      <div style={context.parameters.viewportShellStyle ?? defaultViewportShellStyle}>
+        <ShipTree.Root
+          skills={storySkills}
+          baseUrl="/ship-tree-data"
+          faction={context.args.faction ?? 500001}
+          backgroundColor={context.args.backgroundColor}
+          goldenCapsule={context.args.goldenCapsule}
+          isOmega={context.args.isOmega}
+          strictMode={context.args.strictMode}
+          panZoom={context.args.panZoom}
+          style={{ flex: 1, minHeight: 0, width: '100%' }}
+        >
+          <Story />
+        </ShipTree.Root>
+      </div>
     ),
   ],
 } satisfies Meta<typeof ShipTree>
@@ -139,31 +136,29 @@ export const PanZoomDisabled: Story = {
 export const Loading: Story = {
   decorators: [
     (Story, context) => (
-      <MantineProvider>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: 'calc(100vh - 2rem)',
-            width: 'calc(100vw - 2rem)',
-          }}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: 'calc(100vh - 2rem)',
+          width: 'calc(100vw - 2rem)',
+        }}
+      >
+        <ShipTree.Root
+          skills={storySkills}
+          baseUrl="/ship-tree-data"
+          faction={context.args.faction ?? 500001}
+          style={{ flex: 1, minHeight: 0, width: '100%' }}
+          fetch={
+            (() =>
+              new Promise<Response>(() => {
+                /* never resolves */
+              })) as typeof fetch
+          }
         >
-          <ShipTree.Root
-            skills={storySkills}
-            baseUrl="/ship-tree-data"
-            faction={context.args.faction ?? 500001}
-            style={{ flex: 1, minHeight: 0, width: '100%' }}
-            fetch={
-              (() =>
-                new Promise<Response>(() => {
-                  /* never resolves */
-                })) as typeof fetch
-            }
-          >
-            <Story />
-          </ShipTree.Root>
-        </div>
-      </MantineProvider>
+          <Story />
+        </ShipTree.Root>
+      </div>
     ),
   ],
   render: () => (
@@ -176,32 +171,30 @@ export const Loading: Story = {
 export const ErrorState: Story = {
   decorators: [
     (Story, context) => (
-      <MantineProvider>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: 'calc(100vh - 2rem)',
-            width: 'calc(100vw - 2rem)',
-          }}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: 'calc(100vh - 2rem)',
+          width: 'calc(100vw - 2rem)',
+        }}
+      >
+        <ShipTree.Root
+          skills={storySkills}
+          baseUrl="/ship-tree-data"
+          faction={context.args.faction ?? 500001}
+          style={{ flex: 1, minHeight: 0, width: '100%' }}
+          fetch={
+            (async () =>
+              new Response(null, {
+                status: 500,
+                statusText: 'Server Error',
+              })) as typeof fetch
+          }
         >
-          <ShipTree.Root
-            skills={storySkills}
-            baseUrl="/ship-tree-data"
-            faction={context.args.faction ?? 500001}
-            style={{ flex: 1, minHeight: 0, width: '100%' }}
-            fetch={
-              (async () =>
-                new Response(null, {
-                  status: 500,
-                  statusText: 'Server Error',
-                })) as typeof fetch
-            }
-          >
-            <Story />
-          </ShipTree.Root>
-        </div>
-      </MantineProvider>
+          <Story />
+        </ShipTree.Root>
+      </div>
     ),
   ],
   render: () => (

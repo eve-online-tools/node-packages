@@ -9,7 +9,6 @@ import { useProcessedData } from './use-processed-data'
 import { identifiers as groups } from '../data/identifiers/shipTreeGroups'
 import { SkillsProvider } from '../skills-provider'
 import { renderWithShipTreeProviders } from '../test/render-with-ship-tree-providers'
-import { MantineProvider } from '@mantine/core'
 
 const ProcessedConsumer = () => {
   const { shipTreeGroups } = useProcessedData()
@@ -35,25 +34,21 @@ describe('DataProvider', () => {
     const data = minimalShipTreeData()
 
     const { rerender } = render(
-      <MantineProvider>
-        <SkillsProvider skills={lockedCaldariSkills}>
-          <DataProvider data={data}>
-            <ProcessedConsumer />
-          </DataProvider>
-        </SkillsProvider>
-      </MantineProvider>,
+      <SkillsProvider skills={lockedCaldariSkills}>
+        <DataProvider data={data}>
+          <ProcessedConsumer />
+        </DataProvider>
+      </SkillsProvider>,
     )
 
     expect(screen.getByTestId('group-status')).toHaveTextContent('locked')
 
     rerender(
-      <MantineProvider>
-        <SkillsProvider skills={unlockedCaldariSkills}>
-          <DataProvider data={data}>
-            <ProcessedConsumer />
-          </DataProvider>
-        </SkillsProvider>
-      </MantineProvider>,
+      <SkillsProvider skills={unlockedCaldariSkills}>
+        <DataProvider data={data}>
+          <ProcessedConsumer />
+        </DataProvider>
+      </SkillsProvider>,
     )
 
     expect(screen.getByTestId('group-status')).toHaveTextContent('unlocked')
@@ -81,13 +76,11 @@ describe('DataProvider', () => {
     })
 
     rerender(
-      <MantineProvider>
-        <SkillsProvider skills={unlockedCaldariSkills}>
-          <DataProvider data={data}>
-            <Parent token={2} />
-          </DataProvider>
-        </SkillsProvider>
-      </MantineProvider>,
+      <SkillsProvider skills={unlockedCaldariSkills}>
+        <DataProvider data={data}>
+          <Parent token={2} />
+        </DataProvider>
+      </SkillsProvider>,
     )
 
     expect(refs).toHaveLength(2)
@@ -139,16 +132,14 @@ describe('DataProvider', () => {
     })
 
     rerender(
-      <MantineProvider>
-        <SkillsProvider skills={{}}>
-          <DataProvider
-            baseUrl="/fast-base"
-            fetch={fetchImpl as typeof fetch}
-          >
-            <StatusConsumer />
-          </DataProvider>
-        </SkillsProvider>
-      </MantineProvider>,
+      <SkillsProvider skills={{}}>
+        <DataProvider
+          baseUrl="/fast-base"
+          fetch={fetchImpl as typeof fetch}
+        >
+          <StatusConsumer />
+        </DataProvider>
+      </SkillsProvider>,
     )
 
     resolveFirst?.(new Response('\n', { status: 200 }))

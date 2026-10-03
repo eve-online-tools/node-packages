@@ -53,6 +53,12 @@
   z-index: 1;
 }
 
+.errorOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
 .alertRoot {
   position: absolute;
   top: 50%;
@@ -63,5 +69,5 @@
 }
 
 .alertMessage {
-  color: var(--mantine-color-red);
+  color: #fa5252;
 }

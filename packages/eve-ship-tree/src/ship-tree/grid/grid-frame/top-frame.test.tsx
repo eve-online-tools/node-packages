@@ -1,10 +1,9 @@
-import { MantineProvider } from '@mantine/core'
 import { render, screen } from '@testing-library/react'
 import type { ReactElement } from 'react'
 
 import { TopFrame } from './top-frame'
 
-const renderTopFrame = (ui: ReactElement) => render(<MantineProvider>{ui}</MantineProvider>)
+const renderTopFrame = (ui: ReactElement) => render(ui)
 
 describe('TopFrame', () => {
   it('renders default label', () => {

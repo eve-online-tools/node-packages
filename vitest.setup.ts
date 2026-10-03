@@ -4,9 +4,6 @@ import { expect, vi } from 'vitest'
 
 expect.extend(toHaveNoViolations as Parameters<typeof expect.extend>[0])
 
-// @mantine-tests/core expects Jest globals internally.
-Object.assign(globalThis, { jest: vi })
-
 const { getComputedStyle } = window
 window.getComputedStyle = (elt: Element) => getComputedStyle(elt)
 

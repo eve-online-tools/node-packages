@@ -1,19 +1,9 @@
-import { Stack, Text, Title } from '@mantine/core'
-
 export function App() {
   return (
-    <Stack
-      p="xl"
-      maw={600}
-    >
-      <Title order={1}>EVE Online Tools</Title>
-      <Text>Demo showcase for Mantine component packages.</Text>
-      <Text
-        size="sm"
-        c="dimmed"
-      >
-        Workspace utils: coming soon
-      </Text>
-    </Stack>
+    <main style={{ maxWidth: 600, padding: 32, fontFamily: 'system-ui, sans-serif' }}>
+      <h1>EVE Online Tools</h1>
+      <p>Demo showcase for React component packages.</p>
+      <p style={{ fontSize: 14, color: '#868e96' }}>Workspace utils: coming soon</p>
+    </main>
   )
 }

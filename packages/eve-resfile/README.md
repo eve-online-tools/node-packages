@@ -128,7 +128,7 @@ export default {
 
 ### Output layout
 
-Rollup `output.dir` must be a **subdirectory of `distDir`** (default `dist`). The default layout matches `mantine-build`:
+Rollup `output.dir` must be a **subdirectory of `distDir`** (default `dist`). The default layout matches `react-build`:
 
 ```text
 dist/

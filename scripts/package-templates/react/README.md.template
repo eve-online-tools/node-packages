@@ -1,11 +1,11 @@
 # __PACKAGE_NAME__
 
-Mantine components for EVE Online tooling.
+React components for EVE Online tooling.
 
 ## Installation
 
 ```bash
-pnpm add __PACKAGE_NAME__ @mantine/core @mantine/hooks
+pnpm add __PACKAGE_NAME__
 ```
 
 ## Usage

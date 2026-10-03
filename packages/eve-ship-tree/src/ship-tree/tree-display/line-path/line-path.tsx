@@ -1,35 +1,18 @@
-import { createVarsResolver, factory, Factory, StylesApiProps, useProps, useStyles } from '@mantine/core'
-import { useId, type CSSProperties } from 'react'
+import { useId } from 'react'
 
 import { lineSpriteHeight, lineSpriteWidth } from '../layout-constants'
 import { getLineSegmentFillColor, getLineSegmentSprite, type LinePathFade, type LinePathStatus } from './sprites'
 import classes from './line-path.module.css'
+import { createGetStyles, type StylesApiProps } from '../../styles-api'
 
 export type LinePathStylesNames = 'root'
 export type { LinePathFade, LinePathStatus } from './sprites'
-export type LinePathCssVariables = {}
 
-export interface LinePathProps extends StylesApiProps<LinePathFactory> {
+export interface LinePathProps extends StylesApiProps<LinePathStylesNames> {
   points: { x: number; y: number }[]
   status?: LinePathStatus
   fade?: LinePathFade
-  className?: string
-  style?: CSSProperties
 }
-
-export type LinePathFactory = Factory<{
-  props: LinePathProps
-  ref: SVGGElement
-  stylesNames: LinePathStylesNames
-  vars: LinePathCssVariables
-}>
-
-const defaultProps = {
-  status: 'locked',
-  variant: 'filled',
-} satisfies Partial<LinePathProps>
-
-const varsResolver = createVarsResolver<LinePathFactory>((_theme, _props) => ({}))
 
 export type LinePathLeg = {
   startX: number
@@ -64,38 +47,8 @@ export const legGeometry = (x1: number, y1: number, x2: number, y2: number): Lin
   }
 }
 
-export const LinePath = factory<LinePathFactory>((_props) => {
-  const props = useProps('LinePath', defaultProps, _props)
-  const {
-    points,
-    className,
-    status,
-    fade,
-    style,
-    classNames,
-    styles,
-    unstyled,
-    variant,
-    vars,
-    attributes,
-    ref,
-    ...others
-  } = props
-
-  const getStyles = useStyles<LinePathFactory>({
-    name: 'LinePath',
-    classes,
-    props,
-    className,
-    style,
-    classNames,
-    styles,
-    unstyled,
-    attributes,
-    vars,
-    varsResolver,
-  })
-
+export const LinePath = ({ points, status = 'locked', fade, className, style, classNames, styles }: LinePathProps) => {
+  const getStyles = createGetStyles<LinePathStylesNames>(classes, { className, style, classNames, styles })
   const instanceId = useId().replace(/:/g, '')
   const rootStyles = getStyles('root')
 
@@ -120,10 +73,8 @@ export const LinePath = factory<LinePathFactory>((_props) => {
 
   return (
     <g
-      ref={ref}
       {...rootStyles}
       data-color={fillColor}
-      {...others}
     >
       {legs.map((leg, index) => {
         const legId = `${instanceId}-${index}`
@@ -205,14 +156,6 @@ export const LinePath = factory<LinePathFactory>((_props) => {
       })}
     </g>
   )
-})
+}
 
 LinePath.displayName = '@eve-online-tools/eve-ship-tree/LinePath'
-LinePath.classes = classes
-
-export namespace LinePath {
-  export type Props = LinePathProps
-  export type StylesNames = LinePathStylesNames
-  export type CssVariables = LinePathCssVariables
-  export type Factory = LinePathFactory
-}

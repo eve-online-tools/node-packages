@@ -5,7 +5,7 @@ const virtualJestAxe = '\0virtual:jest-axe'
 
 export default defineConfig({
   resolve: {
-    dedupe: ['react', 'react-dom', '@mantine/core', '@mantine/hooks'],
+    dedupe: ['react', 'react-dom'],
   },
   plugins: [
     {
@@ -67,7 +67,7 @@ export default defineConfig({
     include: ['packages/**/src/**/*.test.{ts,tsx}', 'internal/**/*.test.ts'],
     server: {
       deps: {
-        inline: ['@mantine-tests/core', '@mantine/core', '@mantine/hooks', 'react', 'react-dom'],
+        inline: ['react', 'react-dom'],
       },
     },
   },

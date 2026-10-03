@@ -9,8 +9,8 @@ const templatesDir = path.join(monorepoRoot, 'scripts/package-templates')
 const [type, name] = process.argv.slice(2)
 
 if (!type || !name) {
-  console.error('Usage: pnpm create-package <ts|mantine> <package-name>')
-  console.error('Example: pnpm create-package mantine market-ui')
+  console.error('Usage: pnpm create-package <ts|react> <package-name>')
+  console.error('Example: pnpm create-package react market-ui')
   process.exit(1)
 }
 
@@ -22,7 +22,7 @@ if (!/^[a-z][a-z0-9-]*$/.test(name)) {
 const templateDir = path.join(templatesDir, type)
 
 if (!fs.existsSync(templateDir)) {
-  console.error(`Unknown package type "${type}". Use "ts" or "mantine".`)
+  console.error(`Unknown package type "${type}". Use "ts" or "react".`)
   process.exit(1)
 }
 
@@ -34,7 +34,7 @@ if (fs.existsSync(targetDir)) {
 }
 
 const packageName = `@eve-online-tools/${name}`
-const cssPrefix = type === 'mantine' ? name.replace(/-/g, '').slice(0, 6) : ''
+const cssPrefix = type === 'react' ? name.replace(/-/g, '').slice(0, 6) : ''
 
 function renderTemplate(content: string): string {
   return content
@@ -62,8 +62,8 @@ function copyTemplate(src: string): void {
 copyTemplate(templateDir)
 
 console.log(`Created packages/${name} (${type}) as ${packageName}`)
-if (type === 'mantine') {
-  console.log(`Mantine cssPrefix: ${cssPrefix}`)
+if (type === 'react') {
+  console.log(`CSS prefix: ${cssPrefix}`)
 }
 console.log('Next steps:')
 console.log('  1. pnpm install')

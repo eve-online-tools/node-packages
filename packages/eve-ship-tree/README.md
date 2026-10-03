@@ -1,22 +1,18 @@
 # @eve-online-tools/eve-ship-tree
 
-Mantine components for rendering EVE Online ship trees.
+React components for rendering EVE Online ship trees.
 
 ## Installation
 
 ```bash
-pnpm add @eve-online-tools/eve-ship-tree @mantine/core @mantine/hooks motion @use-gesture/react
+pnpm add @eve-online-tools/eve-ship-tree motion @use-gesture/react
 ```
-
-`MantineProvider` must wrap your app (peer dependency of Mantine).
 
 ## Usage
 
-Import the package styles alongside Mantine:
+Import the package styles once:
 
 ```tsx
-import { MantineProvider } from "@mantine/core";
-import "@mantine/core/styles.css";
 import "@eve-online-tools/eve-ship-tree/styles.css";
 import {
   Grid,
@@ -29,13 +25,11 @@ const skills: Skills = { 3330: 3 };
 
 export function App() {
   return (
-    <MantineProvider>
-      <ShipTree.Root faction={500001} skills={skills} baseUrl="/ship-tree-data">
-        <Grid topLabel="Ship Tree">
-          <TreeDisplay />
-        </Grid>
-      </ShipTree.Root>
-    </MantineProvider>
+    <ShipTree.Root faction={500001} skills={skills} baseUrl="/ship-tree-data">
+      <Grid topLabel="Ship Tree">
+        <TreeDisplay />
+      </Grid>
+    </ShipTree.Root>
   );
 }
 ```

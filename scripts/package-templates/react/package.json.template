@@ -1,7 +1,7 @@
 {
   "name": "__PACKAGE_NAME__",
   "version": "0.0.1",
-  "description": "Mantine components for EVE Online",
+  "description": "React components for EVE Online",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -31,14 +31,12 @@
   "files": ["dist", "README.md"],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "pnpm run clean && rollup -c rollup.config.ts --configPlugin esbuild && tsx ../../internal/mantine-build/post-build.ts",
+    "build": "pnpm run clean && rollup -c rollup.config.ts --configPlugin esbuild && tsx ../../internal/react-build/post-build.ts",
     "typecheck": "pnpm exec tsc --noEmit -p tsconfig.json",
     "test": "pnpm --workspace-root vitest run packages/__PACKAGE_SLUG__"
   },
   "sideEffects": ["**/*.css", "**/*.css.js", "**/*.css.cjs", "**/*.css.mjs"],
   "peerDependencies": {
-    "@mantine/core": "^9.0.0",
-    "@mantine/hooks": "^9.0.0",
     "react": "^18.x || ^19.x",
     "react-dom": "^18.x || ^19.x"
   }

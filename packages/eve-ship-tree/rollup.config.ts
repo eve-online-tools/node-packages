@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { createMantineRollupConfig } from '../../internal/mantine-build/create-rollup-config'
+import { createReactRollupConfig } from '../../internal/react-build/create-rollup-config'
 import { copyGeneratedDataPlugin, staticDataFilesProcessor } from './src/data/processors/copy-generated-data'
 import { staticExtraProcessor } from './src/data/processors/static-extra-data'
 import { factionsProcessor } from './src/data/processors/factions'
@@ -27,7 +27,7 @@ const keepLanguages = ['en']
 const fallbackLanguage = 'en'
 const stripOptions = { keepLanguages, fallbackLanguage }
 
-export default createMantineRollupConfig({
+export default createReactRollupConfig({
   packageDir,
   cssPrefix: 'est',
   resfile: { root: packageDir, buildNumber: SDE_BUILD_NUMBER },

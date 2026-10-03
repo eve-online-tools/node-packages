@@ -20,7 +20,7 @@
   min-height: max(500px, 50vh);
   min-width: max(750px, 50vw);
   color: white;
-  margin: var(--mantine-spacing-xl);
+  margin: 32px;
 }
 
 .inner::before {
@@ -56,6 +56,6 @@
   flex: 1;
   min-height: 0;
   min-width: 0;
-  padding-top: var(--mantine-spacing-xs);
-  padding-bottom: var(--mantine-spacing-xs);
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

@@ -1,11 +1,10 @@
-import { MantineProvider } from '@mantine/core'
 import { render } from '@testing-library/react'
 import type { ReactElement } from 'react'
 
 import { LinePath } from './line-path'
 import { getLineSegmentFillColor } from './sprites'
 
-const renderLinePath = (ui: ReactElement) => render(<MantineProvider>{ui}</MantineProvider>)
+const renderLinePath = (ui: ReactElement) => render(ui)
 
 const renderWithSvg = (path: ReactElement) => renderLinePath(<svg>{path}</svg>)
 
@@ -27,7 +26,7 @@ describe('LinePath', () => {
     expect(textureRect).toHaveAttribute('width', '100')
   })
 
-  it('applies the locked fill color data attribute for Mantine styling', () => {
+  it('applies the locked fill color data attribute', () => {
     const { container } = renderWithSvg(
       <LinePath
         status="locked"

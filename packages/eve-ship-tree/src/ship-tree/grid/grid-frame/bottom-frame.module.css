@@ -6,9 +6,10 @@
   flex: 0 0 auto;
   align-items: flex-end;
 
-  --bottom-frame-font-size: calc(var(--mantine-font-size-xs) * 0.66);
-  --bottom-frame-line-height: var(--mantine-line-height-xs);
-  --bottom-frame-font-family: var(--mantine-font-family-monospace);
+  --bottom-frame-font-size: 8px;
+  --bottom-frame-line-height: 1.4;
+  --bottom-frame-font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --bottom-frame-font-color: #aacbe7;
 
   user-select: none;

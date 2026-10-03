@@ -51,7 +51,7 @@ const config: StorybookConfig = {
 
     config.build = {
       ...config.build,
-      // Mantine + Storybook essentials routinely exceed Vite's default 500 kB limit.
+      // Storybook essentials routinely exceed Vite's default 500 kB limit.
       chunkSizeWarningLimit: 800,
       rolldownOptions: {
         ...config.build?.rolldownOptions,
