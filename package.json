@@ -40,8 +40,8 @@
     ]
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.7.0",
-    "@changesets/cli": "^2.31.0",
+    "@changesets/changelog-github": "^1.0.0",
+    "@changesets/cli": "^3.0.0",
     "@mantine-tests/core": "^2.0.0",
     "@mantine/core": "catalog:",
     "@mantine/hooks": "catalog:",
