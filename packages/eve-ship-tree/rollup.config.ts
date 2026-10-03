@@ -20,7 +20,7 @@ import { shipSizesProcessor } from './src/data/processors/shipSizes'
 import { shipTypeRequirementsProcessor } from './src/data/processors/shipTypeRequirements'
 import { typesProcessor } from './src/data/processors/types'
 
-const SDE_BUILD_NUMBER = '3409592'
+const SDE_BUILD_NUMBER = '3569502'
 
 const packageDir = path.dirname(fileURLToPath(import.meta.url))
 const keepLanguages = ['en']
