@@ -1,6 +1,6 @@
 {
   "extends": "../../internal/tsconfig/react.json",
-  "include": ["src", "scripts", "../../@types"],
+  "include": ["src", "../../@types"],
   "exclude": ["**/*.story.tsx"],
   "compilerOptions": {
     "noEmit": true,

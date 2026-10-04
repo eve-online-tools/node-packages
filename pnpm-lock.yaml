@@ -390,9 +390,6 @@ importers:
       '@types/three':
         specifier: 'catalog:'
         version: 0.186.0
-      esbuild:
-        specifier: 'catalog:'
-        version: 0.28.2
       react:
         specifier: 'catalog:'
         version: 19.3.0

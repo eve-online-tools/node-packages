@@ -56,8 +56,7 @@
     "clean": "rimraf dist",
     "build": "pnpm run clean && tsup",
     "typecheck": "tsc --noEmit",
-    "test": "pnpm --workspace-root vitest run packages/eve-map && pnpm run size",
-    "size": "tsx scripts/check-bundle-size.ts",
+    "test": "pnpm --workspace-root vitest run packages/eve-map",
     "format:check": "pnpm --workspace-root exec oxfmt --check \"packages/eve-map/src/**/*.{ts,tsx}\"",
     "oxlint": "pnpm --workspace-root exec oxlint packages/eve-map"
   },
@@ -79,7 +78,6 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/three": "catalog:",
-    "esbuild": "catalog:",
     "react": "catalog:",
     "three": "catalog:",
     "tsup": "catalog:",

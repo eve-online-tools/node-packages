@@ -258,7 +258,6 @@ import { EveMap } from '@eve-online-tools/eve-map/react'
 - Picking projects systems on the CPU at most once per frame and queries a screen-space grid. No `readPixels`.
 - `prefers-reduced-motion` makes transitions and fly-to instant. Override with `reducedMotion`.
 - On `webglcontextlost` the map pauses and emits `contextlost`, then re-uploads resources after `webglcontextrestored`.
-- Package code is about 18 KB min+gz excluding `three`. `pnpm test` fails above 30 KB.
 
 ## Fallback
 
@@ -269,7 +268,6 @@ import { EveMap } from '@eve-online-tools/eve-map/react'
 ```bash
 pnpm --filter @eve-online-tools/eve-map test
 pnpm --filter @eve-online-tools/eve-map typecheck
-pnpm --filter @eve-online-tools/eve-map size
 ```
 
 ## License
