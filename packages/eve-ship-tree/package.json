@@ -1,6 +1,6 @@
 {
   "name": "@eve-online-tools/eve-ship-tree",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "React components for EVE Online",
   "license": "MIT",
   "publishConfig": {
