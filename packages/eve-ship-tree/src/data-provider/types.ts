@@ -4,6 +4,7 @@ import type {
   CloneGradeRecord,
   MasteryRecord,
   RequiredSkillsRecord,
+  ShipSizeRecord,
   ShipTreeGroupRecord,
   ShipTypeRecord,
 } from './schema'
@@ -14,18 +15,26 @@ export type DataTableName = StripJsonlExtension<(typeof filenames)[number]>
 
 type GenericTable = Record<number, unknown>
 
-type TypedDataTables = {
+/** Tables the tree reads. Other loaders must produce these; see README "Data tables". */
+export type RequiredDataTables = {
   types: Record<number, ShipTypeRecord>
   requiredSkills: Record<number, RequiredSkillsRecord>
   certificates: Record<number, CertificateRecord>
   masteries: Record<number, MasteryRecord>
   cloneGrades: Record<number, CloneGradeRecord>
   shipTreeGroups: Record<number, ShipTreeGroupRecord>
+  shipSizes: Record<number, ShipSizeRecord>
 }
 
-export type Data = TypedDataTables & {
-  [K in Exclude<DataTableName, keyof TypedDataTables>]: GenericTable
+type OtherDataTables = {
+  [K in Exclude<DataTableName, keyof RequiredDataTables>]: GenericTable
 }
+
+/** All tables as loaded by `loadShipTreeData`. */
+export type Data = RequiredDataTables & OtherDataTables
+
+/** Accepted by `DataProvider` and `ShipTree.Root`: the tables the tree reads, the rest optional. */
+export type PreloadedData = RequiredDataTables & Partial<OtherDataTables>
 
 export type DataStatus = 'idle' | 'loading' | 'ready' | 'error'
 

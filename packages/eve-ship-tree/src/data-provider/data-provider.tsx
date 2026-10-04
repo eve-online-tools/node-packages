@@ -3,7 +3,7 @@ import { type PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import { DataContext, ProcessedContext, type DataContextValue } from './context'
 import { loadShipTreeData } from './loader'
 import { sanitizeLoadError } from './sanitize-load-error'
-import type { Data, DataStatus } from './types'
+import type { Data, DataStatus, PreloadedData } from './types'
 import {
   alphaSkillsProcessor,
   buildShipsByGroupFactionIndex,
@@ -14,7 +14,7 @@ import {
 import { useSkills } from '../skills-provider'
 
 export type DataProviderProps = PropsWithChildren &
-  ({ data: Data; baseUrl?: never; fetch?: never } | { baseUrl: string; data?: never; fetch?: typeof fetch })
+  ({ data: PreloadedData; baseUrl?: never; fetch?: never } | { baseUrl: string; data?: never; fetch?: typeof fetch })
 
 export const DataProvider = (props: DataProviderProps) => {
   const { children, fetch = globalThis.fetch } = props
@@ -111,7 +111,7 @@ export const DataProvider = (props: DataProviderProps) => {
       sourceData,
     )
 
-    const shipSizeByTypeId = buildTypeIdToSizeClass(sourceData.shipSizes as Record<number, { typeIDs: number[] }>)
+    const shipSizeByTypeId = buildTypeIdToSizeClass(sourceData.shipSizes)
 
     return {
       status: 'ready' as const,

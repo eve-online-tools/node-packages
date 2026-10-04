@@ -42,3 +42,7 @@ export type MasteryEntryRecord = {
 }
 
 export type MasteryRecord = MasteryEntryRecord[] | { _value?: MasteryEntryRecord[] }
+
+export type ShipSizeRecord = {
+  typeIDs: number[]
+}

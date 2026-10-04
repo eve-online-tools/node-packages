@@ -6,7 +6,15 @@ export {
   useDataStatus,
   useProcessedData,
 } from './data-provider'
-export type { Data, DataProviderProps, DataStatus, DataTableName, LoadDataOptions } from './data-provider'
+export type {
+  Data,
+  DataProviderProps,
+  DataStatus,
+  DataTableName,
+  LoadDataOptions,
+  PreloadedData,
+  RequiredDataTables,
+} from './data-provider'
 
 export { SkillsProvider, useSkills } from './skills-provider'
 export type { EsiCharacterSkill, SkillsProviderProps, Skills, SkillsInput } from './skills-provider'
