@@ -1,5 +1,31 @@
 # @eve-online-tools/eve-ship-tree
 
+## 0.2.0
+
+### Minor Changes
+
+- [#67](https://github.com/eve-online-tools/node-packages/pull/67)
+  [`6abc339`](https://github.com/eve-online-tools/node-packages/commit/6abc33920d96a40f4553fb2d71bd1b869ce641a6) -
+  Preload status sprites on mount so they do not pop in when skills change. Export `preloadShipTreeSprites()` and
+  `shipTreeSprites`.
+
+- [#68](https://github.com/eve-online-tools/node-packages/pull/68)
+  [`b400479`](https://github.com/eve-online-tools/node-packages/commit/b400479c487780285a62de9ccbca44ff35c4eb53) -
+  `DataProvider` and `ShipTree.Root` take `PreloadedData`: only the seven tables the tree reads are required.
+  `shipSizes` is now typed. The README documents each table's shape and SDE derivation. `useData().data` is typed as
+  `PreloadedData`.
+
+### Patch Changes
+
+- [#66](https://github.com/eve-online-tools/node-packages/pull/66)
+  [`10e404e`](https://github.com/eve-online-tools/node-packages/commit/10e404ee1e0774ef65587109f8b59418d6547767) - Use
+  the 264px flat logos for CONCORD, EDENCOM and the Triglavian Collective. Their 256px files in the client are a shared
+  red-square placeholder.
+
+- [#65](https://github.com/eve-online-tools/node-packages/pull/65)
+  [`5f89484`](https://github.com/eve-online-tools/node-packages/commit/5f894845adedf508a475d278e405f6e59f42bbfe) -
+  README: list all 17 factions as supported.
+
 ## 0.1.0
 
 ### Minor Changes

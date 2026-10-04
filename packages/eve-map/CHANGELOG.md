@@ -1,5 +1,13 @@
 # @eve-online-tools/eve-map
 
+## 0.1.1
+
+### Patch Changes
+
+- [#64](https://github.com/eve-online-tools/node-packages/pull/64)
+  [`224b518`](https://github.com/eve-online-tools/node-packages/commit/224b518446be2ba8486ff445464c5413597836f8) - Emit
+  `camerachange` after the canvas resizes, so overlays positioned with `project()` follow.
+
 ## 0.1.0
 
 ### Minor Changes

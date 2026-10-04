@@ -1,6 +1,6 @@
 {
   "name": "@eve-online-tools/eve-map",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Interactive WebGL 2D/3D map of New Eden",
   "license": "MIT",
   "publishConfig": {
