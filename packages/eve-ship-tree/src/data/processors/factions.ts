@@ -7,7 +7,11 @@ const logoModulePath = 'icons/factions/flatLogo.ts'
 const logoCssPath = 'icons/factions/flatLogo.css'
 const factionsIndexPath = 'icons/factions/index.ts'
 
-const factionLogoPath = (logoName: string): string => `res:/ui/texture/eveicon/faction_logos/${logoName}_256px.png`
+// The client ships these 256px files as a shared red-square placeholder; the 264px variants hold the real logo.
+const placeholder256Logos = new Set(['concord_logo', 'edencom_logo', 'triglavian_logo', 'upwell_logo'])
+
+export const factionLogoPath = (logoName: string): string =>
+  `res:/ui/texture/eveicon/faction_logos/${logoName}_${placeholder256Logos.has(logoName) ? 264 : 256}px.png`
 
 type FactionRecord = {
   flatLogo?: string
@@ -21,7 +25,7 @@ export const factionsProcessor = ({
   fallbackLanguage: string
 }): SdeProcessor => ({
   id: 'factions',
-  version: [...keepLanguages].sort().join(','),
+  version: `2:${[...keepLanguages].sort().join(',')}`,
   run: async ({ loadStream, streamJson, writeText }) => {
     const shipTreeFactionIds = new Set<string | number>()
 
