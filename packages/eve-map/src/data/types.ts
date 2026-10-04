@@ -1,5 +1,3 @@
-export const MAP_DATA_VERSION = 1
-
 /**
  * Struct-of-arrays map data. Index `i` is the system's position in every `systems` array.
  *
@@ -7,7 +5,6 @@ export const MAP_DATA_VERSION = 1
  * `position2d` holds scene `(x, z)` with y implied 0.
  */
 export interface MapData {
-  version: typeof MAP_DATA_VERSION
   systems: {
     id: Int32Array
     constellation: Int32Array
@@ -21,8 +18,10 @@ export interface MapData {
   }
   /** Pairs of system indices, deduplicated, `a < b` */
   gates: Uint16Array
-  regions?: { id: Int32Array; name: string[] }
-  constellations?: { id: Int32Array; region: Int32Array; name: string[] }
+  /** Region ID to name */
+  regions: Record<number, string>
+  /** Constellation ID to name */
+  constellations: Record<number, string>
   bounds: {
     /** min xyz, max xyz */
     position: Float32Array
@@ -58,6 +57,6 @@ export interface MapDataSource {
   systems: Iterable<MapSystemSource>
   /** Pairs of solar system IDs. Either direction, duplicates and unknown IDs are dropped. */
   gates: Iterable<readonly [number, number]>
-  regions?: Iterable<{ id: number; name: string }>
-  constellations?: Iterable<{ id: number; regionId: number; name: string }>
+  regions?: Record<number, string>
+  constellations?: Record<number, string>
 }

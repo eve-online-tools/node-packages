@@ -70,15 +70,8 @@ export const fixtureSource = (): MapDataSource => ({
     [30000005, 30000006],
     [30000006, 39999999],
   ],
-  regions: [
-    { id: 10000001, name: 'Region One' },
-    { id: 10000002, name: 'Region Two' },
-  ],
-  constellations: [
-    { id: 20000001, regionId: 10000001, name: 'Const A' },
-    { id: 20000002, regionId: 10000001, name: 'Const B' },
-    { id: 20000003, regionId: 10000002, name: 'Const C' },
-  ],
+  regions: { 10000001: 'Region One', 10000002: 'Region Two' },
+  constellations: { 20000001: 'Const A', 20000002: 'Const B', 20000003: 'Const C' },
 })
 
 export const fixtureMapData = (): MapData => buildMapData(fixtureSource())

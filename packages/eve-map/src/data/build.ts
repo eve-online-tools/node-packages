@@ -1,4 +1,4 @@
-import { MAP_DATA_VERSION, type MapData, type MapDataSource } from './types'
+import type { MapData, MapDataSource } from './types'
 
 export const MAX_SYSTEMS = 0xffff + 1
 
@@ -150,31 +150,13 @@ export const buildMapData = (source: MapDataSource): MapData => {
   const position32 = Float32Array.from(position)
   const position2d32 = Float32Array.from(position2d)
 
-  const data: MapData = {
-    version: MAP_DATA_VERSION,
+  return {
     systems: { id, constellation, region, position: position32, position2d: position2d32, security, name },
     gates: buildGateIndices(source.gates, indexById),
     bounds: { position: bounds3d, position2d: computeBounds(position2d32, 2) },
+    regions: { ...source.regions },
+    constellations: { ...source.constellations },
   }
-
-  if (source.regions) {
-    const regions = [...source.regions].sort((a, b) => a.id - b.id)
-    data.regions = {
-      id: Int32Array.from(regions, (r) => r.id),
-      name: regions.map((r) => r.name),
-    }
-  }
-
-  if (source.constellations) {
-    const constellations = [...source.constellations].sort((a, b) => a.id - b.id)
-    data.constellations = {
-      id: Int32Array.from(constellations, (c) => c.id),
-      region: Int32Array.from(constellations, (c) => c.regionId),
-      name: constellations.map((c) => c.name),
-    }
-  }
-
-  return data
 }
 
 export const computeBounds = (values: Float32Array, stride: number): Float32Array => {

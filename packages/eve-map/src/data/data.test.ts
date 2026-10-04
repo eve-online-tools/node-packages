@@ -20,9 +20,8 @@ const expectSameData = (actual: MapData, expected: MapData) => {
   expect(list(actual.gates)).toEqual(list(expected.gates))
   expect(list(actual.bounds.position)).toEqual(list(expected.bounds.position))
   expect(list(actual.bounds.position2d)).toEqual(list(expected.bounds.position2d))
-  expect(actual.regions?.name).toEqual(expected.regions?.name)
-  expect(actual.constellations?.name).toEqual(expected.constellations?.name)
-  expect(list(actual.constellations?.region)).toEqual(list(expected.constellations?.region))
+  expect(actual.regions).toEqual(expected.regions)
+  expect(actual.constellations).toEqual(expected.constellations)
 }
 
 describe('coordinate conversion', () => {
@@ -120,12 +119,10 @@ describe('binary encoding', () => {
     const view = new DataView(encodeMapData(data))
     expect(view.getUint32(0, true)).toBe(MAP_DATA_MAGIC)
     expect(String.fromCharCode(...new Uint8Array(view.buffer, 0, 4))).toBe('EVEM')
-    expect(view.getUint32(4, true)).toBe(1)
-    expect(view.getUint32(8, true)).toBe(6)
-    expect(view.getUint32(12, true)).toBe(5)
-    expect(view.getUint32(16, true)).toBe(2)
-    expect(view.getUint32(20, true)).toBe(3)
-    expect(view.getUint32(24, true)).toBe(3)
+    expect(view.getUint32(4, true)).toBe(6)
+    expect(view.getUint32(8, true)).toBe(5)
+    expect(view.getUint32(12, true)).toBe(2)
+    expect(view.getUint32(16, true)).toBe(3)
     // First section: 3D bounds right after the header
     expect(view.getFloat32(HEADER_BYTES, true)).toBe(data.bounds.position[0])
     expect(view.byteLength % 4).toBe(0)
@@ -139,11 +136,10 @@ describe('binary encoding', () => {
     expect(decoded.systems.name[0]).toBe('Alpha')
   })
 
-  it('omits optional tables', () => {
-    const { regions: _r, constellations: _c, ...rest } = fixtureMapData()
-    const decoded = decodeMapData(encodeMapData(rest))
-    expect(decoded.regions).toBeUndefined()
-    expect(decoded.constellations).toBeUndefined()
+  it('encodes empty name tables', () => {
+    const decoded = decodeMapData(encodeMapData({ ...fixtureMapData(), regions: {}, constellations: {} }))
+    expect(decoded.regions).toEqual({})
+    expect(decoded.constellations).toEqual({})
   })
 
   it('rejects bad magic and truncated input', () => {
@@ -164,7 +160,7 @@ describe('binary encoding', () => {
   it('stays small for the real map size', () => {
     // 5.5k systems, 7k gates, ~6 char names
     const n = 5500
-    const bytes = 32 + 40 + n * (4 * 3 + 12 + 8 + 4) + 7000 * 4 + 4 + (n + 1) * 4 + n * 6
+    const bytes = HEADER_BYTES + 40 + n * (4 * 3 + 12 + 8 + 4) + 7000 * 4 + 4 + (n + 1) * 4 + n * 6
     expect(bytes).toBeLessThan(300_000)
   })
 })
@@ -183,8 +179,9 @@ describe('JSON', () => {
 })
 
 describe('validateMapData', () => {
-  it('rejects unknown versions', () => {
-    expect(() => validateMapData({ ...fixtureMapData(), version: 2 as 1 })).toThrow(/version/)
+  it('rejects mismatched lengths', () => {
+    const data = fixtureMapData()
+    expect(() => validateMapData({ ...data, systems: { ...data.systems, name: [] } })).toThrow(/systems.name/)
   })
 })
 
@@ -195,7 +192,5 @@ describe('createMapIndex', () => {
     expect(index.indexOf(1)).toBe(-1)
     expect(index.systemsInRegion(10000002)).toEqual([3, 4, 5])
     expect(index.systemsInConstellation(20000001)).toEqual([0, 1])
-    expect(index.regionName(10000001)).toBe('Region One')
-    expect(index.constellationName(20000002)).toBe('Const B')
   })
 })

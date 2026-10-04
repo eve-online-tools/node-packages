@@ -1,12 +1,9 @@
-import { MAP_DATA_VERSION, type MapData } from './types'
+import type { MapData } from './types'
 import { MapDataError, validateMapData } from './validate'
 
 /** "EVEM" read as a little-endian uint32 */
 export const MAP_DATA_MAGIC = 0x4d455645
-export const HEADER_BYTES = 32
-
-const FLAG_REGIONS = 1
-const FLAG_CONSTELLATIONS = 2
+export const HEADER_BYTES = 20
 
 const align4 = (n: number): number => (n + 3) & ~3
 
@@ -28,7 +25,6 @@ interface Layout {
   gates: number
   regionId: number
   constellationId: number
-  constellationRegion: number
   strings: number
 }
 
@@ -56,7 +52,6 @@ const computeLayout = (n: number, gateCount: number, regionCount: number, conste
     gates: take(gateCount * 4),
     regionId: take(regionCount * 4),
     constellationId: take(constellationCount * 4),
-    constellationRegion: take(constellationCount * 4),
     strings: offset,
   }
 }
@@ -70,14 +65,16 @@ export const encodeMapData = (data: MapData): ArrayBuffer => {
 
   const { systems } = data
   const n = systems.id.length
-  const regionCount = data.regions?.id.length ?? 0
-  const constellationCount = data.constellations?.id.length ?? 0
-  const layout = computeLayout(n, data.gates.length / 2, regionCount, constellationCount)
+  const regionIds = Object.keys(data.regions).map(Number)
+  const constellationIds = Object.keys(data.constellations).map(Number)
+  const layout = computeLayout(n, data.gates.length / 2, regionIds.length, constellationIds.length)
 
   const encoder = new TextEncoder()
-  const strings = [...systems.name, ...(data.regions?.name ?? []), ...(data.constellations?.name ?? [])].map((s) =>
-    encoder.encode(s),
-  )
+  const strings = [
+    ...systems.name,
+    ...regionIds.map((id) => data.regions[id]),
+    ...constellationIds.map((id) => data.constellations[id]),
+  ].map((s) => encoder.encode(s))
   const stringBytes = strings.reduce((sum, s) => sum + s.length, 0)
   const stringHeaderBytes = 4 + (strings.length + 1) * 4
   const totalBytes = align4(layout.strings + stringHeaderBytes + stringBytes)
@@ -85,13 +82,10 @@ export const encodeMapData = (data: MapData): ArrayBuffer => {
   const buffer = new ArrayBuffer(totalBytes)
   const view = new DataView(buffer)
   view.setUint32(0, MAP_DATA_MAGIC, true)
-  view.setUint32(4, MAP_DATA_VERSION, true)
-  view.setUint32(8, n, true)
-  view.setUint32(12, layout.gateCount, true)
-  view.setUint32(16, regionCount, true)
-  view.setUint32(20, constellationCount, true)
-  view.setUint32(24, (data.regions ? FLAG_REGIONS : 0) | (data.constellations ? FLAG_CONSTELLATIONS : 0), true)
-  view.setUint32(28, 0, true)
+  view.setUint32(4, n, true)
+  view.setUint32(8, layout.gateCount, true)
+  view.setUint32(12, regionIds.length, true)
+  view.setUint32(16, constellationIds.length, true)
 
   // DataView keeps the output little-endian regardless of host byte order.
   const writeF32 = (offset: number, values: ArrayLike<number>) => {
@@ -116,13 +110,8 @@ export const encodeMapData = (data: MapData): ArrayBuffer => {
   for (let i = 0; i < data.gates.length; i++) {
     view.setUint16(layout.gates + i * 2, data.gates[i], true)
   }
-  if (data.regions) {
-    writeI32(layout.regionId, data.regions.id)
-  }
-  if (data.constellations) {
-    writeI32(layout.constellationId, data.constellations.id)
-    writeI32(layout.constellationRegion, data.constellations.region)
-  }
+  writeI32(layout.regionId, regionIds)
+  writeI32(layout.constellationId, constellationIds)
 
   view.setUint32(layout.strings, strings.length, true)
   const bytes = new Uint8Array(buffer)
@@ -173,16 +162,10 @@ export const decodeMapData = (input: ArrayBuffer | ArrayBufferView): MapData => 
   if (view.getUint32(0, true) !== MAP_DATA_MAGIC) {
     throw new MapDataError('Map data magic mismatch, expected "EVEM".')
   }
-  const version = view.getUint32(4, true)
-  if (version !== MAP_DATA_VERSION) {
-    throw new MapDataError(`Unsupported map data version ${version}, expected ${MAP_DATA_VERSION}.`)
-  }
-
-  const n = view.getUint32(8, true)
-  const gateCount = view.getUint32(12, true)
-  const regionCount = view.getUint32(16, true)
-  const constellationCount = view.getUint32(20, true)
-  const flags = view.getUint32(24, true)
+  const n = view.getUint32(4, true)
+  const gateCount = view.getUint32(8, true)
+  const regionCount = view.getUint32(12, true)
+  const constellationCount = view.getUint32(16, true)
   const layout = computeLayout(n, gateCount, regionCount, constellationCount)
 
   if (layout.strings + 4 > length) {
@@ -206,8 +189,12 @@ export const decodeMapData = (input: ArrayBuffer | ArrayBufferView): MapData => 
   const readStrings = (start: number, count: number) =>
     Array.from({ length: count }, (_, i) => decoder.decode(bytes.subarray(offsets[start + i], offsets[start + i + 1])))
 
+  const names = (ids: Int32Array, start: number): Record<number, string> => {
+    const values = readStrings(start, ids.length)
+    return Object.fromEntries(Array.from(ids, (id, i) => [id, values[i]]))
+  }
+
   const data: MapData = {
-    version: MAP_DATA_VERSION,
     systems: {
       id: i32(layout.id, n),
       constellation: i32(layout.constellation, n),
@@ -222,17 +209,8 @@ export const decodeMapData = (input: ArrayBuffer | ArrayBufferView): MapData => 
       position: f32(layout.boundsPosition, 6),
       position2d: f32(layout.boundsPosition2d, 4),
     },
-  }
-
-  if (flags & FLAG_REGIONS) {
-    data.regions = { id: i32(layout.regionId, regionCount), name: readStrings(n, regionCount) }
-  }
-  if (flags & FLAG_CONSTELLATIONS) {
-    data.constellations = {
-      id: i32(layout.constellationId, constellationCount),
-      region: i32(layout.constellationRegion, constellationCount),
-      name: readStrings(n + regionCount, constellationCount),
-    }
+    regions: names(i32(layout.regionId, regionCount), n),
+    constellations: names(i32(layout.constellationId, constellationCount), n + regionCount),
   }
 
   validateMapData(data)

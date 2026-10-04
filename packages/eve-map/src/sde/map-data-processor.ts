@@ -6,10 +6,10 @@ import type { SdeProcessor } from '@eve-online-tools/eve-sde'
 import { buildMapData } from '../data/build'
 import { encodeMapData } from '../data/binary'
 import { mapDataToJson } from '../data/json'
-import { MAP_DATA_VERSION, type MapSystemSource } from '../data/types'
+import type { MapSystemSource } from '../data/types'
 
-/** Bump when processor output changes without a `MAP_DATA_VERSION` change. */
-const PROCESSOR_REVISION = 1
+/** Bump when the processor output changes, so eve-sde regenerates it. */
+const PROCESSOR_REVISION = 2
 
 export interface SdeSolarSystem {
   id: number
@@ -32,35 +32,26 @@ export interface MapDataProcessorOptions {
   id?: string
 }
 
-type Translated = Record<string, string> | string | undefined
+type Translated = Record<string, string>
 
 interface SolarSystemRow {
   constellationID: number
   regionID: number
-  name?: Translated
+  name: Translated
   position: { x: number; y: number; z: number }
   position2D?: { x: number; y: number }
-  securityStatus?: number
+  securityStatus: number
 }
 
+/** Shape of a `mapStargates` row in the SDE */
 interface StargateRow {
   solarSystemID: number
-  destination?: { solarSystemID: number }
-}
-
-interface NamedRow {
-  name?: Translated
-  regionID?: number
+  destination: { solarSystemID: number }
 }
 
 export const isKnownSpace = (system: SdeSolarSystem): boolean => system.id >= 30_000_000 && system.id < 31_000_000
 
-const pickName = (name: Translated, locale: string): string => {
-  if (typeof name === 'string') {
-    return name
-  }
-  return name?.[locale] ?? name?.en ?? ''
-}
+const pickName = (name: Translated, locale: string): string => name[locale] ?? name.en
 
 const hashString = (value: string): string => {
   let hash = 0x811c9dc5
@@ -83,7 +74,7 @@ export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProc
   return {
     id: options.id ?? 'eve-map:map-data',
     // The filter source is hashed so editing it invalidates the lock.
-    version: [MAP_DATA_VERSION, PROCESSOR_REVISION, locale, format, fileName, hashString(String(filter))].join(':'),
+    version: [PROCESSOR_REVISION, locale, format, fileName, hashString(String(filter))].join(':'),
     run: async ({ loadStream, resolve, writeJson }) => {
       const systems: MapSystemSource[] = []
       const keep = new Set<number>()
@@ -96,7 +87,7 @@ export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProc
           id: Number(record.key),
           constellationId: row.constellationID,
           regionId: row.regionID,
-          security: row.securityStatus ?? 0,
+          security: row.securityStatus,
           name: pickName(row.name, locale),
         }
         if (!filter(system)) {
@@ -110,29 +101,24 @@ export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProc
 
       const gates: Array<[number, number]> = []
       for await (const record of loadStream('mapStargates')) {
-        const row = record.value as StargateRow
-        const to = row.destination?.solarSystemID
-        if (to !== undefined && keep.has(row.solarSystemID) && keep.has(to)) {
-          gates.push([row.solarSystemID, to])
+        const { solarSystemID: from, destination } = record.value as StargateRow
+        if (keep.has(from) && keep.has(destination.solarSystemID)) {
+          gates.push([from, destination.solarSystemID])
         }
       }
 
-      const regions: Array<{ id: number; name: string }> = []
-      for await (const record of loadStream('mapRegions')) {
-        const id = Number(record.key)
-        if (regionIds.has(id)) {
-          regions.push({ id, name: pickName((record.value as NamedRow).name, locale) })
+      const loadNames = async (table: string, ids: Set<number>) => {
+        const names: Record<number, string> = {}
+        for await (const record of loadStream(table)) {
+          const id = Number(record.key)
+          if (ids.has(id)) {
+            names[id] = pickName((record.value as { name: Translated }).name, locale)
+          }
         }
+        return names
       }
-
-      const constellations: Array<{ id: number; regionId: number; name: string }> = []
-      for await (const record of loadStream('mapConstellations')) {
-        const id = Number(record.key)
-        if (constellationIds.has(id)) {
-          const row = record.value as NamedRow
-          constellations.push({ id, regionId: row.regionID ?? 0, name: pickName(row.name, locale) })
-        }
-      }
+      const regions = await loadNames('mapRegions', regionIds)
+      const constellations = await loadNames('mapConstellations', constellationIds)
 
       const data = buildMapData({ systems, gates, regions, constellations })
 

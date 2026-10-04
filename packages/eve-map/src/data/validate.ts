@@ -1,5 +1,5 @@
 import { MAX_SYSTEMS } from './build'
-import { MAP_DATA_VERSION, type MapData } from './types'
+import type { MapData } from './types'
 
 export class MapDataError extends Error {
   override name = 'MapDataError'
@@ -21,10 +21,6 @@ const expectFinite = (label: string, values: ArrayLike<number>): void => {
 
 /** Throws `MapDataError` when `data` is structurally invalid. */
 export const validateMapData = (data: MapData): void => {
-  if (data.version !== MAP_DATA_VERSION) {
-    throw new MapDataError(`Unsupported MapData version ${String(data.version)}, expected ${MAP_DATA_VERSION}.`)
-  }
-
   const { systems, gates, bounds } = data
   const n = systems.id.length
   if (n > MAX_SYSTEMS) {
@@ -60,14 +56,5 @@ export const validateMapData = (data: MapData): void => {
       throw new MapDataError(`gates[${i / 2}] = (${a}, ${b}) is duplicated.`)
     }
     seen.add(key)
-  }
-
-  if (data.regions) {
-    expectLength('regions.name', data.regions.name.length, data.regions.id.length)
-  }
-  if (data.constellations) {
-    const count = data.constellations.id.length
-    expectLength('constellations.region', data.constellations.region.length, count)
-    expectLength('constellations.name', data.constellations.name.length, count)
   }
 }
