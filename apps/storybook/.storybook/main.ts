@@ -2,7 +2,10 @@ import type { StorybookConfig } from '@storybook/react-vite'
 import { createEveResfileIntegration } from '@eve-online-tools/eve-resfile/integration'
 import { vitePlugin } from '@eve-online-tools/eve-resfile/vite'
 import { postcssPlugin } from '@eve-online-tools/eve-resfile/postcss'
+import { mapDataProcessor } from '@eve-online-tools/eve-map/sde'
+import { sde } from '@eve-online-tools/eve-sde/vite'
 import { createWorkspaceAliases, mergeAliases } from '../../../internal/vite-config/workspace-aliases'
+import { mkdirSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -11,6 +14,9 @@ const require = createRequire(import.meta.url)
 const storybookDir = path.dirname(fileURLToPath(import.meta.url))
 const monorepoRoot = path.resolve(storybookDir, '../../../')
 const resfile = createEveResfileIntegration({ root: monorepoRoot })
+// Filled by the SDE plugin on startup; must exist before Storybook resolves staticDirs.
+const eveMapDataDir = path.resolve(storybookDir, '../generated/eve-map')
+mkdirSync(eveMapDataDir, { recursive: true })
 
 function getAbsolutePath(value: string): string {
   return path.dirname(require.resolve(path.join(value, 'package.json')))
@@ -23,6 +29,7 @@ const config: StorybookConfig = {
       from: path.join(monorepoRoot, 'packages/eve-ship-tree/src/data/generated'),
       to: '/ship-tree-data',
     },
+    { from: eveMapDataDir, to: '/eve-map' },
   ],
   addons: [getAbsolutePath('@storybook/addon-essentials')],
   framework: {
@@ -33,7 +40,16 @@ const config: StorybookConfig = {
     autodocs: false,
   },
   async viteFinal(config) {
-    config.plugins = [vitePlugin(resfile), ...(config.plugins ?? [])]
+    config.plugins = [
+      sde({
+        outputDir: eveMapDataDir,
+        cacheDir: path.join(monorepoRoot, 'apps/storybook/.cache/eve-sde'),
+        buildNumber: 3569502,
+        processors: [mapDataProcessor()],
+      }),
+      vitePlugin(resfile),
+      ...(config.plugins ?? []),
+    ]
 
     config.css = {
       ...config.css,
