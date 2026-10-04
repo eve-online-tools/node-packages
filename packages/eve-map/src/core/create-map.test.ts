@@ -239,6 +239,17 @@ describe('createMap', () => {
     expect(frames.pending).toBe(0)
   })
 
+  it('emits camerachange on resize while following is paused', () => {
+    const { map } = setup()
+    map.setCamera(map.getCamera())
+    frames.flush()
+    let changes = 0
+    map.on('camerachange', () => changes++)
+    map.resize()
+    frames.flush()
+    expect(changes).toBe(1)
+  })
+
   it('ignores camera input with controls disabled but still clicks', () => {
     const { map, canvas } = setup({ controls: false })
     const before = map.getCamera()
