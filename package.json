@@ -44,7 +44,6 @@
     "@changesets/cli": "^3.0.0",
     "@rollup/plugin-node-resolve": "catalog:",
     "@rollup/plugin-replace": "catalog:",
-    "@storybook/addon-essentials": "catalog:",
     "@storybook/react": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@testing-library/dom": "catalog:",

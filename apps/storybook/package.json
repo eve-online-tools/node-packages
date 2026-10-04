@@ -18,7 +18,6 @@
     "@eve-online-tools/eve-map": "workspace:*",
     "@eve-online-tools/eve-resfile": "workspace:*",
     "@eve-online-tools/eve-sde": "workspace:*",
-    "@storybook/addon-essentials": "catalog:",
     "@storybook/react": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@types/react": "catalog:",

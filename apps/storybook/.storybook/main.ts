@@ -31,7 +31,7 @@ const config: StorybookConfig = {
     },
     { from: eveMapDataDir, to: '/eve-map' },
   ],
-  addons: [getAbsolutePath('@storybook/addon-essentials')],
+  addons: [],
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {},
@@ -67,13 +67,13 @@ const config: StorybookConfig = {
 
     config.build = {
       ...config.build,
-      // Storybook essentials routinely exceed Vite's default 500 kB limit.
-      chunkSizeWarningLimit: 800,
+      // Storybook's manager and preview bundles exceed Vite's default 500 kB limit.
+      chunkSizeWarningLimit: 1200,
       rolldownOptions: {
         ...config.build?.rolldownOptions,
         onLog(level, log, defaultHandler) {
-          // Storybook core ships dead telejson eval code that Rolldown warns on.
-          if (log.code === 'EVAL' && log.id?.includes('@storybook/core')) {
+          // `'use client'` directives in dependencies are irrelevant outside React Server Components.
+          if (log.code === 'MODULE_LEVEL_DIRECTIVE') {
             return
           }
 
