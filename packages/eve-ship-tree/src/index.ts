@@ -21,6 +21,8 @@ export {
   shipTreeDefaultBackgroundColor,
   useFaction,
   useShipTreeTheme,
+  preloadShipTreeSprites,
+  shipTreeSprites,
 } from './ship-tree'
 export type {
   ShipTreeProps,

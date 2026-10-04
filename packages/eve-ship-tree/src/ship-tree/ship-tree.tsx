@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentPropsWithoutRef, type CSSProperties, type PropsWithChildren } from 'react'
+import { forwardRef, useEffect, type ComponentPropsWithoutRef, type CSSProperties, type PropsWithChildren } from 'react'
 
 import { SkillsProvider, type SkillsInput } from '../skills-provider'
 import { useDataStatus, DataProvider, type DataProviderProps } from '../data-provider'
@@ -11,6 +11,7 @@ import { createGetStyles, cx, type StylesApiProps } from './styles-api'
 import { ThemeProvider } from './theme-provider'
 import { Identifier } from '../data/identifiers/shipTreeFactions'
 import { TreeDisplay } from './tree-display'
+import { preloadShipTreeSprites } from './sprites'
 
 export const shipTreeDefaultBackgroundColor = '#070d13'
 
@@ -47,6 +48,10 @@ const ShipTreeBase = forwardRef<HTMLDivElement, ShipTreeProps>(
     const getStyles = createGetStyles<ShipTreeStylesNames>(classes, { className, style, classNames, styles }, {
       '--ship-tree-background-color': backgroundColor,
     } as CSSProperties)
+
+    useEffect(() => {
+      void preloadShipTreeSprites()
+    }, [])
 
     const { status, error } = useDataStatus()
     const panZoomOptions = resolvePanZoomOptions(panZoom)
