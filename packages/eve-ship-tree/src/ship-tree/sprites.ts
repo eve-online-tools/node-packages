@@ -70,7 +70,8 @@ export const preloadShipTreeSprites = (): Promise<void> => {
         return image.decode().catch(() => undefined)
       }
       return new Promise<void>((resolve) => {
-        image.onload = image.onerror = () => resolve()
+        image.onload = () => resolve()
+        image.onerror = () => resolve()
       })
     }),
   ).then(() => undefined)
