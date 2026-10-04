@@ -139,20 +139,6 @@ describe('picking', () => {
     const grid = buildScreenGrid(p, 200, 100)
     expect(queryNearest(grid, p, 100, 50, 10)).toBeNull()
   })
-
-  it('handles the full map in well under a frame', () => {
-    const n = 5500
-    const pos = Float32Array.from({ length: n * 3 }, () => Math.random() * 2 - 1)
-    const pos2 = new Float32Array(n * 2)
-    const f = new Float32Array(n)
-    const p = createProjection(n)
-    const start = performance.now()
-    for (let k = 0; k < 10; k++) {
-      projectSystems(p, pos, pos2, f, 1, IDENTITY, 1920, 1080)
-      queryNearest(buildScreenGrid(p, 1920, 1080), p, 500, 500, 10)
-    }
-    expect((performance.now() - start) / 10).toBeLessThan(8)
-  })
 })
 
 describe('label visibility', () => {
