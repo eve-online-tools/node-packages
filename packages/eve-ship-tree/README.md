@@ -131,6 +131,20 @@ const data = await loadShipTreeData({
 </SkillsProvider>;
 ```
 
+### Data tables
+
+`data` is typed as `PreloadedData`: the seven tables below are required and the other generated tables are optional. Each table maps a numeric key to a record. To build them without the bundled JSONL (for example from your own SDE copy), derive them as follows. Field names follow the SDE YAML/JSONL export.
+
+| Table | Key | Record | Derivation |
+| --- | --- | --- | --- |
+| `types` | type ID | `{ shipTreeGroupID?, factionID?, metaGroupID?, techLevel? }` | SDE `types` whose group has `categoryID` 6 (Ship). `techLevel` falls back to dogma attribute 422, then 1. |
+| `requiredSkills` | type ID | `{ requiredSkills: Record<skillTypeID, level> }` | Dogma attribute pairs (skill, level): 182/277, 183/278, 184/279, 1285/1286, 1289/1287. Skip pairs whose skill is missing or 0; a missing level is 0. |
+| `masteries` | type ID | `[{ _key: masteryLevel, _value: certificateID[] }]` | SDE `masteries` for the types above. `_key` is 0 to 4. |
+| `certificates` | certificate ID | `{ skillTypes: [{ _key: skillTypeID, basic, standard, improved, advanced, elite }] }` | SDE `certificates` referenced by `masteries`. |
+| `cloneGrades` | clone grade ID | `{ skills: [{ typeID, level }] }` | SDE `cloneGrades` as is. |
+| `shipTreeGroups` | ship tree group ID | `{ elements: [{ _key, _value }], preReqSkills: [{ _key: factionID, skills: [{ _key: skillTypeID, level, display }] }] }` | SDE `shipTreeGroups` as is. |
+| `shipSizes` | rig size | `{ typeIDs: number[] }` | Types grouped by dogma attribute 1547 (rig size, missing is 0). Ship tree groups 37 (Freighter) and 38 (Jump Freighter) are forced to 4. |
+
 ### Security (server loaders)
 
 `loadShipTreeData` accepts a trusted static `baseUrl`. Never pass user-controlled URLs to it on the server without validation — that enables SSRF against internal networks.

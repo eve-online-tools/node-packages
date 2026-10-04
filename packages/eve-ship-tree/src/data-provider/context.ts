@@ -1,13 +1,13 @@
 import { createContext } from 'react'
 
-import type { Data, DataStatus } from './types'
+import type { DataStatus, PreloadedData } from './types'
 import type { Identifier as GroupIdentifier } from '../data/identifiers/shipTreeGroups'
 import type { AlphaSkills } from './processors'
 import type { ShipTreeGroup } from './processors/ship-tree-groups'
 import type { ShipTypeInfo } from './processors/ship-types'
 
 export type DataContextValue = {
-  data: Data | null
+  data: PreloadedData | null
   status: DataStatus
   error: Error | null
 }

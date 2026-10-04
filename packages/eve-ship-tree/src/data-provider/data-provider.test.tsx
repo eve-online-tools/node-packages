@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { identifiers as factions } from '../data/identifiers/shipTreeFactions'
 import { lockedCaldariSkills, minimalShipTreeData, unlockedCaldariSkills } from './__fixtures__/minimal-data'
 import { DataProvider } from './data-provider'
+import type { PreloadedData } from './types'
 import { useDataStatus } from './use-data'
 import { useProcessedData } from './use-processed-data'
 import { identifiers as groups } from '../data/identifiers/shipTreeGroups'
@@ -26,6 +27,30 @@ describe('DataProvider', () => {
       data: minimalShipTreeData(),
       skills: unlockedCaldariSkills,
     })
+
+    expect(screen.getByTestId('group-status')).toHaveTextContent('unlocked')
+  })
+
+  it('accepts preloaded data with only the tables the tree reads', () => {
+    const { types, requiredSkills, certificates, masteries, cloneGrades, shipTreeGroups, shipSizes } =
+      minimalShipTreeData()
+    const data: PreloadedData = {
+      types,
+      requiredSkills,
+      certificates,
+      masteries,
+      cloneGrades,
+      shipTreeGroups,
+      shipSizes,
+    }
+
+    render(
+      <SkillsProvider skills={unlockedCaldariSkills}>
+        <DataProvider data={data}>
+          <ProcessedConsumer />
+        </DataProvider>
+      </SkillsProvider>,
+    )
 
     expect(screen.getByTestId('group-status')).toHaveTextContent('unlocked')
   })
