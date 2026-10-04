@@ -15,7 +15,7 @@
 }
 
 [data-faction='500006'] {
-  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/concord_logo_256px.png');
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/concord_logo_264px.png');
 }
 
 [data-faction='500010'] {
@@ -55,11 +55,11 @@
 }
 
 [data-faction='500026'] {
-  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/triglavian_logo_256px.png');
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/triglavian_logo_264px.png');
 }
 
 [data-faction='500027'] {
-  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/edencom_logo_256px.png');
+  --factions-flat-logo: url('res:/ui/texture/eveicon/faction_logos/edencom_logo_264px.png');
 }
 
 [data-faction='500029'] {
