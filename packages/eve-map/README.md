@@ -8,13 +8,14 @@ The package draws the map. Data sourcing, overlays (tooltips, panels) and domain
 
 ```bash
 pnpm add @eve-online-tools/eve-map three
-# React binding
-pnpm add react
-# Build-time data generation
-pnpm add -D @eve-online-tools/eve-sde
 ```
 
 `three` is a peer dependency so apps share one copy. Requires WebGL 2.
+
+Optional peers, only for the matching entry point:
+
+- `react` for `@eve-online-tools/eve-map/react`
+- `@eve-online-tools/eve-sde` for `@eve-online-tools/eve-map/sde`, to generate map data from the SDE at build time
 
 | Import | Contents |
 | --- | --- |
@@ -26,7 +27,9 @@ Imports have no side effects and are SSR safe. Nothing touches `window` until `c
 
 ## Getting map data
 
-### From the SDE at build time
+`createMap` takes a `MapData` object; where it comes from is up to the app. The SDE processor below is one option.
+
+### From the SDE at build time (optional)
 
 ```ts
 // vite.config.ts
