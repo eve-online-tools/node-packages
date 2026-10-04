@@ -9,7 +9,7 @@ import {
   Vector3,
 } from 'three'
 
-import type { MapData } from '../../data/types'
+import type { PreparedMap } from '../prepare'
 import type { Rgb } from '../colors'
 import { pathFragment, pathVertex } from '../shaders'
 import { DynamicAttributes } from './buffers'
@@ -67,7 +67,7 @@ export class PathLayer {
   }
 
   /** Consecutive system indices. Unknown IDs break the path into separate runs. */
-  set(indices: readonly number[], data: MapData): void {
+  set(indices: readonly number[], data: PreparedMap): void {
     const segments: Array<[number, number]> = []
     for (let k = 1; k < indices.length; k++) {
       if (indices[k - 1] >= 0 && indices[k] >= 0) {
@@ -81,7 +81,7 @@ export class PathLayer {
     const start2d = this.buffers.array('aStart2d')
     const end = this.buffers.array('aEnd')
     const end2d = this.buffers.array('aEnd2d')
-    const { position, position2d } = data.systems
+    const { position, position2d } = data
     segments.forEach(([a, b], k) => {
       start.set(position.subarray(a * 3, a * 3 + 3), k * 3)
       start2d.set(position2d.subarray(a * 2, a * 2 + 2), k * 2)

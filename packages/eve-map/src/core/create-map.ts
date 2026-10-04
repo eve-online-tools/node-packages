@@ -1,7 +1,7 @@
 import { Color, PerspectiveCamera, Scene, SRGBColorSpace, Vector3, WebGLRenderer } from 'three'
 
-import { createMapIndex, type MapIndex } from '../data/lookup'
 import type { MapData } from '../data/types'
+import { prepareMap, type PreparedMap } from './prepare'
 import { validateMapData } from '../data/validate'
 import {
   applyPose,
@@ -118,11 +118,8 @@ export interface MapEventMap {
 
 export type MapEventType = keyof MapEventMap
 
-/** System ID, region ID, constellation ID, a list of system IDs, or scene-space bounds */
-export type FocusTarget =
-  | number
-  | readonly number[]
-  | { min: readonly [number, number, number]; max: readonly [number, number, number] }
+/** System ID, region ID, constellation ID, or a list of system IDs */
+export type FocusTarget = number | readonly number[]
 
 export interface AnimationOptions {
   /** Default true, ignored under reduced motion */
@@ -231,7 +228,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   }
 
   let data = options.data
-  let index: MapIndex = createMapIndex(data)
+  let prepared: PreparedMap = prepareMap(data)
   let theme = { ...DEFAULT_THEME, ...options.theme }
   let style: SystemStyle = { ...options.systemStyle }
   let highlightIds = new Set(options.highlight ?? [])
@@ -253,7 +250,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   const highlightIndices = () => {
     const set = new Set<number>()
     for (const id of highlightIds) {
-      const i = index.indexOf(id)
+      const i = prepared.indexOf(id)
       if (i >= 0) {
         set.add(i)
       }
@@ -263,15 +260,15 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
 
   const buildSystems = () =>
     new SystemsLayer(
-      data,
-      resolveColors(style.color, data.systems.security),
-      resolveSizes(style.size, data.systems.id.length),
-      resolveFlags(style.visible, highlightIndices(), data.systems.id.length),
+      prepared,
+      resolveColors(style.color, prepared.security),
+      resolveSizes(style.size, prepared.id.length),
+      resolveFlags(style.visible, highlightIndices(), prepared.id.length),
       parseColor(theme.highlight),
     )
 
   let systems = buildSystems()
-  let gates = new GatesLayer(data, parseColor(theme.gate), parseColor(theme.gateRegional))
+  let gates = new GatesLayer(prepared, parseColor(theme.gate), parseColor(theme.gateRegional))
   gates.updateVisibility(systems.flags.array as Float32Array)
   const markersLayer = new MarkersLayer()
   const pathLayer = new PathLayer(parseColor(theme.path))
@@ -282,10 +279,10 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     parseColor(theme.labelHalo ?? theme.background),
   )
   scene.add(gates.object, pathLayer.object, systems.object, markersLayer.object, labels.object)
-  markersLayer.set(markers, data, index.indexOf)
+  markersLayer.set(markers, prepared)
   pathLayer.set(
-    pathIds.map((id) => index.indexOf(id)),
-    data,
+    pathIds.map((id) => prepared.indexOf(id)),
+    prepared,
   )
   renderer.setClearColor(toSceneColor(parseColor(theme.background)), 1)
 
@@ -308,14 +305,8 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   }
   measure()
 
-  {
-    const bounds = view === '3d' ? data.bounds.position : data.bounds.position2d
-    const stride = view === '3d' ? 3 : 2
-    const cx = (bounds[0] + bounds[stride]) / 2
-    const cz = (bounds[stride - 1] + bounds[stride * 2 - 1]) / 2
-    pose.target = view === '3d' ? [cx, (bounds[1] + bounds[4]) / 2, cz] : [cx, 0, cz]
-    const aspect = width / height
-    pose.viewHeight = aspect < 1 ? FIT_VIEW_HEIGHT / aspect : FIT_VIEW_HEIGHT
+  if (width < height) {
+    pose.viewHeight = (FIT_VIEW_HEIGHT * height) / width
   }
   if (options.camera) {
     pose = { ...pose, ...normalizeCamera(options.camera, view) }
@@ -334,7 +325,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   const reducedMotion = () => options.reducedMotion ?? systemReducedMotion
 
   // Projection and picking
-  let projection: Projection = createProjection(data.systems.id.length)
+  let projection: Projection = createProjection(prepared.id.length)
   let projectionStale = true
   let grid: ScreenGrid | null = null
 
@@ -346,8 +337,8 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
       const m = camera.projectionMatrix.clone().multiply(camera.matrixWorldInverse).elements
       projectSystems(
         projection,
-        data.systems.position,
-        data.systems.position2d,
+        prepared.position,
+        prepared.position2d,
         systems.flags.array as Float32Array,
         pose.morph,
         m,
@@ -409,7 +400,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     hoverIndex = next
     systems.uniforms.uHover.value = next ?? -1
     canvas.style.cursor = next === null ? '' : 'pointer'
-    emit('hover', { systemId: next === null ? null : data.systems.id[next], index: next, screen, originalEvent: event })
+    emit('hover', { systemId: next === null ? null : prepared.id[next], index: next, screen, originalEvent: event })
     invalidate()
   }
 
@@ -480,7 +471,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
 
     labels.update(
       {
-        data,
+        data: prepared,
         projection: ensureProjection(),
         sizes: systems.sizes.array as Float32Array,
         sizeScale: scale,
@@ -597,18 +588,15 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   const resolveFocusIndices = (target: FocusTarget): number[] => {
     if (typeof target === 'number') {
       if (target >= REGION_MIN && target < CONSTELLATION_MIN) {
-        return index.systemsInRegion(target)
+        return prepared.systemsInRegion(target)
       }
       if (target >= CONSTELLATION_MIN && target < SYSTEM_MIN) {
-        return index.systemsInConstellation(target)
+        return prepared.systemsInConstellation(target)
       }
-      const i = index.indexOf(target)
+      const i = prepared.indexOf(target)
       return i >= 0 ? [i] : []
     }
-    if (Array.isArray(target)) {
-      return target.map((id: number) => index.indexOf(id)).filter((i: number) => i >= 0)
-    }
-    return []
+    return target.map((id) => prepared.indexOf(id)).filter((i) => i >= 0)
   }
 
   // Public API
@@ -637,8 +625,8 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     // Keep the system nearest the target under the camera while the layout morphs.
     const anchor = pickAnchor(to.target, to.morph)
     if (anchor !== null) {
-      const before = morphPosition(data.systems.position, data.systems.position2d, to.morph, anchor)
-      const after = morphPosition(data.systems.position, data.systems.position2d, morph, anchor)
+      const before = morphPosition(prepared.position, prepared.position2d, to.morph, anchor)
+      const after = morphPosition(prepared.position, prepared.position2d, morph, anchor)
       to.target = [
         after[0] + to.target[0] - before[0],
         after[1] + to.target[1] - before[1],
@@ -661,8 +649,8 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     let best: number | null = null
     let bestDistance = Infinity
     const p: [number, number, number] = [0, 0, 0]
-    for (let i = 0; i < data.systems.id.length; i++) {
-      morphPosition(data.systems.position, data.systems.position2d, morph, i, p)
+    for (let i = 0; i < prepared.id.length; i++) {
+      morphPosition(prepared.position, prepared.position2d, morph, i, p)
       const d = (p[0] - target[0]) ** 2 + (p[1] - target[1]) ** 2 + (p[2] - target[2]) ** 2
       if (d < bestDistance) {
         bestDistance = d
@@ -677,25 +665,18 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
       return Promise.resolve()
     }
     const to = destination()
-    let min: [number, number, number]
-    let max: [number, number, number]
-    if (typeof target === 'object' && !Array.isArray(target) && 'min' in target) {
-      min = [...target.min]
-      max = [...target.max]
-    } else {
-      const indices = resolveFocusIndices(target)
-      if (indices.length === 0) {
-        return Promise.resolve()
-      }
-      min = [Infinity, Infinity, Infinity]
-      max = [-Infinity, -Infinity, -Infinity]
-      const p: [number, number, number] = [0, 0, 0]
-      for (const i of indices) {
-        morphPosition(data.systems.position, data.systems.position2d, to.morph, i, p)
-        for (let c = 0; c < 3; c++) {
-          min[c] = Math.min(min[c], p[c])
-          max[c] = Math.max(max[c], p[c])
-        }
+    const indices = resolveFocusIndices(target)
+    if (indices.length === 0) {
+      return Promise.resolve()
+    }
+    const min = [Infinity, Infinity, Infinity]
+    const max = [-Infinity, -Infinity, -Infinity]
+    const p: [number, number, number] = [0, 0, 0]
+    for (const i of indices) {
+      morphPosition(prepared.position, prepared.position2d, to.morph, i, p)
+      for (let c = 0; c < 3; c++) {
+        min[c] = Math.min(min[c], p[c])
+        max[c] = Math.max(max[c], p[c])
       }
     }
     const center: [number, number, number] = [(min[0] + max[0]) / 2, (min[1] + max[1]) / 2, (min[2] + max[2]) / 2]
@@ -724,10 +705,10 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
 
   const setSystemStyle = (partial: SystemStyle) => {
     style = { ...style, ...partial }
-    const n = data.systems.id.length
+    const n = prepared.id.length
     let changed = 0
     if ('color' in partial) {
-      changed += uploadRanges(systems.colors, resolveColors(style.color, data.systems.security))
+      changed += uploadRanges(systems.colors, resolveColors(style.color, prepared.security))
     }
     if ('size' in partial) {
       changed += uploadRanges(systems.sizes, resolveSizes(style.size, n))
@@ -741,7 +722,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   }
 
   const updateFlags = (): number => {
-    const changed = uploadRanges(systems.flags, resolveFlags(style.visible, highlightIndices(), data.systems.id.length))
+    const changed = uploadRanges(systems.flags, resolveFlags(style.visible, highlightIndices(), prepared.id.length))
     if (changed > 0) {
       gates.updateVisibility(systems.flags.array as Float32Array)
       projectionStale = true
@@ -762,8 +743,8 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     }
     pathIds = [...ids]
     pathLayer.set(
-      pathIds.map((id) => index.indexOf(id)),
-      data,
+      pathIds.map((id) => prepared.indexOf(id)),
+      prepared,
     )
     invalidate()
   }
@@ -773,7 +754,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
       return
     }
     markers = [...next]
-    markersLayer.set(markers, data, index.indexOf)
+    markersLayer.set(markers, prepared)
     invalidate()
   }
 
@@ -798,20 +779,20 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   const setData = (next: MapData) => {
     validateMapData(next)
     data = next
-    index = createMapIndex(data)
+    prepared = prepareMap(data)
     scene.remove(systems.object, gates.object)
     systems.dispose()
     gates.dispose()
     systems = buildSystems()
-    gates = new GatesLayer(data, parseColor(theme.gate), parseColor(theme.gateRegional))
+    gates = new GatesLayer(prepared, parseColor(theme.gate), parseColor(theme.gateRegional))
     gates.updateVisibility(systems.flags.array as Float32Array)
     scene.add(gates.object, systems.object)
-    markersLayer.set(markers, data, index.indexOf)
+    markersLayer.set(markers, prepared)
     pathLayer.set(
-      pathIds.map((id) => index.indexOf(id)),
-      data,
+      pathIds.map((id) => prepared.indexOf(id)),
+      prepared,
     )
-    projection = createProjection(data.systems.id.length)
+    projection = createProjection(prepared.id.length)
     projectionStale = true
     hoverIndex = null
     labels.shown = []
@@ -824,7 +805,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     if (systemId === null || systemId === undefined) {
       return null
     }
-    const i = index.indexOf(systemId)
+    const i = prepared.indexOf(systemId)
     if (i < 0) {
       return null
     }
@@ -896,7 +877,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
       click: (x, y, event) => {
         const i = pickIndex(x, y)
         emit('click', {
-          systemId: i === null ? null : data.systems.id[i],
+          systemId: i === null ? null : prepared.id[i],
           index: i,
           screen: { x, y },
           originalEvent: event,
@@ -908,7 +889,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
         }
         const i = pickIndex(x, y)
         emit('contextmenu', {
-          systemId: i === null ? null : data.systems.id[i],
+          systemId: i === null ? null : prepared.id[i],
           index: i,
           screen: { x, y },
           originalEvent: event,
@@ -922,7 +903,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
       keyboardSelect: (event) => {
         const i = hoverIndex ?? nearestToCenter()
         const screen = i === null ? { x: width / 2, y: height / 2 } : screenOf(i)
-        emit('click', { systemId: i === null ? null : data.systems.id[i], index: i, screen, originalEvent: event })
+        emit('click', { systemId: i === null ? null : prepared.id[i], index: i, screen, originalEvent: event })
       },
       size: () => ({ width, height }),
     },

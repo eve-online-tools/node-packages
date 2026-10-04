@@ -11,7 +11,7 @@ import {
   Vector3,
 } from 'three'
 
-import type { MapData } from '../../data/types'
+import type { PreparedMap } from '../prepare'
 import type { Rgb } from '../colors'
 import type { Projection } from '../projection'
 import { labelsFragment, labelsVertex } from '../shaders'
@@ -164,7 +164,7 @@ const createQuadGeometry = (): InstancedBufferGeometry => {
 }
 
 export interface LabelLayoutInput {
-  data: MapData
+  data: PreparedMap
   projection: Projection
   /** Point diameters in CSS px */
   sizes: Float32Array
@@ -265,7 +265,7 @@ export class LabelsLayer {
     }
 
     const { data, projection, sizes, sizeScale, priority, width, height } = input
-    const names = data.systems.name
+    const names = data.name
     const candidates: number[] = []
     const seen = new Set<number>()
     const push = (i: number) => {
@@ -359,8 +359,8 @@ export class LabelsLayer {
         if (!glyph) {
           continue
         }
-        anchor.set(data.systems.position.subarray(i * 3, i * 3 + 3), g * 3)
-        anchor2d.set(data.systems.position2d.subarray(i * 2, i * 2 + 2), g * 2)
+        anchor.set(data.position.subarray(i * 3, i * 3 + 3), g * 3)
+        anchor2d.set(data.position2d.subarray(i * 2, i * 2 + 2), g * 2)
         rectAttr[g * 4] = x - 2
         rectAttr[g * 4 + 1] = -lineHeight / 2
         rectAttr[g * 4 + 2] = glyph.width

@@ -3,27 +3,17 @@ import { dirname } from 'node:path'
 
 import type { SdeProcessor } from '@eve-online-tools/eve-sde'
 
-import { buildMapData } from '../data/build'
 import { encodeMapData } from '../data/binary'
-import { mapDataToJson } from '../data/json'
-import type { MapSystemSource } from '../data/types'
+import type { MapData, MapSystem } from '../data/types'
 
 /** Bump when the processor output changes, so eve-sde regenerates it. */
-const PROCESSOR_REVISION = 2
-
-export interface SdeSolarSystem {
-  id: number
-  constellationId: number
-  regionId: number
-  security: number
-  name: string
-}
+const PROCESSOR_REVISION = 3
 
 export interface MapDataProcessorOptions {
   /** Name locale. Falls back to `en` when missing. Default `en`. */
   locale?: string
   /** Default: IDs 30,000,000 to 30,999,999 (known space, the in-game map) */
-  systems?: (system: SdeSolarSystem) => boolean
+  systems?: (system: MapSystem) => boolean
   /** Default `binary` */
   format?: 'binary' | 'json'
   /** Output file relative to `outputDir`. Default `map-data.bin` or `map-data.json`. */
@@ -49,7 +39,7 @@ interface StargateRow {
   destination: { solarSystemID: number }
 }
 
-export const isKnownSpace = (system: SdeSolarSystem): boolean => system.id >= 30_000_000 && system.id < 31_000_000
+export const isKnownSpace = (system: MapSystem): boolean => system.id >= 30_000_000 && system.id < 31_000_000
 
 const pickName = (name: Translated, locale: string): string => name[locale] ?? name.en
 
@@ -76,34 +66,34 @@ export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProc
     // The filter source is hashed so editing it invalidates the lock.
     version: [PROCESSOR_REVISION, locale, format, fileName, hashString(String(filter))].join(':'),
     run: async ({ loadStream, resolve, writeJson }) => {
-      const systems: MapSystemSource[] = []
-      const keep = new Set<number>()
+      const systems = new Map<number, MapSystem>()
       const regionIds = new Set<number>()
       const constellationIds = new Set<number>()
 
       for await (const record of loadStream('mapSolarSystems')) {
         const row = record.value as SolarSystemRow
-        const system: SdeSolarSystem = {
+        const system: MapSystem = {
           id: Number(record.key),
-          constellationId: row.constellationID,
-          regionId: row.regionID,
-          security: row.securityStatus,
           name: pickName(row.name, locale),
+          regionId: row.regionID,
+          constellationId: row.constellationID,
+          security: row.securityStatus,
+          position: row.position,
+          position2d: row.position2D,
+          gates: [],
         }
         if (!filter(system)) {
           continue
         }
-        keep.add(system.id)
         regionIds.add(system.regionId)
         constellationIds.add(system.constellationId)
-        systems.push({ ...system, position: row.position, position2d: row.position2D })
+        systems.set(system.id, system)
       }
 
-      const gates: Array<[number, number]> = []
       for await (const record of loadStream('mapStargates')) {
-        const { solarSystemID: from, destination } = record.value as StargateRow
-        if (keep.has(from) && keep.has(destination.solarSystemID)) {
-          gates.push([from, destination.solarSystemID])
+        const { solarSystemID, destination } = record.value as StargateRow
+        if (systems.has(destination.solarSystemID)) {
+          systems.get(solarSystemID)?.gates.push(destination.solarSystemID)
         }
       }
 
@@ -117,20 +107,22 @@ export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProc
         }
         return names
       }
-      const regions = await loadNames('mapRegions', regionIds)
-      const constellations = await loadNames('mapConstellations', constellationIds)
 
-      const data = buildMapData({ systems, gates, regions, constellations })
+      const data: MapData = {
+        systems: [...systems.values()].sort((a, b) => a.id - b.id),
+        regions: await loadNames('mapRegions', regionIds),
+        constellations: await loadNames('mapConstellations', constellationIds),
+      }
 
       if (format === 'json') {
-        await writeJson(fileName, mapDataToJson(data))
+        await writeJson(fileName, data)
       } else {
         const path = resolve(fileName)
         await mkdir(dirname(path), { recursive: true })
         await writeFile(path, new Uint8Array(encodeMapData(data)))
       }
 
-      return { fileName, systems: data.systems.id.length, gates: data.gates.length / 2 }
+      return { fileName, systems: data.systems.length }
     },
   }
 }

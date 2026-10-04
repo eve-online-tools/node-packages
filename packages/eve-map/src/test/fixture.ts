@@ -1,10 +1,9 @@
-import { buildMapData } from '../data/build'
-import type { MapData, MapDataSource } from '../data/types'
+import type { MapData } from '../data/types'
 
 const AU = 1.5e11
 
 /** Two regions, three constellations, six systems in SDE universe coordinates. */
-export const fixtureSource = (): MapDataSource => ({
+export const fixtureMapData = (): MapData => ({
   systems: [
     {
       id: 30000001,
@@ -14,6 +13,7 @@ export const fixtureSource = (): MapDataSource => ({
       name: 'Alpha',
       position: { x: -10 * AU, y: 2 * AU, z: 10 * AU },
       position2d: { x: -10 * AU, y: 10 * AU },
+      gates: [30000002],
     },
     {
       id: 30000002,
@@ -23,6 +23,7 @@ export const fixtureSource = (): MapDataSource => ({
       name: 'Bravo',
       position: { x: -5 * AU, y: 0, z: 5 * AU },
       position2d: { x: -5 * AU, y: 5 * AU },
+      gates: [30000001, 30000003],
     },
     {
       id: 30000003,
@@ -32,6 +33,7 @@ export const fixtureSource = (): MapDataSource => ({
       name: 'Charlie',
       position: { x: 0, y: -2 * AU, z: 0 },
       position2d: { x: 0, y: 0 },
+      gates: [30000004],
     },
     {
       id: 30000004,
@@ -41,6 +43,7 @@ export const fixtureSource = (): MapDataSource => ({
       name: 'Delta',
       position: { x: 5 * AU, y: 1 * AU, z: -5 * AU },
       position2d: { x: 5 * AU, y: -5 * AU },
+      gates: [30000005],
     },
     {
       id: 30000005,
@@ -50,6 +53,7 @@ export const fixtureSource = (): MapDataSource => ({
       name: 'Echo',
       position: { x: 10 * AU, y: 0, z: -10 * AU },
       position2d: { x: 10 * AU, y: -10 * AU },
+      gates: [30000006],
     },
     {
       id: 30000006,
@@ -59,19 +63,9 @@ export const fixtureSource = (): MapDataSource => ({
       name: 'Foxtrot',
       position: { x: 10 * AU, y: 0, z: 10 * AU },
       position2d: { x: 10 * AU, y: 10 * AU },
+      gates: [39999999],
     },
-  ],
-  gates: [
-    [30000001, 30000002],
-    [30000002, 30000001],
-    [30000002, 30000003],
-    [30000003, 30000004],
-    [30000004, 30000005],
-    [30000005, 30000006],
-    [30000006, 39999999],
   ],
   regions: { 10000001: 'Region One', 10000002: 'Region Two' },
   constellations: { 20000001: 'Const A', 20000002: 'Const B', 20000003: 'Const C' },
 })
-
-export const fixtureMapData = (): MapData => buildMapData(fixtureSource())

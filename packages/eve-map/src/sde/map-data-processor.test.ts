@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import type { SdeJsonlRecord, SdeProcessorContext } from '@eve-online-tools/eve-sde'
 
 import { decodeMapData } from '../data/binary'
-import { mapDataFromJson } from '../data/json'
+import type { MapData } from '../data/types'
 import { mapDataProcessor } from './map-data-processor'
 
 const name = (en: string) => ({ en, de: `${en} (de)` })
@@ -109,13 +109,13 @@ describe('mapDataProcessor', () => {
     const result = await mapDataProcessor().run(ctx)
 
     expect(loaded).toEqual(['mapSolarSystems', 'mapStargates', 'mapRegions', 'mapConstellations'])
-    expect(result).toEqual({ fileName: 'map-data.bin', systems: 3, gates: 2 })
+    expect(result).toEqual({ fileName: 'map-data.bin', systems: 3 })
 
     const data = decodeMapData(await readFile(join(outputDir, 'map-data.bin')))
-    expect(Array.from(data.systems.id)).toEqual([30000001, 30000002, 30000003])
-    expect(data.systems.name).toEqual(['Tanoo', 'Lashesih', 'Akpivem'])
-    expect(Array.from(data.systems.security)).toEqual([0.86, 0.75, 0.46].map(Math.fround))
-    expect(Array.from(data.gates)).toEqual([0, 1, 1, 2])
+    expect(data.systems.map((s) => s.id)).toEqual([30000001, 30000002, 30000003])
+    expect(data.systems.map((s) => s.name)).toEqual(['Tanoo', 'Lashesih', 'Akpivem'])
+    expect(data.systems.map((s) => s.security)).toEqual([0.86, 0.75, 0.46].map(Math.fround))
+    expect(data.systems.map((s) => s.gates)).toEqual([[30000002], [30000001, 30000003], [30000002]])
     expect(data.regions).toEqual({ 10000001: 'Derelik', 10000002: 'The Forge' })
     expect(data.constellations).toEqual({ 20000001: 'San Matar', 20000002: 'Kimotoro' })
   })
@@ -128,8 +128,9 @@ describe('mapDataProcessor', () => {
     const processor = mapDataProcessor({ locale: 'de', format: 'json', systems: (s) => s.regionId === 10000001 })
     await processor.run(ctx)
 
-    const data = mapDataFromJson(JSON.parse(JSON.stringify(written)))
-    expect(data.systems.name).toEqual(['Tanoo (de)', 'Lashesih (de)'])
+    const data = written as MapData
+    expect(data.systems.map((s) => s.name)).toEqual(['Tanoo (de)', 'Lashesih (de)'])
+    expect(data.systems[0].gates).toEqual([30000002])
     expect(data.regions).toEqual({ 10000001: 'Derelik (de)' })
   })
 

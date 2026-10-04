@@ -1,6 +1,7 @@
 import { fixtureMapData } from '../test/fixture'
 import { installFrameQueue } from '../test/frames'
 import { installWebGLMock, type WebGLMock } from '../test/webgl-mock'
+import { prepareMap } from './prepare'
 import { createMap, type CreateMapOptions, type EveMap } from './create-map'
 import { isWebGL2Available, WebGLUnavailableError } from './webgl'
 
@@ -124,9 +125,9 @@ describe('createMap', () => {
   it('focuses systems, regions and constellations', async () => {
     const { map } = setup({ reducedMotion: true })
     await map.focus(30000003)
-    const data = map.data
-    expect(map.getCamera().target[0]).toBeCloseTo(data.systems.position2d[4])
-    expect(map.getCamera().target[2]).toBeCloseTo(data.systems.position2d[5])
+    const { position2d } = prepareMap(map.data)
+    expect(map.getCamera().target[0]).toBeCloseTo(position2d[4])
+    expect(map.getCamera().target[2]).toBeCloseTo(position2d[5])
     await map.focus(10000002)
     expect(map.getCamera().viewHeight).toBeGreaterThan(0.06)
   })

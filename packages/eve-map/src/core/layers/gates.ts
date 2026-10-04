@@ -1,6 +1,6 @@
 import { BufferAttribute, BufferGeometry, GLSL3, LineSegments, ShaderMaterial, Vector3 } from 'three'
 
-import type { MapData } from '../../data/types'
+import type { PreparedMap } from '../prepare'
 import type { Rgb } from '../colors'
 import { gatesFragment, gatesVertex } from '../shaders'
 import { FLAG_HIDDEN } from '../style'
@@ -16,11 +16,11 @@ export class GatesLayer {
   private readonly baseKinds: Float32Array
 
   constructor(
-    private readonly data: MapData,
+    private readonly data: PreparedMap,
     gate: Rgb,
     gateRegional: Rgb,
   ) {
-    const { gates, systems } = data
+    const { gates } = data
     const vertexCount = gates.length
     const position = new Float32Array(vertexCount * 3)
     const position2d = new Float32Array(vertexCount * 2)
@@ -28,11 +28,11 @@ export class GatesLayer {
 
     for (let v = 0; v < vertexCount; v++) {
       const i = gates[v]
-      position.set(systems.position.subarray(i * 3, i * 3 + 3), v * 3)
-      position2d.set(systems.position2d.subarray(i * 2, i * 2 + 2), v * 2)
+      position.set(data.position.subarray(i * 3, i * 3 + 3), v * 3)
+      position2d.set(data.position2d.subarray(i * 2, i * 2 + 2), v * 2)
     }
     for (let g = 0; g < vertexCount; g += 2) {
-      const regional = systems.region[gates[g]] !== systems.region[gates[g + 1]] ? KIND_REGIONAL : 0
+      const regional = data.region[gates[g]] !== data.region[gates[g + 1]] ? KIND_REGIONAL : 0
       this.baseKinds[g] = regional
       this.baseKinds[g + 1] = regional
     }

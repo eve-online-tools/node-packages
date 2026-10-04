@@ -23,15 +23,11 @@ export function MapDemo() {
   }, [])
 
   const systemStyle = useMemo(
-    () => (data && colorMode === 'region' ? { color: (i: number) => regionColor(data.systems.region[i]) } : {}),
+    () => (data && colorMode === 'region' ? { color: (i: number) => regionColor(data.systems[i].regionId) } : {}),
     [data, colorMode],
   )
 
-  const names = useMemo(() => {
-    const map = new Map<number, string>()
-    data?.systems.id.forEach((id, i) => map.set(id, data.systems.name[i]))
-    return map
-  }, [data])
+  const names = useMemo(() => new Map(data?.systems.map((s) => [s.id, s.name])), [data])
 
   if (error) {
     return <p>Failed to load map data: {error}</p>

@@ -28,7 +28,7 @@ const useMapData = () => {
 }
 
 const idsByName = (data: MapData, names: string[]) =>
-  names.map((name) => data.systems.id[data.systems.name.indexOf(name)]).filter((id) => id !== undefined)
+  names.flatMap((name) => data.systems.find((s) => s.name === name)?.id ?? [])
 
 function WithData({ children }: { children: (data: MapData) => ReactNode }) {
   const { data, error } = useMapData()
@@ -114,11 +114,11 @@ function ColorsDemo({ data }: { data: MapData }) {
   const [mode, setMode] = useState<'security' | 'region' | 'scale'>('security')
   const systemStyle = useMemo(() => {
     if (mode === 'region') {
-      return { color: (i: number) => regionColor(data.systems.region[i]) }
+      return { color: (i: number) => regionColor(data.systems[i].regionId) }
     }
     if (mode === 'scale') {
       // Stand-in for consumer data, e.g. jumps or kills per system.
-      const values = Array.from(data.systems.id, (_, i) => Math.abs(Math.sin(i * 12.9898)))
+      const values = data.systems.map((_, i) => Math.abs(Math.sin(i * 12.9898)))
       return { color: scaleColor(values, ['#1b2a49', '#f2c14e', '#e4572e']), size: values.map((v) => 3 + v * 5) }
     }
     return {}

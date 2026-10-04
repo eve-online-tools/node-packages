@@ -1,6 +1,6 @@
 import { BufferGeometry, GLSL3, Points, ShaderMaterial } from 'three'
 
-import type { MapData } from '../../data/types'
+import type { PreparedMap } from '../prepare'
 import { parseColor, type ColorInput } from '../colors'
 import { markersFragment, markersVertex } from '../shaders'
 import { DynamicAttributes } from './buffers'
@@ -60,9 +60,9 @@ export class MarkersLayer {
   }
 
   /** Unknown system IDs are skipped. */
-  set(markers: readonly Marker[], data: MapData, indexOf: (systemId: number) => number): void {
+  set(markers: readonly Marker[], data: PreparedMap): void {
     const resolved = markers
-      .map((marker) => ({ marker, index: indexOf(marker.systemId) }))
+      .map((marker) => ({ marker, index: data.indexOf(marker.systemId) }))
       .filter((entry) => entry.index >= 0)
     if (this.buffers.reserve(resolved.length)) {
       this.object.geometry = this.buffers.geometry!
@@ -76,8 +76,8 @@ export class MarkersLayer {
     const colorCache = new Map<ColorInput, readonly number[]>()
 
     resolved.forEach(({ marker, index }, k) => {
-      position.set(data.systems.position.subarray(index * 3, index * 3 + 3), k * 3)
-      position2d.set(data.systems.position2d.subarray(index * 2, index * 2 + 2), k * 2)
+      position.set(data.position.subarray(index * 3, index * 3 + 3), k * 3)
+      position2d.set(data.position2d.subarray(index * 2, index * 2 + 2), k * 2)
       const input = marker.color ?? DEFAULT_MARKER_COLOR
       const rgb = colorCache.get(input) ?? parseColor(input)
       colorCache.set(input, rgb)

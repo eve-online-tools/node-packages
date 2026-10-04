@@ -46,8 +46,8 @@ export default defineConfig({
 | Option | Default | |
 | --- | --- | --- |
 | `locale` | `en` | Language of the names written to the output, falls back to `en` |
-| `systems` | IDs 30,000,000 to 30,999,999 | `(system) => boolean` filter. `system` has `id`, `constellationId`, `regionId`, `security`, `name` |
-| `format` | `binary` | `binary` writes `map-data.bin`, `json` writes `map-data.json` |
+| `systems` | IDs 30,000,000 to 30,999,999 | `(system: MapSystem) => boolean` filter |
+| `format` | `binary` | `binary` writes `map-data.bin`, `json` writes `MapData` as `map-data.json` |
 | `fileName` | by format | Output path relative to `outputDir` |
 
 The processor streams `mapSolarSystems`, `mapStargates`, `mapRegions` and `mapConstellations`. Its version includes a processor revision, the options and the filter source, so changing any of them invalidates the SDE lock.
@@ -61,44 +61,43 @@ const data = decodeMapData(await (await fetch(mapDataUrl)).arrayBuffer())
 
 ### From other sources
 
-- `buildMapData({ systems, gates, regions?, constellations? })` builds normalized `MapData` from SDE-shaped input (universe coordinates in meters). `gates` are `[fromSystemId, toSystemId]` tuples, `regions` and `constellations` are `{ [id]: name }`. Names are used as given, in the display language. Use it in a JS server.
-- `decodeMapData(buffer)` reads the binary format below, which any language can write.
-- `mapDataFromJson(json)` / `mapDataToJson(data)` for debugging.
+`MapData` is plain data, so any source works: build it in code, load it as JSON, or write the binary format below from any language and read it with `decodeMapData(buffer)`.
 
-`validateMapData(data)` throws `MapDataError` on structural problems. `createMap`, `encodeMapData` and the decoders call it.
-
-## Coordinates
-
-- SDE universe space is left-handed, Y up, meters. Scene space is right-handed, Y up: `scene = (x, y, -z)`.
-- SDE `position2D` follows universe +z for its y axis, so it maps to scene `(x, 0, -y)`. Both layouts then share the same orientation: north is screen up when looking down.
-- Each layout is centered on the origin and scaled uniformly so its largest half extent is 1. Both layouts appear the same size on screen and the GPU never sees values near 1e17.
-- `position2d` stores scene `(x, z)` pairs, already converted and normalized.
+`validateMapData(data)` throws `MapDataError` on duplicate system IDs or non-finite positions. `createMap`, `encodeMapData` and `decodeMapData` call it.
 
 ## Data model
 
 ```ts
 interface MapData {
-  systems: {
-    id: Int32Array // solarSystemID, ascending
-    constellation: Int32Array
-    region: Int32Array
-    position: Float32Array // xyz per system, scene space, normalized
-    position2d: Float32Array // xz per system, scene space, normalized
-    security: Float32Array
-    name: string[] // one display name per system
-  }
-  gates: Uint16Array // pairs of system indices, a < b, no duplicates
+  systems: MapSystem[]
   regions: Record<number, string> // region ID to name
   constellations: Record<number, string> // constellation ID to name
-  bounds: { position: Float32Array /* min xyz, max xyz */; position2d: Float32Array /* min xz, max xz */ }
+}
+
+interface MapSystem {
+  id: number
+  name: string // in the display language
+  regionId: number
+  constellationId: number
+  security: number
+  position: { x: number; y: number; z: number } // SDE universe coordinates, meters
+  position2d?: { x: number; y: number } // SDE position2D
+  gates: number[] // IDs of systems connected by a stargate
 }
 ```
 
-Index `i` refers to the same system in every `systems` array. Gate indices are Uint16, so a map holds at most 65,536 systems; encoders and `buildMapData` fail loudly beyond that.
+Gates may be listed on one or both systems; the renderer deduplicates them and ignores IDs not in `systems`. Style callbacks such as `systemStyle.color(i)` receive the index into `systems`.
+
+## Coordinates
+
+- SDE universe space is left-handed, Y up, meters. Scene space is right-handed, Y up: `scene = (x, y, -z)`.
+- SDE `position2D` follows universe +z for its y axis, so it maps to scene `(x, 0, -y)`. Both layouts then share the same orientation: north is screen up when looking down.
+- When data is set, each layout is centered on the origin and scaled uniformly so its largest half extent is 1. Both layouts appear the same size on screen and the GPU never sees values near 1e17.
+- Systems without `position2d` are placed at their top-down 3D position in the 2D layout.
 
 ## Binary format
 
-All values little-endian. Every section starts on a 4-byte boundary; pad with zeros. `n` = systems, `g` = gates, `r` = regions, `c` = constellations.
+All values little-endian. Every section starts on a 4-byte boundary; pad with zeros. `n` = systems, `g` = total gate entries over all systems, `r` = regions, `c` = constellations.
 
 Header, 20 bytes:
 
@@ -106,7 +105,7 @@ Header, 20 bytes:
 | --- | --- | --- |
 | 0 | 4 bytes | Magic `EVEM` (`0x45 0x56 0x45 0x4D`) |
 | 4 | uint32 | `n` |
-| 8 | uint32 | `g` (pairs) |
+| 8 | uint32 | `g` |
 | 12 | uint32 | `r` |
 | 16 | uint32 | `c` |
 
@@ -114,24 +113,23 @@ Sections, in order:
 
 | Section | Type | Count |
 | --- | --- | --- |
-| `bounds.position` | float32 | 6 |
-| `bounds.position2d` | float32 | 4 |
-| `systems.id` | int32 | n |
-| `systems.constellation` | int32 | n |
-| `systems.region` | int32 | n |
-| `systems.position` | float32 | 3n |
-| `systems.position2d` | float32 | 2n |
-| `systems.security` | float32 | n |
-| `gates` | uint16 | 2g, then pad to 4 bytes |
+| System IDs | int32 | n |
+| Region IDs per system | int32 | n |
+| Constellation IDs per system | int32 | n |
+| `position` xyz | float32 | 3n |
+| `position2d` xy, NaN when absent | float32 | 2n |
+| `security` | float32 | n |
+| Gate count per system | uint16 | n |
+| Gate target system IDs, grouped by system | int32 | g |
 | Region IDs | int32 | r |
 | Constellation IDs | int32 | c |
 | String table | see below | |
 
 String table: uint32 `count` (`n + r + c`), then `count + 1` uint32 byte offsets into the UTF-8 data that follows (entry `i` spans `offsets[i]` to `offsets[i + 1]`), then the UTF-8 bytes. Order: system names, then region and constellation names in the order of their ID sections.
 
-`decodeMapData` returns typed arrays that are views over the input buffer. A `Uint8Array` whose `byteOffset` is not 4-byte aligned (such as a pooled Node `Buffer`) is copied once.
+Positions are stored as float32, which is precise to about 1e-7 of the value, well under the distance between systems.
 
-The full known-space map (5,485 systems, 6,989 gates) is about 294 KB, 168 KB gzipped.
+The full known-space map (5,485 systems, 6,989 gates) is about 333 KB, 176 KB gzipped.
 
 ## Core API
 
@@ -153,7 +151,7 @@ await map.setView('3d') // animated, interruptible
 map.setHighlight([30000142])
 map.setPath([30000142, 30000144, 30002187])
 map.setMarkers([{ systemId: 30000142, color: '#fc3', size: 14, shape: 'diamond' }])
-await map.focus(10000002) // region, constellation, system ID, list of system IDs, or { min, max } bounds
+await map.focus(10000002) // region, constellation, system ID, or list of system IDs
 
 map.on('hover', ({ systemId, screen }) => {})
 map.on('click', ({ systemId, index, originalEvent }) => {})
