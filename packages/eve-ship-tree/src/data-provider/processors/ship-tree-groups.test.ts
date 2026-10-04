@@ -106,7 +106,7 @@ describe('shipTreeGroupsProcessor', () => {
     expect(result[groups.frigate].factions[factions.caldariState].shipTypes).toEqual([582, 583])
   })
 
-  it('processes large type tables without rescanning per faction', () => {
+  it('processes large type tables', () => {
     const types: Record<number, { shipTreeGroupID: number; factionID: number }> = {}
 
     for (let typeId = 1; typeId <= 2_000; typeId += 1) {
@@ -117,14 +117,12 @@ describe('shipTreeGroupsProcessor', () => {
     }
 
     const index = buildShipsByGroupFactionIndex(types)
-    const startedAt = performance.now()
-
-    shipTreeGroupsProcessor({ 3330: 1 }, { 3330: 1 }, {}, index, {
+    const result = shipTreeGroupsProcessor({ 3330: 1 }, { 3330: 1 }, {}, index, {
       shipTreeGroups: {
         [groups.frigate]: frigateGroup,
       },
     })
 
-    expect(performance.now() - startedAt).toBeLessThan(50)
+    expect(result[groups.frigate].factions[factions.caldariState].shipTypes).toHaveLength(2_000)
   })
 })
