@@ -16,15 +16,15 @@ const computeLayout = (n: number, gateCount: number, regionCount: number, conste
   }
   return {
     id: take(n * 4),
-    regionId: take(n * 4),
     constellationId: take(n * 4),
     position: take(n * 12),
     position2d: take(n * 8),
     security: take(n * 4),
     gateCount: take(n * 2),
     gates: take(gateCount * 4),
-    regions: take(regionCount * 4),
     constellations: take(constellationCount * 4),
+    constellationRegions: take(constellationCount * 4),
+    regions: take(regionCount * 4),
     strings: offset,
   }
 }
@@ -35,16 +35,16 @@ export const encodeMapData = (data: MapData): ArrayBuffer => {
 
   const { systems } = data
   const n = systems.length
-  const regionIds = Object.keys(data.regions).map(Number)
   const constellationIds = Object.keys(data.constellations).map(Number)
+  const regionIds = Object.keys(data.regions).map(Number)
   const gateCount = systems.reduce((sum, s) => sum + s.gates.length, 0)
   const layout = computeLayout(n, gateCount, regionIds.length, constellationIds.length)
 
   const encoder = new TextEncoder()
   const strings = [
     ...systems.map((s) => s.name),
+    ...constellationIds.map((id) => data.constellations[id].name),
     ...regionIds.map((id) => data.regions[id]),
-    ...constellationIds.map((id) => data.constellations[id]),
   ].map((s) => encoder.encode(s))
   const stringBytes = strings.reduce((sum, s) => sum + s.length, 0)
   const stringHeaderBytes = 4 + (strings.length + 1) * 4
@@ -54,13 +54,12 @@ export const encodeMapData = (data: MapData): ArrayBuffer => {
   view.setUint32(0, MAP_DATA_MAGIC, true)
   view.setUint32(4, n, true)
   view.setUint32(8, gateCount, true)
-  view.setUint32(12, regionIds.length, true)
-  view.setUint32(16, constellationIds.length, true)
+  view.setUint32(12, constellationIds.length, true)
+  view.setUint32(16, regionIds.length, true)
 
   let gate = layout.gates
   systems.forEach((s, i) => {
     view.setInt32(layout.id + i * 4, s.id, true)
-    view.setInt32(layout.regionId + i * 4, s.regionId, true)
     view.setInt32(layout.constellationId + i * 4, s.constellationId, true)
     view.setFloat32(layout.position + i * 12, s.position.x, true)
     view.setFloat32(layout.position + i * 12 + 4, s.position.y, true)
@@ -74,8 +73,11 @@ export const encodeMapData = (data: MapData): ArrayBuffer => {
       gate += 4
     }
   })
+  constellationIds.forEach((id, i) => {
+    view.setInt32(layout.constellations + i * 4, id, true)
+    view.setInt32(layout.constellationRegions + i * 4, data.constellations[id].regionId, true)
+  })
   regionIds.forEach((id, i) => view.setInt32(layout.regions + i * 4, id, true))
-  constellationIds.forEach((id, i) => view.setInt32(layout.constellations + i * 4, id, true))
 
   view.setUint32(layout.strings, strings.length, true)
   const bytes = new Uint8Array(buffer)
@@ -107,8 +109,8 @@ export const decodeMapData = (input: ArrayBuffer | ArrayBufferView): MapData => 
 
   const n = view.getUint32(4, true)
   const gateCount = view.getUint32(8, true)
-  const regionCount = view.getUint32(12, true)
-  const constellationCount = view.getUint32(16, true)
+  const constellationCount = view.getUint32(12, true)
+  const regionCount = view.getUint32(16, true)
   const layout = computeLayout(n, gateCount, regionCount, constellationCount)
 
   const stringCount = n + regionCount + constellationCount
@@ -135,7 +137,6 @@ export const decodeMapData = (input: ArrayBuffer | ArrayBufferView): MapData => 
     return {
       id: view.getInt32(layout.id + i * 4, true),
       name: string(i),
-      regionId: view.getInt32(layout.regionId + i * 4, true),
       constellationId: view.getInt32(layout.constellationId + i * 4, true),
       security: view.getFloat32(layout.security + i * 4, true),
       position: {
@@ -148,13 +149,20 @@ export const decodeMapData = (input: ArrayBuffer | ArrayBufferView): MapData => 
     }
   })
 
-  const names = (start: number, count: number, first: number): Record<number, string> =>
-    Object.fromEntries(Array.from({ length: count }, (_, i) => [view.getInt32(start + i * 4, true), string(first + i)]))
-
   const data: MapData = {
     systems,
-    regions: names(layout.regions, regionCount, n),
-    constellations: names(layout.constellations, constellationCount, n + regionCount),
+    constellations: Object.fromEntries(
+      Array.from({ length: constellationCount }, (_, i) => [
+        view.getInt32(layout.constellations + i * 4, true),
+        { name: string(n + i), regionId: view.getInt32(layout.constellationRegions + i * 4, true) },
+      ]),
+    ),
+    regions: Object.fromEntries(
+      Array.from({ length: regionCount }, (_, i) => [
+        view.getInt32(layout.regions + i * 4, true),
+        string(n + constellationCount + i),
+      ]),
+    ),
   }
   validateMapData(data)
   return data

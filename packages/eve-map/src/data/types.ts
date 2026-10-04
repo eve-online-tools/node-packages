@@ -13,7 +13,6 @@ export interface Vec2 {
 export interface MapSystem {
   id: number
   name: string
-  regionId: number
   constellationId: number
   security: number
   position: Vec3
@@ -23,10 +22,15 @@ export interface MapSystem {
   gates: number[]
 }
 
+export interface MapConstellation {
+  name: string
+  regionId: number
+}
+
 export interface MapData {
   systems: MapSystem[]
+  /** Keyed by constellation ID */
+  constellations: Record<number, MapConstellation>
   /** Region ID to name */
   regions: Record<number, string>
-  /** Constellation ID to name */
-  constellations: Record<number, string>
 }

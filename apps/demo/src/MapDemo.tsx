@@ -23,7 +23,10 @@ export function MapDemo() {
   }, [])
 
   const systemStyle = useMemo(
-    () => (data && colorMode === 'region' ? { color: (i: number) => regionColor(data.systems[i].regionId) } : {}),
+    () =>
+      data && colorMode === 'region'
+        ? { color: (i: number) => regionColor(data.constellations[data.systems[i].constellationId].regionId) }
+        : {},
     [data, colorMode],
   )
 

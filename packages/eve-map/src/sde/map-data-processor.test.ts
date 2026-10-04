@@ -108,7 +108,7 @@ describe('mapDataProcessor', () => {
   it('streams the map tables and writes binary map data for known space', async () => {
     const result = await mapDataProcessor().run(ctx)
 
-    expect(loaded).toEqual(['mapSolarSystems', 'mapStargates', 'mapRegions', 'mapConstellations'])
+    expect(loaded).toEqual(['mapSolarSystems', 'mapStargates', 'mapConstellations', 'mapRegions'])
     expect(result).toEqual({ fileName: 'map-data.bin', systems: 3 })
 
     const data = decodeMapData(await readFile(join(outputDir, 'map-data.bin')))
@@ -116,8 +116,11 @@ describe('mapDataProcessor', () => {
     expect(data.systems.map((s) => s.name)).toEqual(['Tanoo', 'Lashesih', 'Akpivem'])
     expect(data.systems.map((s) => s.security)).toEqual([0.86, 0.75, 0.46].map(Math.fround))
     expect(data.systems.map((s) => s.gates)).toEqual([[30000002], [30000001, 30000003], [30000002]])
+    expect(data.constellations).toEqual({
+      20000001: { name: 'San Matar', regionId: 10000001 },
+      20000002: { name: 'Kimotoro', regionId: 10000002 },
+    })
     expect(data.regions).toEqual({ 10000001: 'Derelik', 10000002: 'The Forge' })
-    expect(data.constellations).toEqual({ 20000001: 'San Matar', 20000002: 'Kimotoro' })
   })
 
   it('honours locale, system filter and JSON format', async () => {
@@ -125,7 +128,7 @@ describe('mapDataProcessor', () => {
     ctx.writeJson = async (_path, value) => {
       written = value
     }
-    const processor = mapDataProcessor({ locale: 'de', format: 'json', systems: (s) => s.regionId === 10000001 })
+    const processor = mapDataProcessor({ locale: 'de', format: 'json', systems: (s) => s.constellationId === 20000001 })
     await processor.run(ctx)
 
     const data = written as MapData

@@ -50,7 +50,7 @@ export default defineConfig({
 | `format` | `binary` | `binary` writes `map-data.bin`, `json` writes `MapData` as `map-data.json` |
 | `fileName` | by format | Output path relative to `outputDir` |
 
-The processor streams `mapSolarSystems`, `mapStargates`, `mapRegions` and `mapConstellations`. Its version includes a processor revision, the options and the filter source, so changing any of them invalidates the SDE lock.
+The processor streams `mapSolarSystems`, `mapStargates`, `mapConstellations` and `mapRegions`. Its version includes a processor revision, the options and the filter source, so changing any of them invalidates the SDE lock.
 
 ```ts
 import { decodeMapData } from '@eve-online-tools/eve-map'
@@ -63,21 +63,20 @@ const data = decodeMapData(await (await fetch(mapDataUrl)).arrayBuffer())
 
 `MapData` is plain data, so any source works: build it in code, load it as JSON, or write the binary format below from any language and read it with `decodeMapData(buffer)`.
 
-`validateMapData(data)` throws `MapDataError` on duplicate system IDs or non-finite positions. `createMap`, `encodeMapData` and `decodeMapData` call it.
+`validateMapData(data)` throws `MapDataError` on duplicate system IDs, unknown constellations or non-finite positions. `createMap`, `encodeMapData` and `decodeMapData` call it.
 
 ## Data model
 
 ```ts
 interface MapData {
   systems: MapSystem[]
+  constellations: Record<number, { name: string; regionId: number }> // keyed by constellation ID
   regions: Record<number, string> // region ID to name
-  constellations: Record<number, string> // constellation ID to name
 }
 
 interface MapSystem {
   id: number
   name: string // in the display language
-  regionId: number
   constellationId: number
   security: number
   position: { x: number; y: number; z: number } // SDE universe coordinates, meters
@@ -86,7 +85,7 @@ interface MapSystem {
 }
 ```
 
-Gates may be listed on one or both systems; the renderer deduplicates them and ignores IDs not in `systems`. Style callbacks such as `systemStyle.color(i)` receive the index into `systems`.
+Gates may be listed on one or both systems; the renderer deduplicates them and ignores IDs not in `systems`. Style callbacks such as `systemStyle.color(i)` receive the index into `systems`. A system's region is `constellations[system.constellationId].regionId`.
 
 ## Coordinates
 
@@ -97,7 +96,7 @@ Gates may be listed on one or both systems; the renderer deduplicates them and i
 
 ## Binary format
 
-All values little-endian. Every section starts on a 4-byte boundary; pad with zeros. `n` = systems, `g` = total gate entries over all systems, `r` = regions, `c` = constellations.
+All values little-endian. Every section starts on a 4-byte boundary; pad with zeros. `n` = systems, `g` = total gate entries over all systems, `c` = constellations, `r` = regions.
 
 Header, 20 bytes:
 
@@ -106,30 +105,30 @@ Header, 20 bytes:
 | 0 | 4 bytes | Magic `EVEM` (`0x45 0x56 0x45 0x4D`) |
 | 4 | uint32 | `n` |
 | 8 | uint32 | `g` |
-| 12 | uint32 | `r` |
-| 16 | uint32 | `c` |
+| 12 | uint32 | `c` |
+| 16 | uint32 | `r` |
 
 Sections, in order:
 
 | Section | Type | Count |
 | --- | --- | --- |
 | System IDs | int32 | n |
-| Region IDs per system | int32 | n |
-| Constellation IDs per system | int32 | n |
+| Constellation ID per system | int32 | n |
 | `position` xyz | float32 | 3n |
 | `position2d` xy, NaN when absent | float32 | 2n |
 | `security` | float32 | n |
 | Gate count per system | uint16 | n |
 | Gate target system IDs, grouped by system | int32 | g |
-| Region IDs | int32 | r |
 | Constellation IDs | int32 | c |
+| Region ID per constellation | int32 | c |
+| Region IDs | int32 | r |
 | String table | see below | |
 
-String table: uint32 `count` (`n + r + c`), then `count + 1` uint32 byte offsets into the UTF-8 data that follows (entry `i` spans `offsets[i]` to `offsets[i + 1]`), then the UTF-8 bytes. Order: system names, then region and constellation names in the order of their ID sections.
+String table: uint32 `count` (`n + c + r`), then `count + 1` uint32 byte offsets into the UTF-8 data that follows (entry `i` spans `offsets[i]` to `offsets[i + 1]`), then the UTF-8 bytes. Order: system names, constellation names, region names, each in the order of its ID section.
 
 Positions are stored as float32, which is precise to about 1e-7 of the value, well under the distance between systems.
 
-The full known-space map (5,485 systems, 6,989 gates) is about 333 KB, 176 KB gzipped.
+The full known-space map (5,485 systems, 6,989 gates) is about 314 KB, 176 KB gzipped.
 
 ## Core API
 

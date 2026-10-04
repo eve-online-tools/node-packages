@@ -105,7 +105,7 @@ export const prepareMap = (data: MapData): PreparedMap => {
     gates[g++] = key % n
   }
 
-  const region = Int32Array.from(systems, (s) => s.regionId)
+  const region = Int32Array.from(systems, (s) => data.constellations[s.constellationId].regionId)
   const constellation = Int32Array.from(systems, (s) => s.constellationId)
   let byRegion: Map<number, number[]> | undefined
   let byConstellation: Map<number, number[]> | undefined

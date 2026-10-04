@@ -8,7 +8,6 @@ export const fixtureMapData = (): MapData => ({
     {
       id: 30000001,
       constellationId: 20000001,
-      regionId: 10000001,
       security: 0.9,
       name: 'Alpha',
       position: { x: -10 * AU, y: 2 * AU, z: 10 * AU },
@@ -18,7 +17,6 @@ export const fixtureMapData = (): MapData => ({
     {
       id: 30000002,
       constellationId: 20000001,
-      regionId: 10000001,
       security: 0.5,
       name: 'Bravo',
       position: { x: -5 * AU, y: 0, z: 5 * AU },
@@ -28,7 +26,6 @@ export const fixtureMapData = (): MapData => ({
     {
       id: 30000003,
       constellationId: 20000002,
-      regionId: 10000001,
       security: 0.04,
       name: 'Charlie',
       position: { x: 0, y: -2 * AU, z: 0 },
@@ -38,7 +35,6 @@ export const fixtureMapData = (): MapData => ({
     {
       id: 30000004,
       constellationId: 20000003,
-      regionId: 10000002,
       security: -0.3,
       name: 'Delta',
       position: { x: 5 * AU, y: 1 * AU, z: -5 * AU },
@@ -48,7 +44,6 @@ export const fixtureMapData = (): MapData => ({
     {
       id: 30000005,
       constellationId: 20000003,
-      regionId: 10000002,
       security: -1,
       name: 'Echo',
       position: { x: 10 * AU, y: 0, z: -10 * AU },
@@ -58,7 +53,6 @@ export const fixtureMapData = (): MapData => ({
     {
       id: 30000006,
       constellationId: 20000003,
-      regionId: 10000002,
       security: 0.2,
       name: 'Foxtrot',
       position: { x: 10 * AU, y: 0, z: 10 * AU },
@@ -66,6 +60,10 @@ export const fixtureMapData = (): MapData => ({
       gates: [39999999],
     },
   ],
+  constellations: {
+    20000001: { name: 'Const A', regionId: 10000001 },
+    20000002: { name: 'Const B', regionId: 10000001 },
+    20000003: { name: 'Const C', regionId: 10000002 },
+  },
   regions: { 10000001: 'Region One', 10000002: 'Region Two' },
-  constellations: { 20000001: 'Const A', 20000002: 'Const B', 20000003: 'Const C' },
 })

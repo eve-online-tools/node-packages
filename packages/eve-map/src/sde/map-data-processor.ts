@@ -7,7 +7,7 @@ import { encodeMapData } from '../data/binary'
 import type { MapData, MapSystem } from '../data/types'
 
 /** Bump when the processor output changes, so eve-sde regenerates it. */
-const PROCESSOR_REVISION = 3
+const PROCESSOR_REVISION = 4
 
 export interface MapDataProcessorOptions {
   /** Name locale. Falls back to `en` when missing. Default `en`. */
@@ -26,11 +26,15 @@ type Translated = Record<string, string>
 
 interface SolarSystemRow {
   constellationID: number
-  regionID: number
   name: Translated
   position: { x: number; y: number; z: number }
   position2D?: { x: number; y: number }
   securityStatus: number
+}
+
+interface ConstellationRow {
+  name: Translated
+  regionID: number
 }
 
 /** Shape of a `mapStargates` row in the SDE */
@@ -52,7 +56,7 @@ const hashString = (value: string): string => {
 }
 
 /**
- * Streams `mapSolarSystems`, `mapStargates`, `mapRegions` and `mapConstellations` and writes a `MapData` file.
+ * Streams `mapSolarSystems`, `mapStargates`, `mapConstellations` and `mapRegions` and writes a `MapData` file.
  * Returns the written file name for later processors.
  */
 export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProcessor => {
@@ -67,7 +71,6 @@ export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProc
     version: [PROCESSOR_REVISION, locale, format, fileName, hashString(String(filter))].join(':'),
     run: async ({ loadStream, resolve, writeJson }) => {
       const systems = new Map<number, MapSystem>()
-      const regionIds = new Set<number>()
       const constellationIds = new Set<number>()
 
       for await (const record of loadStream('mapSolarSystems')) {
@@ -75,7 +78,6 @@ export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProc
         const system: MapSystem = {
           id: Number(record.key),
           name: pickName(row.name, locale),
-          regionId: row.regionID,
           constellationId: row.constellationID,
           security: row.securityStatus,
           position: row.position,
@@ -85,7 +87,6 @@ export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProc
         if (!filter(system)) {
           continue
         }
-        regionIds.add(system.regionId)
         constellationIds.add(system.constellationId)
         systems.set(system.id, system)
       }
@@ -97,21 +98,29 @@ export const mapDataProcessor = (options: MapDataProcessorOptions = {}): SdeProc
         }
       }
 
-      const loadNames = async (table: string, ids: Set<number>) => {
-        const names: Record<number, string> = {}
-        for await (const record of loadStream(table)) {
-          const id = Number(record.key)
-          if (ids.has(id)) {
-            names[id] = pickName((record.value as { name: Translated }).name, locale)
-          }
+      const constellations: MapData['constellations'] = {}
+      const regionIds = new Set<number>()
+      for await (const record of loadStream('mapConstellations')) {
+        const id = Number(record.key)
+        if (constellationIds.has(id)) {
+          const row = record.value as ConstellationRow
+          constellations[id] = { name: pickName(row.name, locale), regionId: row.regionID }
+          regionIds.add(row.regionID)
         }
-        return names
+      }
+
+      const regions: MapData['regions'] = {}
+      for await (const record of loadStream('mapRegions')) {
+        const id = Number(record.key)
+        if (regionIds.has(id)) {
+          regions[id] = pickName((record.value as { name: Translated }).name, locale)
+        }
       }
 
       const data: MapData = {
         systems: [...systems.values()].sort((a, b) => a.id - b.id),
-        regions: await loadNames('mapRegions', regionIds),
-        constellations: await loadNames('mapConstellations', constellationIds),
+        constellations,
+        regions,
       }
 
       if (format === 'json') {

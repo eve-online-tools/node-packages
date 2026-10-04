@@ -114,7 +114,7 @@ function ColorsDemo({ data }: { data: MapData }) {
   const [mode, setMode] = useState<'security' | 'region' | 'scale'>('security')
   const systemStyle = useMemo(() => {
     if (mode === 'region') {
-      return { color: (i: number) => regionColor(data.systems[i].regionId) }
+      return { color: (i: number) => regionColor(data.constellations[data.systems[i].constellationId].regionId) }
     }
     if (mode === 'scale') {
       // Stand-in for consumer data, e.g. jumps or kills per system.

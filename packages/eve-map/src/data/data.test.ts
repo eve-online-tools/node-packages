@@ -32,8 +32,8 @@ describe('binary encoding', () => {
     expect(String.fromCharCode(...new Uint8Array(view.buffer, 0, 4))).toBe('EVEM')
     expect(view.getUint32(4, true)).toBe(6)
     expect(view.getUint32(8, true)).toBe(7)
-    expect(view.getUint32(12, true)).toBe(2)
-    expect(view.getUint32(16, true)).toBe(3)
+    expect(view.getUint32(12, true)).toBe(3)
+    expect(view.getUint32(16, true)).toBe(2)
     expect(view.getInt32(HEADER_BYTES, true)).toBe(30000001)
     expect(view.byteLength % 4).toBe(0)
   })
@@ -55,9 +55,10 @@ describe('binary encoding', () => {
 })
 
 describe('validateMapData', () => {
-  it('rejects duplicate IDs and non-finite positions', () => {
+  it('rejects duplicate IDs, unknown constellations and non-finite positions', () => {
     const data = fixtureMapData()
     expect(() => validateMapData({ ...data, systems: [data.systems[0], data.systems[0]] })).toThrow(/Duplicate/)
+    expect(() => validateMapData({ ...data, constellations: {} })).toThrow(/unknown constellation/)
     data.systems[1].position.x = NaN
     expect(() => validateMapData(data)).toThrow(/non-finite/)
   })
