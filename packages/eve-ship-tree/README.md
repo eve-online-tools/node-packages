@@ -50,7 +50,7 @@ The batteries-included `ShipTree.Root` composes the required providers. Provider
 </SkillsProvider>
 ```
 
-`TreeDisplay` reads the faction from `ShipTree` when the prop is omitted. Only the four empire factions (`500001`–`500004`) have layouts today; other factions show an explicit unsupported message.
+`TreeDisplay` reads the faction from `ShipTree` when the prop is omitted. All 17 ship tree factions have layouts: the four empires, CONCORD, ORE, EDENCOM, the Triglavian Collective and the pirate factions.
 
 ## Data
 
