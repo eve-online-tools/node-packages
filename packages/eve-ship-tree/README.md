@@ -52,6 +52,10 @@ The batteries-included `ShipTree.Root` composes the required providers. Provider
 
 `TreeDisplay` reads the faction from `ShipTree` when the prop is omitted. Only the four empire factions (`500001`–`500004`) have layouts today; other factions show an explicit unsupported message.
 
+### Sprites
+
+`ShipTree` fetches and decodes all status sprites (frames, lines, mastery and tech badges) on mount, so switching characters does not make them pop in. Call `preloadShipTreeSprites()` to start earlier, for example on page load. `shipTreeSprites` lists their URLs.
+
 ## Data
 
 Ship tree structure and metadata ship as JSONL files in `dist/data/generated/`. Icons and layout geometry stay bundled in the package; the JSONL files are fetched or preloaded at runtime.
