@@ -164,7 +164,7 @@ map.on('click', ({ systemId, index, originalEvent }) => {})
 map.dispose()
 ```
 
-Size the canvas with CSS. The drawing buffer follows its client size through a `ResizeObserver`.
+Size the canvas with CSS. The drawing buffer follows its client size through a `ResizeObserver`. A resize emits `camerachange`, so overlays placed with `project()` update.
 
 | Method | |
 | --- | --- |

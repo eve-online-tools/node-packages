@@ -909,6 +909,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     renderer.setSize(width, height, false)
     applyPose(camera, pose, width / height)
     projectionStale = true
+    cameraChanged = true
     if (!tween) {
       follow(false)
     }
