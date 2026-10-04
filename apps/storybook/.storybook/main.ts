@@ -24,7 +24,6 @@ const config: StorybookConfig = {
       to: '/ship-tree-data',
     },
   ],
-  addons: [getAbsolutePath('@storybook/addon-essentials')],
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {},

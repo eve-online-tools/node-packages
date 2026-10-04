@@ -4,7 +4,7 @@ import type { Alias, AliasOptions } from 'vite'
 
 /**
  * Vite aliases for workspace packages.
- * - Exact package imports resolve to source for HMR.
+ * - Exact package and subpath export imports resolve to source for HMR.
  * - styles.css subpaths resolve to built dist files.
  */
 export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
@@ -29,6 +29,7 @@ export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
 
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')) as {
       name?: string
+      exports?: Record<string, unknown>
     }
     const srcDir = path.join(packageDir, 'src')
     const indexFile = path.join(srcDir, 'index.ts')
@@ -38,9 +39,22 @@ export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
     }
 
     aliases.push({
-      find: `${packageJson.name}$`,
+      find: exactMatch(packageJson.name),
       replacement: indexFile,
     })
+
+    for (const subpath of Object.keys(packageJson.exports ?? {})) {
+      const subpathIndex = path.join(srcDir, subpath, 'index.ts')
+
+      if (subpath === '.' || subpath.includes('*') || !fs.existsSync(subpathIndex)) {
+        continue
+      }
+
+      aliases.push({
+        find: exactMatch(path.posix.join(packageJson.name, subpath)),
+        replacement: subpathIndex,
+      })
+    }
 
     const stylesPath = path.join(packageDir, 'dist/styles.css')
     const stylesLayerPath = path.join(packageDir, 'dist/styles.layer.css')
@@ -61,6 +75,10 @@ export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
   }
 
   return aliases
+}
+
+function exactMatch(specifier: string): RegExp {
+  return new RegExp(`^${specifier.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)
 }
 
 export function mergeAliases(...groups: (AliasOptions | undefined)[]): Alias[] {
