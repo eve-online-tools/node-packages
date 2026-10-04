@@ -18,3 +18,6 @@ coverage/
 # logs
 *.log
 .pnpm-debug.log*
+
+# Turborepo will try to keep adding it, this is noise
+AGENTS.md

@@ -31,7 +31,6 @@ const config: StorybookConfig = {
     },
     { from: eveMapDataDir, to: '/eve-map' },
   ],
-  addons: [],
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {},

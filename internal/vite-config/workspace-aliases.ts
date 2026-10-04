@@ -2,12 +2,9 @@ import fs from 'node:fs'
 import path from 'node:path'
 import type { Alias, AliasOptions } from 'vite'
 
-const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
 /**
  * Vite aliases for workspace packages.
- * - Exact package imports resolve to source for HMR.
- * - Subpath exports with a `src/<subpath>/index.ts` resolve to source.
+ * - Exact package and subpath export imports resolve to source for HMR.
  * - styles.css subpaths resolve to built dist files.
  */
 export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
@@ -41,21 +38,23 @@ export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
       continue
     }
 
-    // Subpath entries (e.g. `pkg/react`) that have a matching `src/<subpath>/index.ts`
-    for (const subpath of Object.keys(packageJson.exports ?? {})) {
-      const subpathIndex = path.join(srcDir, subpath, 'index.ts')
-      if (subpath.startsWith('./') && !subpath.includes('*') && fs.existsSync(subpathIndex)) {
-        aliases.push({
-          find: new RegExp(`^${escapeRegExp(`${packageJson.name}/${subpath.slice(2)}`)}$`),
-          replacement: subpathIndex,
-        })
-      }
-    }
-
     aliases.push({
-      find: `${packageJson.name}$`,
+      find: exactMatch(packageJson.name),
       replacement: indexFile,
     })
+
+    for (const subpath of Object.keys(packageJson.exports ?? {})) {
+      const subpathIndex = path.join(srcDir, subpath, 'index.ts')
+
+      if (subpath === '.' || subpath.includes('*') || !fs.existsSync(subpathIndex)) {
+        continue
+      }
+
+      aliases.push({
+        find: exactMatch(path.posix.join(packageJson.name, subpath)),
+        replacement: subpathIndex,
+      })
+    }
 
     const stylesPath = path.join(packageDir, 'dist/styles.css')
     const stylesLayerPath = path.join(packageDir, 'dist/styles.layer.css')
@@ -76,6 +75,10 @@ export function createWorkspaceAliases(monorepoRoot: string): Alias[] {
   }
 
   return aliases
+}
+
+function exactMatch(specifier: string): RegExp {
+  return new RegExp(`^${specifier.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)
 }
 
 export function mergeAliases(...groups: (AliasOptions | undefined)[]): Alias[] {
