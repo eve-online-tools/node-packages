@@ -8,21 +8,25 @@ import {
   clamp,
   clonePose,
   DEFAULT_POLAR_3D,
+  fitPoints,
   FOV_2D,
+  FIT_VIEW_HEIGHT,
   FOV_3D,
   lerpPose,
   MAX_POLAR,
   MAX_VIEW_HEIGHT,
   MIN_VIEW_HEIGHT,
+  viewHeightToZoom,
+  zoomToViewHeight,
   type CameraPose,
   type CameraState,
   type MapView,
 } from './camera'
 import { parseColor, type ColorInput, type Rgb } from './colors'
-import { attachControls, type ControlsOptions } from './controls'
+import { attachControls } from './controls'
 import { resolveEasing, type Easing } from './easing'
 import { GatesLayer } from './layers/gates'
-import { LabelsLayer, type LabelOptions } from './layers/labels'
+import { LABEL_FADE, LabelsLayer, type LabelColors, type LabelOptions } from './layers/labels'
 import { MarkersLayer, type Marker } from './layers/markers'
 import { PathLayer } from './layers/path'
 import { SystemsLayer, uploadRanges } from './layers/systems'
@@ -44,6 +48,8 @@ export interface MapTheme {
   /** Gates between regions */
   gateRegional: ColorInput
   label: ColorInput
+  constellationLabel: ColorInput
+  regionLabel: ColorInput
   /** Outline behind label text. Default: `background` */
   labelHalo?: ColorInput
   /** Highlight ring and priority label color */
@@ -56,6 +62,8 @@ export const DEFAULT_THEME: Required<Omit<MapTheme, 'labelHalo'>> = {
   gate: '#2a3a4e',
   gateRegional: '#6e3f78',
   label: '#b7c3cf',
+  constellationLabel: '#8392a3',
+  regionLabel: '#c9d6e3',
   highlight: '#ffffff',
   path: '#ffcc33',
 }
@@ -71,8 +79,15 @@ export interface CreateMapOptions {
   data: MapData
   /** Default `2d` */
   view?: MapView
-  /** Initial camera. Default: fit the whole map. */
+  /** Initial camera. Default: fit `focus`, or the whole map. Setting it starts with `focus` following paused. */
   camera?: Partial<CameraState>
+  /**
+   * System IDs to keep in view. Until the user or `setCamera`/`focus()` moves the camera, the map follows them;
+   * empty or unset fits the whole map. In 3D the view resets to the default angle.
+   */
+  focus?: readonly number[]
+  /** Milliseconds after the last camera input to return to following `focus`. Default: never. */
+  autoFocus?: number
   transition?: TransitionOptions
   /** Default `min(devicePixelRatio, 2)` */
   pixelRatio?: number
@@ -86,7 +101,8 @@ export interface CreateMapOptions {
   /** System IDs in route order */
   path?: readonly number[]
   markers?: readonly Marker[]
-  controls?: ControlsOptions
+  /** User camera input: drag, pinch, wheel and arrow keys. Hover, click and Enter work regardless. Default true. */
+  controls?: boolean
   /** Pick radius in CSS px. Default 10. */
   pickRadius?: number
   /** Overrides `prefers-reduced-motion` detection. Reduced motion makes transitions and fly-to instant. */
@@ -133,7 +149,7 @@ export interface FocusOptions extends AnimationOptions {
   /** Fraction added around the target. Default 0.15. */
   padding?: number
   /** Fixed zoom instead of fitting the target */
-  viewHeight?: number
+  zoom?: number
 }
 
 export interface ProjectedSystem extends ScreenPoint {
@@ -163,6 +179,12 @@ export interface EveMap {
   setMarkers: (markers: readonly Marker[]) => void
   setTheme: (theme: Partial<MapTheme>) => void
   setLabels: (options: LabelOptions) => void
+  setControls: (enabled: boolean) => void
+  /** Systems to follow, see `CreateMapOptions.focus` */
+  setFocus: (systemIds: readonly number[]) => void
+  /** See `CreateMapOptions.autoFocus`; null disables */
+  setAutoFocus: (ms: number | null) => void
+  /** Flies to a target once. Pauses `focus` following like user input does. */
   focus: (target: FocusTarget, options?: FocusOptions) => Promise<void>
   getCamera: () => CameraState
   setCamera: (camera: Partial<CameraState>, options?: AnimationOptions) => Promise<void>
@@ -192,7 +214,6 @@ interface Tween {
 const REGION_MIN = 10_000_000
 const CONSTELLATION_MIN = 20_000_000
 const SYSTEM_MIN = 30_000_000
-const FIT_VIEW_HEIGHT = 2.2
 const MIN_FOCUS_VIEW_HEIGHT = 0.06
 const TARGET_LIMIT = 2
 
@@ -272,12 +293,14 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   gates.updateVisibility(systems.flags.array as Float32Array)
   const markersLayer = new MarkersLayer()
   const pathLayer = new PathLayer(parseColor(theme.path))
-  const labels = new LabelsLayer(
-    options.labels ?? {},
-    parseColor(theme.label),
-    parseColor(theme.highlight),
-    parseColor(theme.labelHalo ?? theme.background),
-  )
+  const labelColors = (): LabelColors => ({
+    system: parseColor(theme.label),
+    emphasis: parseColor(theme.highlight),
+    constellation: parseColor(theme.constellationLabel),
+    region: parseColor(theme.regionLabel),
+    halo: parseColor(theme.labelHalo ?? theme.background),
+  })
+  const labels = new LabelsLayer(options.labels ?? {}, labelColors())
   scene.add(gates.object, pathLayer.object, systems.object, markersLayer.object, labels.object)
   markersLayer.set(markers, prepared)
   pathLayer.set(
@@ -288,16 +311,12 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
 
   // Camera
   const morphFor = (v: MapView) => (v === '3d' ? 1 : 0)
-  let pose: CameraPose = {
-    target: [0, 0, 0],
-    viewHeight: FIT_VIEW_HEIGHT,
-    azimuth: 0,
-    polar: view === '3d' ? DEFAULT_POLAR_3D : 0,
-    fov: view === '3d' ? FOV_3D : FOV_2D,
-    morph: morphFor(view),
-  }
   let tween: Tween | null = null
   let cameraChanged = true
+  let focusIds: readonly number[] = options.focus ?? []
+  let autoFocus = options.autoFocus ?? null
+  let following = !options.camera
+  let autoFocusTimer: number | undefined
 
   const measure = () => {
     width = canvas.clientWidth || canvas.width || 300
@@ -305,9 +324,40 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   }
   measure()
 
-  if (width < height) {
-    pose.viewHeight = (FIT_VIEW_HEIGHT * height) / width
+  /** Interleaved morphed xyz of the given systems */
+  const pointsOf = (indices: readonly number[], morph: number): Float32Array => {
+    const points = new Float32Array(indices.length * 3)
+    const p: [number, number, number] = [0, 0, 0]
+    indices.forEach((i, k) => points.set(morphPosition(prepared.position, prepared.position2d, morph, i, p), k * 3))
+    return points
   }
+
+  /** Neutral pose framing the focus systems, or every system when none resolve. */
+  const followPose = (forView: MapView): CameraPose => {
+    let indices = focusIds.map((id) => prepared.indexOf(id)).filter((i) => i >= 0)
+    const whole = indices.length === 0
+    if (whole) {
+      indices = Array.from(prepared.id, (_, i) => i)
+    }
+    const next: CameraPose = {
+      target: [0, 0, 0],
+      viewHeight: FIT_VIEW_HEIGHT,
+      azimuth: 0,
+      polar: forView === '3d' ? DEFAULT_POLAR_3D : 0,
+      fov: forView === '3d' ? FOV_3D : FOV_2D,
+      morph: morphFor(forView),
+    }
+    const fit = fitPoints(pointsOf(indices, next.morph), next, width / height, whole ? 0.05 : 0.15)
+    next.target = fit.target
+    next.viewHeight = clamp(
+      whole ? fit.viewHeight : Math.max(MIN_FOCUS_VIEW_HEIGHT, fit.viewHeight),
+      MIN_VIEW_HEIGHT,
+      MAX_VIEW_HEIGHT,
+    )
+    return next
+  }
+
+  let pose: CameraPose = followPose(view)
   if (options.camera) {
     pose = { ...pose, ...normalizeCamera(options.camera, view) }
     if (view === '3d') {
@@ -333,8 +383,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
 
   const ensureProjection = (): Projection => {
     if (projectionStale) {
-      camera.updateMatrixWorld()
-      const m = camera.projectionMatrix.clone().multiply(camera.matrixWorldInverse).elements
+      const m = viewProjection()
       projectSystems(
         projection,
         prepared.position,
@@ -355,6 +404,11 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     const p = ensureProjection()
     grid ??= buildScreenGrid(p, width, height)
     return queryNearest(grid, p, x, y, radius)
+  }
+
+  const viewProjection = () => {
+    camera.updateMatrixWorld()
+    return camera.projectionMatrix.clone().multiply(camera.matrixWorldInverse).elements
   }
 
   const setPose = (next: CameraPose) => {
@@ -437,7 +491,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
 
     if (needsRender) {
       needsRender = false
-      render()
+      render(now)
     }
 
     schedule()
@@ -458,7 +512,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     return list
   }
 
-  const render = () => {
+  const render = (now: number) => {
     const scale = sizeScale()
     for (const layer of [systems, gates, markersLayer, pathLayer, labels]) {
       layer.uniforms.uMorph.value = pose.morph
@@ -469,18 +523,24 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     pathLayer.uniforms.uViewport.value.set(width, height)
     labels.uniforms.uViewport.value.set(width, height)
 
-    labels.update(
-      {
-        data: prepared,
-        projection: ensureProjection(),
-        sizes: systems.sizes.array as Float32Array,
-        sizeScale: scale,
-        priority: priorityIndices(),
-        width,
-        height,
-      },
+    const fading = labels.update({
+      data: prepared,
+      projection: ensureProjection(),
+      matrix: viewProjection(),
+      morph: pose.morph,
+      zoom: viewHeightToZoom(pose.viewHeight),
+      sizes: systems.sizes.array as Float32Array,
+      sizeScale: scale,
+      priority: priorityIndices(),
+      width,
+      height,
       pixelRatio,
-    )
+      now,
+      fade: reducedMotion() ? 0 : LABEL_FADE,
+    })
+    if (fading) {
+      needsRender = true
+    }
 
     renderer.render(scene, camera)
     frames++
@@ -527,6 +587,26 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
 
   /** Where the camera will end up, accounting for a running tween */
   const destination = (): CameraPose => clonePose(tween?.to ?? pose)
+
+  const follow = (animate: boolean) => {
+    if (!following || disposed) {
+      return
+    }
+    orbit3d = { azimuth: 0, polar: DEFAULT_POLAR_3D }
+    void startTween(followPose(view), { animate })
+  }
+
+  /** Pauses following until `autoFocus` ms pass without further camera input. */
+  const takeControl = () => {
+    following = false
+    win.clearTimeout(autoFocusTimer)
+    if (autoFocus !== null) {
+      autoFocusTimer = win.setTimeout(() => {
+        following = true
+        follow(true)
+      }, autoFocus)
+    }
+  }
 
   /** Applies a user camera edit to the current pose and any running tween, so input never fights an animation. */
   const editPose = (edit: (p: CameraPose) => void) => {
@@ -602,7 +682,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   // Public API
   const getCamera = (): CameraState => ({
     target: [...pose.target],
-    viewHeight: pose.viewHeight,
+    zoom: viewHeightToZoom(pose.viewHeight),
     azimuth: pose.azimuth,
     polar: pose.polar,
   })
@@ -642,6 +722,10 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     to.azimuth = next === '3d' ? orbit3d.azimuth : 0
 
     emit('viewchange', { view: next, previous })
+    if (following) {
+      orbit3d = { azimuth: 0, polar: DEFAULT_POLAR_3D }
+      return startTween(followPose(next), animation)
+    }
     return startTween(to, animation)
   }
 
@@ -664,28 +748,18 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     if (disposed) {
       return Promise.resolve()
     }
-    const to = destination()
     const indices = resolveFocusIndices(target)
     if (indices.length === 0) {
       return Promise.resolve()
     }
-    const min = [Infinity, Infinity, Infinity]
-    const max = [-Infinity, -Infinity, -Infinity]
-    const p: [number, number, number] = [0, 0, 0]
-    for (const i of indices) {
-      morphPosition(prepared.position, prepared.position2d, to.morph, i, p)
-      for (let c = 0; c < 3; c++) {
-        min[c] = Math.min(min[c], p[c])
-        max[c] = Math.max(max[c], p[c])
-      }
-    }
-    const center: [number, number, number] = [(min[0] + max[0]) / 2, (min[1] + max[1]) / 2, (min[2] + max[2]) / 2]
-    const radius = Math.hypot(max[0] - min[0], max[1] - min[1], max[2] - min[2]) / 2
-    const aspect = width / height
-    const fit = (2 * radius * (1 + (focusOptions.padding ?? 0.15))) / Math.min(1, aspect)
-    to.target = center
+    takeControl()
+    const to = destination()
+    const fit = fitPoints(pointsOf(indices, to.morph), to, width / height, focusOptions.padding ?? 0.15)
+    to.target = fit.target
     to.viewHeight = clamp(
-      focusOptions.viewHeight ?? Math.max(MIN_FOCUS_VIEW_HEIGHT, fit),
+      focusOptions.zoom !== undefined
+        ? zoomToViewHeight(focusOptions.zoom)
+        : Math.max(MIN_FOCUS_VIEW_HEIGHT, fit.viewHeight),
       MIN_VIEW_HEIGHT,
       MAX_VIEW_HEIGHT,
     )
@@ -696,6 +770,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     if (disposed) {
       return Promise.resolve()
     }
+    takeControl()
     const to = { ...destination(), ...normalizeCamera(state, view) }
     if (view === '3d') {
       orbit3d = { azimuth: to.azimuth, polar: to.polar }
@@ -765,15 +840,30 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     gates.uniforms.uGateRegional.value.set(...parseColor(theme.gateRegional))
     systems.uniforms.uHighlight.value.set(...parseColor(theme.highlight))
     pathLayer.uniforms.uColor.value.set(...parseColor(theme.path))
-    labels.uniforms.uColor.value.set(...parseColor(theme.label))
-    labels.uniforms.uEmphasisColor.value.set(...parseColor(theme.highlight))
-    labels.uniforms.uHalo.value.set(...parseColor(theme.labelHalo ?? theme.background))
+    labels.setColors(labelColors())
     invalidate()
   }
 
   const setLabels = (labelOptions: LabelOptions) => {
     labels.setOptions(labelOptions)
     invalidate()
+  }
+
+  const setControls = (enabled: boolean) => controls.setEnabled(enabled)
+
+  const setFocus = (ids: readonly number[]) => {
+    if (sameList(ids, focusIds)) {
+      return
+    }
+    focusIds = [...ids]
+    follow(true)
+  }
+
+  const setAutoFocus = (ms: number | null) => {
+    autoFocus = ms
+    if (!following) {
+      takeControl()
+    }
   }
 
   const setData = (next: MapData) => {
@@ -795,7 +885,8 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     projection = createProjection(prepared.id.length)
     projectionStale = true
     hoverIndex = null
-    labels.shown = []
+    labels.reset()
+    follow(false)
     invalidate()
   }
 
@@ -818,6 +909,9 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     renderer.setSize(width, height, false)
     applyPose(camera, pose, width / height)
     projectionStale = true
+    if (!tween) {
+      follow(false)
+    }
     invalidate()
   }
 
@@ -859,13 +953,22 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
   canvas.addEventListener('webglcontextlost', onContextLost)
   canvas.addEventListener('webglcontextrestored', onContextRestored)
 
-  const detachControls = attachControls(
+  const controls = attachControls(
     canvas,
     {
       is3d: () => view === '3d',
-      pan,
-      orbit,
-      zoomAt,
+      pan: (dx, dy) => {
+        takeControl()
+        pan(dx, dy)
+      },
+      orbit: (dAzimuth, dPolar) => {
+        takeControl()
+        orbit(dAzimuth, dPolar)
+      },
+      zoomAt: (factor, x, y) => {
+        takeControl()
+        zoomAt(factor, x, y)
+      },
       hover: (x, y, event) => {
         pendingHover = { x, y, event }
         schedule()
@@ -907,7 +1010,7 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
       },
       size: () => ({ width, height }),
     },
-    options.controls ?? {},
+    options.controls ?? true,
   )
 
   const dispose = () => {
@@ -921,7 +1024,8 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     }
     tween?.resolve()
     tween = null
-    detachControls()
+    win.clearTimeout(autoFocusTimer)
+    controls.detach()
     resizeObserver?.disconnect()
     intersectionObserver?.disconnect()
     motionQuery?.removeEventListener?.('change', onMotionChange)
@@ -960,6 +1064,9 @@ export const createMap = (canvas: HTMLCanvasElement, options: CreateMapOptions):
     setMarkers,
     setTheme,
     setLabels,
+    setControls,
+    setFocus,
+    setAutoFocus,
     focus,
     getCamera,
     setCamera,
@@ -1002,8 +1109,8 @@ function normalizeCamera(state: Partial<CameraState>, view: MapView): Partial<Ca
   if (state.target) {
     out.target = [state.target[0], view === '2d' ? 0 : state.target[1], state.target[2]]
   }
-  if (state.viewHeight !== undefined) {
-    out.viewHeight = clamp(state.viewHeight, MIN_VIEW_HEIGHT, MAX_VIEW_HEIGHT)
+  if (state.zoom !== undefined) {
+    out.viewHeight = clamp(zoomToViewHeight(state.zoom), MIN_VIEW_HEIGHT, MAX_VIEW_HEIGHT)
   }
   if (view === '3d') {
     if (state.azimuth !== undefined) {

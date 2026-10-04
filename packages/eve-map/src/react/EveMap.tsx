@@ -15,7 +15,6 @@ import {
   WebGLUnavailableError,
   type AnimationOptions,
   type CameraState,
-  type ControlsOptions,
   type CreateMapOptions,
   type EveMap as EveMapInstance,
   type LabelOptions,
@@ -49,14 +48,25 @@ export interface EveMapProps {
   path?: readonly number[]
   systemStyle?: SystemStyle
   theme?: Partial<MapTheme>
-  labels?: LabelOptions
+  /** System IDs to keep in view until the user moves the camera. Unset or empty fits the whole map. */
+  focus?: readonly number[]
+  /** Milliseconds without camera input before returning to `focus`. Default: never. */
+  autoFocus?: number
+  /** User camera input (drag, pinch, wheel, arrow keys). Hover and click work regardless. Default true. */
+  controls?: boolean
+  /** `true` always, a number shows them below that zoom */
+  showRegionLabels?: boolean | number
+  /** `true` always, `[min, max]` shows them between those zooms */
+  showConstellationLabels?: boolean | readonly [number, number]
+  /** `true` all, a number above that zoom, `false` none. Default: hovered, highlighted, path and marker systems. */
+  showSystemLabels?: boolean | number
+  /** Label limits and font */
+  labels?: Pick<LabelOptions, 'max' | 'fontFamily' | 'fontSize'>
   transition?: TransitionOptions
   /** Creation only */
   pixelRatio?: number
   /** Creation only */
   antialias?: boolean
-  /** Creation only */
-  controls?: ControlsOptions
   /** Creation only */
   reducedMotion?: boolean
   onSystemClick?: (event: SystemEvent) => void
@@ -91,7 +101,7 @@ const sameCamera = (camera: Partial<CameraState>, current: CameraState): boolean
   const close = (a: number | undefined, b: number) => a === undefined || Math.abs(a - b) < 1e-6
   return (
     (!camera.target || camera.target.every((v, i) => close(v, current.target[i]))) &&
-    close(camera.viewHeight, current.viewHeight) &&
+    close(camera.zoom, current.zoom) &&
     close(camera.azimuth, current.azimuth) &&
     close(camera.polar, current.polar)
   )
@@ -99,12 +109,24 @@ const sameCamera = (camera: Partial<CameraState>, current: CameraState): boolean
 
 const sameCameraProp = (a: Partial<CameraState> | undefined, b: Partial<CameraState> | undefined): boolean =>
   a === b ||
-  (!!a &&
-    !!b &&
-    sameArray(a.target, b.target) &&
-    a.viewHeight === b.viewHeight &&
-    a.azimuth === b.azimuth &&
-    a.polar === b.polar)
+  (!!a && !!b && sameArray(a.target, b.target) && a.zoom === b.zoom && a.azimuth === b.azimuth && a.polar === b.polar)
+
+const labelOptions = (props: EveMapProps): LabelOptions => ({
+  ...props.labels,
+  regions: props.showRegionLabels,
+  constellations: props.showConstellationLabels,
+  systems: props.showSystemLabels,
+})
+
+const sameLabels = (a: LabelOptions, b: LabelOptions): boolean =>
+  a.max === b.max &&
+  a.fontFamily === b.fontFamily &&
+  a.fontSize === b.fontSize &&
+  a.regions === b.regions &&
+  a.systems === b.systems &&
+  (Array.isArray(a.constellations) && Array.isArray(b.constellations)
+    ? sameArray(a.constellations, b.constellations)
+    : a.constellations === b.constellations)
 
 /** Runs `apply` when `value` changes, skipping values equal to the last applied one. */
 const useApply = <T,>(
@@ -163,6 +185,9 @@ export function EveMap(props: EveMapProps) {
       pixelRatio: initial.pixelRatio,
       antialias: initial.antialias,
       controls: initial.controls,
+      focus: initial.focus,
+      autoFocus: initial.autoFocus,
+      labels: labelOptions(initial),
       reducedMotion: initial.reducedMotion,
     }
 
@@ -240,7 +265,10 @@ export function EveMap(props: EveMapProps) {
       m.setTheme(theme)
     }
   })
-  useApply(map, props.labels, (m, labels) => m.setLabels(labels ?? {}))
+  useApply(map, labelOptions(props), (m, labels) => m.setLabels(labels), sameLabels)
+  useApply(map, props.focus, (m, focus) => m.setFocus(focus ?? []), sameArray)
+  useApply(map, props.autoFocus, (m, autoFocus) => m.setAutoFocus(autoFocus ?? null))
+  useApply(map, props.controls, (m, controls) => m.setControls(controls ?? true))
 
   const api = useMemo<EveMapApi | null>(() => {
     if (!map) {

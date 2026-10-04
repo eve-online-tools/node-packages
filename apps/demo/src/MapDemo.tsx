@@ -14,6 +14,7 @@ export function MapDemo() {
   const [colorMode, setColorMode] = useState<ColorMode>('security')
   const [hovered, setHovered] = useState<SystemEvent | null>(null)
   const [route, setRoute] = useState<number[]>([])
+  const [locked, setLocked] = useState(false)
 
   useEffect(() => {
     fetch(mapDataUrl)
@@ -61,14 +62,21 @@ export function MapDemo() {
         <button
           type="button"
           style={button}
+          onClick={() => setLocked(!locked)}
+        >
+          {locked ? 'Unlock camera' : 'Lock camera'}
+        </button>
+        <button
+          type="button"
+          style={button}
           onClick={() => setRoute([])}
           disabled={route.length === 0}
         >
           Clear path
         </button>
         <span style={{ fontSize: 13, color: '#868e96', alignSelf: 'center' }}>
-          Click systems to build a path. Drag to pan (3D: orbit, right drag pans), wheel to zoom, arrows and +/- with
-          keyboard focus.
+          Click systems to build a path; the map follows it and returns 5 s after you move it. Drag to pan (3D: orbit,
+          right drag pans), wheel to zoom, arrows and +/- with keyboard focus.
         </span>
       </div>
       <EveMap
@@ -79,6 +87,12 @@ export function MapDemo() {
         path={route}
         highlight={route}
         markers={markers}
+        focus={route}
+        autoFocus={5000}
+        controls={!locked}
+        showRegionLabels={2.5}
+        showConstellationLabels={[2, 8]}
+        showSystemLabels={6}
         onSystemHover={(event) => setHovered(event.systemId === null ? null : event)}
         onSystemClick={(event) => {
           if (event.systemId !== null) {

@@ -14,11 +14,10 @@ export interface ControlsHost {
   size: () => { width: number; height: number }
 }
 
-export interface ControlsOptions {
-  /** Default true */
-  enabled?: boolean
-  /** Default true */
-  keyboard?: boolean
+export interface Controls {
+  /** Disabled controls ignore camera input (drag, pinch, wheel, arrow keys); hover, click and Enter still work. */
+  setEnabled: (enabled: boolean) => void
+  detach: () => void
 }
 
 const CLICK_SLOP = 4
@@ -31,16 +30,9 @@ interface ActivePointer {
   y: number
 }
 
-/** Pointer, wheel, touch and keyboard handling. Returns a teardown function. */
-export const attachControls = (
-  canvas: HTMLCanvasElement,
-  host: ControlsHost,
-  options: ControlsOptions,
-): (() => void) => {
-  if (options.enabled === false) {
-    return () => {}
-  }
-
+/** Pointer, wheel, touch and keyboard handling. */
+export const attachControls = (canvas: HTMLCanvasElement, host: ControlsHost, initiallyEnabled: boolean): Controls => {
+  let enabled = initiallyEnabled
   const pointers = new Map<number, ActivePointer>()
   let downX = 0
   let downY = 0
@@ -73,7 +65,9 @@ export const attachControls = (
       moved = false
       rightDragged = false
       panMode = !host.is3d() || event.button === 1 || event.button === 2 || event.shiftKey || event.ctrlKey
-      canvas.style.cursor = 'grabbing'
+      if (enabled) {
+        canvas.style.cursor = 'grabbing'
+      }
     } else if (pointers.size === 2) {
       ;[pinchDistance, pinchMidX, pinchMidY] = pinchState()
       moved = true
@@ -94,6 +88,13 @@ export const attachControls = (
     const dy = y - pointer.y
     pointer.x = x
     pointer.y = y
+
+    if (!enabled) {
+      if (Math.hypot(x - downX, y - downY) > CLICK_SLOP) {
+        moved = true
+      }
+      return
+    }
 
     if (pointers.size >= 2) {
       const [distance, midX, midY] = pinchState()
@@ -168,6 +169,9 @@ export const attachControls = (
   }
 
   const onWheel = (event: WheelEvent) => {
+    if (!enabled) {
+      return
+    }
     event.preventDefault()
     const { height } = host.size()
     const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? height : 1
@@ -177,6 +181,14 @@ export const attachControls = (
 
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.altKey || event.metaKey) {
+      return
+    }
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      host.keyboardSelect(event)
+      return
+    }
+    if (!enabled) {
       return
     }
     const { width, height } = host.size()
@@ -202,10 +214,6 @@ export const attachControls = (
       case '_':
         host.zoomAt(KEY_ZOOM, width / 2, height / 2)
         break
-      case 'Enter':
-        event.preventDefault()
-        host.keyboardSelect(event)
-        return
       default:
         return
     }
@@ -213,8 +221,13 @@ export const attachControls = (
     host.keyboardNavigate(event)
   }
 
-  canvas.style.touchAction = 'none'
-  if (options.keyboard !== false && !canvas.hasAttribute('tabindex')) {
+  const setEnabled = (next: boolean) => {
+    enabled = next
+    // Let touch scroll the page when the map can't move.
+    canvas.style.touchAction = enabled ? 'none' : ''
+  }
+  setEnabled(enabled)
+  if (!canvas.hasAttribute('tabindex')) {
     canvas.tabIndex = 0
   }
 
@@ -225,11 +238,9 @@ export const attachControls = (
   canvas.addEventListener('pointerleave', onPointerLeave)
   canvas.addEventListener('contextmenu', onContextMenu)
   canvas.addEventListener('wheel', onWheel, { passive: false })
-  if (options.keyboard !== false) {
-    canvas.addEventListener('keydown', onKeyDown)
-  }
+  canvas.addEventListener('keydown', onKeyDown)
 
-  return () => {
+  const detach = () => {
     canvas.removeEventListener('pointerdown', onPointerDown)
     canvas.removeEventListener('pointermove', onPointerMove)
     canvas.removeEventListener('pointerup', onPointerUp)
@@ -241,4 +252,6 @@ export const attachControls = (
     canvas.style.touchAction = ''
     canvas.style.cursor = ''
   }
+
+  return { setEnabled, detach }
 }

@@ -141,9 +141,12 @@ const map = createMap(canvas, {
   transition: { duration: 600, easing: 'cubicInOut' },
   pixelRatio: Math.min(devicePixelRatio, 2),
   antialias: true,
-  theme: { background: '#06080c', gate: '#2a3a4e', gateRegional: '#6e3f78', label: '#b7c3cf', highlight: '#fff', path: '#fc3' },
-  systemStyle: { color: (i) => securityColor(data.systems.security[i]), size: 4 },
-  labels: { mode: 'auto', max: 150 },
+  theme: { background: '#06080c', label: '#b7c3cf', regionLabel: '#c9d6e3', highlight: '#fff', path: '#fc3' },
+  systemStyle: { color: (i) => securityColor(data.systems[i].security), size: 4 },
+  labels: { regions: 2.5, constellations: [2, 8], systems: 6 },
+  focus: [30000142, 30002187], // follow these until the user moves the camera
+  autoFocus: 5000, // and return to them 5 s after the last input
+  controls: true,
 })
 
 await map.setView('3d') // animated, interruptible
@@ -169,8 +172,10 @@ Size the canvas with CSS. The drawing buffer follows its client size through a `
 | `setPath(systemIds)` | Route polyline, in order |
 | `setMarkers(markers)` | `{ systemId, color?, size?, shape? }[]`, shapes `circle`, `ring`, `square`, `diamond`, `triangle` |
 | `setTheme(partial)` / `setLabels(options)` | |
-| `focus(target, options?)` | Fly to a target. `padding`, `viewHeight`, `duration`, `animate` |
-| `getCamera()` / `setCamera(state, options?)` | `{ target, viewHeight, azimuth, polar }`. `viewHeight` is the world height visible at the target, independent of FOV. Rotation is locked to 0 in 2D. |
+| `setFocus(systemIds)` / `setAutoFocus(ms \| null)` | See [Following](#following) |
+| `setControls(enabled)` | Turns camera input on or off |
+| `focus(target, options?)` | Fly to a region, constellation, system or list of system IDs once. `padding`, `zoom`, `duration`, `animate`. Pauses following. |
+| `getCamera()` / `setCamera(state, options?)` | `{ target, zoom, azimuth, polar }`. Rotation is locked to 0 in 2D. `setCamera` pauses following. |
 | `pick(x, y)` | Canvas CSS pixels to system index, or null |
 | `project(systemId)` | `{ x, y, visible }` in canvas CSS pixels, for DOM overlays |
 | `on(type, listener)` / `off` | `on` returns an unsubscribe function |
@@ -192,7 +197,19 @@ Events: `hover`, `click`, `contextmenu` carry `{ systemId, index, screen: { x, y
 | `+` / `-` | Zoom | Zoom |
 | Enter | Click the focused system | Click the focused system |
 
-Keyboard navigation focuses the system nearest the view center. The canvas gets `tabindex="0"` unless it already has one. Pass `controls: { enabled: false }` or `controls: { keyboard: false }` to opt out.
+Keyboard navigation focuses the system nearest the view center. The canvas gets `tabindex="0"` unless it already has one.
+
+`controls: false` (or `setControls(false)`) ignores drag, pinch, wheel and arrow keys, so the camera only moves from code. Hover, click, context menu and Enter keep working, and wheel and touch scroll the page instead.
+
+### Zoom
+
+`zoom` 1 shows the whole map in 2D; 2 shows half as much. Label thresholds use the same scale. It stays meaningful across the 2D/3D switch because it measures the visible height at the camera target, not the camera distance.
+
+### Following
+
+`focus` is a list of system IDs to keep in view. The map frames them on creation and whenever the list changes, and frames the whole map when the list is empty or unset. In 3D, framing resets to the default viewing angle and only pans and zooms.
+
+User camera input, `setCamera` and `focus()` pause following. With `autoFocus: ms`, the map returns to the focus `ms` after the last of them; without it, following stays paused. A `camera` option at creation starts paused.
 
 ## Styling
 
@@ -212,7 +229,17 @@ Colors are CSS strings (`#rgb`, `#rrggbb`, `rgb()`, names in a browser), `0xrrgg
 
 ## Labels
 
-Labels are bitmap glyphs from a Canvas 2D atlas, drawn as one instanced draw call at a fixed screen size. `mode: 'auto'` places priority labels (hovered, highlighted, path, markers) first, then other on-screen systems without overlap, up to `max`, once few enough systems are on screen. `mode: 'priority'` only labels priority systems. `mode: 'none'` disables labels. `fontFamily` and `fontSize` are configurable.
+| Option | `true` | Number or range |
+| --- | --- | --- |
+| `regions` | Always | Shown below that zoom: `2.5` shows them only when zoomed out |
+| `constellations` | Always | `[min, max]`: shown above `min` and below `max` |
+| `systems` | Every system | Shown above that zoom |
+
+Region and constellation labels sit at the centroid of their systems. Hovered, highlighted, path and marker systems are always labelled in the highlight color unless `systems: false`. All are off by default except those.
+
+Labels are placed greedily without overlap, up to `max` (default 150), and fade in and out over 200 ms (instant with reduced motion). `fontFamily` and `fontSize` are configurable; region labels are 1.35 times larger and uppercase. Theme colors: `label`, `constellationLabel`, `regionLabel`, `labelHalo`.
+
+Glyphs come from a Canvas 2D atlas and draw in one instanced call at a fixed screen size.
 
 ## React
 
@@ -225,6 +252,12 @@ import { EveMap } from '@eve-online-tools/eve-map/react'
   onViewChange={setView}
   markers={presence}
   highlight={selected}
+  focus={activeSystems}
+  autoFocus={5000}
+  controls={!locked}
+  showRegionLabels={2.5}
+  showConstellationLabels={[2, 8]}
+  showSystemLabels={6}
   onSystemClick={(e) => select(e.systemId)}
   onSystemHover={(e) => setHovered(e.systemId)}
   fallback={<p>WebGL 2 is not available.</p>}
@@ -237,7 +270,8 @@ import { EveMap } from '@eve-online-tools/eve-map/react'
 - Props map to the imperative setters. Arrays are compared by content, so inline arrays don't cause extra frames. Memoize `systemStyle`: a new object re-resolves every system's style (uploads still only cover changed ranges).
 - `view` and `camera` are controlled when set (pair with `onViewChange` / `onCameraChange`), otherwise use `defaultView` / `defaultCamera`. With a controlled `view`, `api.setView` calls `onViewChange` instead of changing the map.
 - A function child re-renders on every camera change, for positioning overlays with `api.project`. Other children can call `useEveMap()`.
-- `pixelRatio`, `antialias`, `controls` and `reducedMotion` are read once at mount.
+- `showRegionLabels`, `showConstellationLabels` and `showSystemLabels` map to `labels.regions`, `.constellations` and `.systems`; `labels` takes `max`, `fontFamily` and `fontSize`.
+- `pixelRatio`, `antialias` and `reducedMotion` are read once at mount.
 - Each mount creates its own canvas, so StrictMode double mounting doesn't reuse a released context.
 
 ## Resource use
@@ -248,7 +282,8 @@ import { EveMap } from '@eve-online-tools/eve-map/react'
 - The 2D/3D transition animates one uniform and the camera; the vertex shaders interpolate between both layouts.
 - Style, highlight and marker updates upload changed ranges only.
 - Picking projects systems on the CPU at most once per frame and queries a screen-space grid. No `readPixels`.
-- `prefers-reduced-motion` makes transitions and fly-to instant. Override with `reducedMotion`.
+- Label fades render frames for 200 ms, then the map is idle again.
+- `prefers-reduced-motion` makes transitions, fly-to and label fades instant. Override with `reducedMotion`.
 - On `webglcontextlost` the map pauses and emits `contextlost`, then re-uploads resources after `webglcontextrestored`.
 
 ## Fallback

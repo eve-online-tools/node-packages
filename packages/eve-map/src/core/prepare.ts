@@ -17,6 +17,18 @@ export interface PreparedMap {
   indexOf: (systemId: number) => number
   systemsInRegion: (regionId: number) => number[]
   systemsInConstellation: (constellationId: number) => number[]
+  /** Region label anchors: the centroid of each region's systems */
+  regions: GroupAnchors
+  constellations: GroupAnchors
+}
+
+export interface GroupAnchors {
+  id: Int32Array
+  name: string[]
+  /** Scene xyz per group */
+  position: Float32Array
+  /** Scene xz per group */
+  position2d: Float32Array
 }
 
 /**
@@ -44,6 +56,35 @@ export const normalizeInPlace = (values: Float32Array, stride: number): void => 
     const c = i % stride
     values[i] = (values[i] - (min[c] + max[c]) / 2) * scale
   }
+}
+
+const centroids = (
+  groups: Map<number, number[]>,
+  names: Record<number, { name: string } | string>,
+  position: Float32Array,
+  position2d: Float32Array,
+): GroupAnchors => {
+  const entries = [...groups]
+  const out: GroupAnchors = {
+    id: Int32Array.from(entries, ([id]) => id),
+    name: entries.map(([id]) => {
+      const entry = names[id]
+      return typeof entry === 'string' ? entry : (entry?.name ?? '')
+    }),
+    position: new Float32Array(entries.length * 3),
+    position2d: new Float32Array(entries.length * 2),
+  }
+  entries.forEach(([, members], g) => {
+    for (const i of members) {
+      for (let c = 0; c < 3; c++) {
+        out.position[g * 3 + c] += position[i * 3 + c] / members.length
+      }
+      for (let c = 0; c < 2; c++) {
+        out.position2d[g * 2 + c] += position2d[i * 2 + c] / members.length
+      }
+    }
+  })
+  return out
 }
 
 const group = (keys: Int32Array): Map<number, number[]> => {
@@ -107,8 +148,8 @@ export const prepareMap = (data: MapData): PreparedMap => {
 
   const region = Int32Array.from(systems, (s) => data.constellations[s.constellationId].regionId)
   const constellation = Int32Array.from(systems, (s) => s.constellationId)
-  let byRegion: Map<number, number[]> | undefined
-  let byConstellation: Map<number, number[]> | undefined
+  const byRegion = group(region)
+  const byConstellation = group(constellation)
 
   return {
     id: Int32Array.from(systems, (s) => s.id),
@@ -120,7 +161,9 @@ export const prepareMap = (data: MapData): PreparedMap => {
     position2d,
     gates,
     indexOf: (systemId) => byId.get(systemId) ?? -1,
-    systemsInRegion: (regionId) => (byRegion ??= group(region)).get(regionId) ?? [],
-    systemsInConstellation: (constellationId) => (byConstellation ??= group(constellation)).get(constellationId) ?? [],
+    systemsInRegion: (regionId) => byRegion.get(regionId) ?? [],
+    systemsInConstellation: (constellationId) => byConstellation.get(constellationId) ?? [],
+    regions: centroids(byRegion, data.regions, position, position2d),
+    constellations: centroids(byConstellation, data.constellations, position, position2d),
   }
 }

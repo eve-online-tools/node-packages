@@ -147,6 +147,39 @@ describe('<EveMap>', () => {
     expect(api.view).toBe('3d')
   })
 
+  it('follows the focus prop and toggles controls', () => {
+    let api: EveMapApi | null = null
+    const { rerender, container } = render(
+      <EveMap
+        data={data}
+        focus={[30000001]}
+        controls={false}
+        reducedMotion
+        onReady={(m) => (api = m)}
+      />,
+    )
+    act(() => {
+      frames.flush()
+    })
+    const map = api as unknown as EveMapApi
+    const first = map.getCamera()
+    const canvas = container.querySelector('canvas')!
+    canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: -100, cancelable: true }))
+    expect(map.getCamera()).toEqual(first)
+
+    rerender(
+      <EveMap
+        data={data}
+        focus={[30000006]}
+        reducedMotion
+        onReady={(m) => (api = m)}
+      />,
+    )
+    expect(map.getCamera().target).not.toEqual(first.target)
+    canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: -100, cancelable: true }))
+    expect(map.getCamera().zoom).toBeGreaterThan(first.zoom)
+  })
+
   it('passes the instance to render-prop children', () => {
     const seen: Array<{ x: number; y: number } | null> = []
     render(

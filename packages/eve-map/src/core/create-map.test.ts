@@ -129,7 +129,7 @@ describe('createMap', () => {
     expect(map.getCamera().target[0]).toBeCloseTo(position2d[4])
     expect(map.getCamera().target[2]).toBeCloseTo(position2d[5])
     await map.focus(10000002)
-    expect(map.getCamera().viewHeight).toBeGreaterThan(0.06)
+    expect(map.getCamera().zoom).toBeLessThan(2.2 / 0.06)
   })
 
   it('picks and projects systems', () => {
@@ -173,12 +173,12 @@ describe('createMap', () => {
 
   it('zooms with the wheel and keyboard', () => {
     const { map, canvas } = setup()
-    const before = map.getCamera().viewHeight
+    const before = map.getCamera().zoom
     canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: -100, clientX: 200, clientY: 150, cancelable: true }))
-    const afterWheel = map.getCamera().viewHeight
-    expect(afterWheel).toBeLessThan(before)
+    const afterWheel = map.getCamera().zoom
+    expect(afterWheel).toBeGreaterThan(before)
     canvas.dispatchEvent(new KeyboardEvent('keydown', { key: '-' }))
-    expect(map.getCamera().viewHeight).toBeGreaterThan(afterWheel)
+    expect(map.getCamera().zoom).toBeLessThan(afterWheel)
   })
 
   it('selects the system nearest the view center with Enter', async () => {
@@ -237,6 +237,116 @@ describe('createMap', () => {
     expect(frames.pending).toBe(0)
     map.setHighlight([30000001])
     expect(frames.pending).toBe(0)
+  })
+
+  it('ignores camera input with controls disabled but still clicks', () => {
+    const { map, canvas } = setup({ controls: false })
+    const before = map.getCamera()
+    const wheel = new WheelEvent('wheel', { deltaY: -100, clientX: 200, clientY: 150, cancelable: true })
+    canvas.dispatchEvent(wheel)
+    canvas.dispatchEvent(new KeyboardEvent('keydown', { key: '+' }))
+    canvas.dispatchEvent(new PointerEvent('pointerdown', { clientX: 100, clientY: 100, pointerId: 1, button: 0 }))
+    canvas.dispatchEvent(new PointerEvent('pointermove', { clientX: 150, clientY: 100, pointerId: 1, buttons: 1 }))
+    canvas.dispatchEvent(new PointerEvent('pointerup', { clientX: 150, clientY: 100, pointerId: 1, button: 0 }))
+    expect(map.getCamera()).toEqual(before)
+    expect(wheel.defaultPrevented).toBe(false)
+
+    const clicks: Array<number | null> = []
+    map.on('click', (e) => clicks.push(e.systemId))
+    const { x, y } = map.project(30000002)!
+    canvas.dispatchEvent(new PointerEvent('pointerdown', { clientX: x, clientY: y, pointerId: 1, button: 0 }))
+    canvas.dispatchEvent(new PointerEvent('pointerup', { clientX: x, clientY: y, pointerId: 1, button: 0 }))
+    expect(clicks).toEqual([30000002])
+
+    map.setControls(true)
+    canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: -100, clientX: 200, clientY: 150, cancelable: true }))
+    expect(map.getCamera().zoom).toBeGreaterThan(before.zoom)
+  })
+
+  describe('focus following', () => {
+    const center2d = (map: EveMap, ids: number[]) => {
+      const { position2d } = prepareMap(map.data)
+      const indices = ids.map((id) => map.data.systems.findIndex((s) => s.id === id))
+      const xs = indices.map((i) => position2d[i * 2])
+      const zs = indices.map((i) => position2d[i * 2 + 1])
+      return [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...zs) + Math.max(...zs)) / 2]
+    }
+
+    it('fits the whole map without focus', () => {
+      const { map } = setup()
+      const { target, zoom } = map.getCamera()
+      expect(target[0]).toBeCloseTo(0)
+      expect(target[2]).toBeCloseTo(0)
+      expect(zoom).toBeGreaterThan(0.9)
+      expect(zoom).toBeLessThan(1.2)
+    })
+
+    it('frames the focus systems and follows changes', () => {
+      const { map } = setup({ focus: [30000001, 30000002], reducedMotion: true })
+      const [x, z] = center2d(map, [30000001, 30000002])
+      expect(map.getCamera().target[0]).toBeCloseTo(x)
+      expect(map.getCamera().target[2]).toBeCloseTo(z)
+      expect(map.getCamera().zoom).toBeGreaterThan(1.5)
+
+      map.setFocus([30000005, 30000006])
+      const [x2, z2] = center2d(map, [30000005, 30000006])
+      expect(map.getCamera().target[0]).toBeCloseTo(x2)
+      expect(map.getCamera().target[2]).toBeCloseTo(z2)
+
+      map.setFocus([])
+      expect(map.getCamera().target[0]).toBeCloseTo(0)
+    })
+
+    it('stops following after user input or setCamera', () => {
+      const { map, canvas } = setup({ focus: [30000001], reducedMotion: true })
+      canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: 100, clientX: 10, clientY: 10, cancelable: true }))
+      const moved = map.getCamera()
+      map.setFocus([30000006])
+      expect(map.getCamera()).toEqual(moved)
+
+      const other = setup({ focus: [30000001], reducedMotion: true }).map
+      void other.setCamera({ zoom: 5 })
+      other.setFocus([30000006])
+      expect(other.getCamera().zoom).toBeCloseTo(5)
+    })
+
+    it('starts without following when a camera is given', () => {
+      const { map } = setup({ focus: [30000001], camera: { zoom: 3, target: [0.5, 0, 0.5] } })
+      map.setFocus([30000006])
+      expect(map.getCamera()).toMatchObject({ zoom: 3, target: [0.5, 0, 0.5] })
+    })
+
+    describe('with autoFocus', () => {
+      beforeEach(() => {
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+      })
+      afterEach(() => {
+        vi.useRealTimers()
+      })
+
+      it('returns to the focus after the idle time', () => {
+        const { map, canvas } = setup({ focus: [30000001, 30000002], autoFocus: 1000, reducedMotion: true })
+        const followed = map.getCamera()
+        canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: 100, clientX: 10, clientY: 10, cancelable: true }))
+        vi.advanceTimersByTime(600)
+        canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: 100, clientX: 10, clientY: 10, cancelable: true }))
+        vi.advanceTimersByTime(999)
+        expect(map.getCamera().zoom).not.toBeCloseTo(followed.zoom)
+        vi.advanceTimersByTime(1)
+        expect(map.getCamera().zoom).toBeCloseTo(followed.zoom)
+        expect(map.getCamera().target[0]).toBeCloseTo(followed.target[0])
+      })
+
+      it('resets 3D orbit to the neutral angle', () => {
+        const { map, canvas } = setup({ view: '3d', focus: [30000003], autoFocus: 100, reducedMotion: true })
+        canvas.dispatchEvent(new PointerEvent('pointerdown', { clientX: 100, clientY: 100, pointerId: 1, button: 0 }))
+        canvas.dispatchEvent(new PointerEvent('pointermove', { clientX: 160, clientY: 130, pointerId: 1, buttons: 1 }))
+        canvas.dispatchEvent(new PointerEvent('pointerup', { clientX: 160, clientY: 130, pointerId: 1, button: 0 }))
+        expect(map.getCamera().azimuth).not.toBe(0)
+        vi.advanceTimersByTime(100)
+        expect(map.getCamera()).toMatchObject({ azimuth: 0, polar: 0.9 })
+      })
+    })
   })
 
   it('rebuilds on setData and keeps markers by ID', () => {

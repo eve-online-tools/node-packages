@@ -1,3 +1,4 @@
+import { constellationLabelsVisible, regionLabelsVisible, systemLabelsVisible } from './layers/labels'
 import { lerpAngle, lerpPose } from './camera'
 import { parseColor, regionColor, roundSecurity, scaleColor, securityColor } from './colors'
 import { buildScreenGrid, createProjection, projectSystems, queryNearest } from './projection'
@@ -151,5 +152,28 @@ describe('picking', () => {
       queryNearest(buildScreenGrid(p, 1920, 1080), p, 500, 500, 10)
     }
     expect((performance.now() - start) / 10).toBeLessThan(8)
+  })
+})
+
+describe('label visibility', () => {
+  it('shows region labels below the zoom threshold', () => {
+    expect(regionLabelsVisible(undefined, 1)).toBe(false)
+    expect(regionLabelsVisible(true, 100)).toBe(true)
+    expect(regionLabelsVisible(3, 2)).toBe(true)
+    expect(regionLabelsVisible(3, 4)).toBe(false)
+  })
+
+  it('shows constellation labels inside the zoom range', () => {
+    expect(constellationLabelsVisible([2, 8], 1)).toBe(false)
+    expect(constellationLabelsVisible([2, 8], 4)).toBe(true)
+    expect(constellationLabelsVisible([2, 8], 9)).toBe(false)
+    expect(constellationLabelsVisible(true, 0.1)).toBe(true)
+  })
+
+  it('shows system labels above the zoom threshold', () => {
+    expect(systemLabelsVisible(undefined, 100)).toBe(false)
+    expect(systemLabelsVisible(false, 100)).toBe(false)
+    expect(systemLabelsVisible(6, 5)).toBe(false)
+    expect(systemLabelsVisible(6, 7)).toBe(true)
   })
 })

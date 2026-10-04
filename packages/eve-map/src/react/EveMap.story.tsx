@@ -38,13 +38,28 @@ function WithData({ children }: { children: (data: MapData) => ReactNode }) {
   return data ? <div style={shell}>{children(data)}</div> : <p>Loading map data...</p>
 }
 
-type Args = Pick<EveMapProps, 'defaultView' | 'labels'>
+type Args = Pick<
+  EveMapProps,
+  'defaultView' | 'controls' | 'showRegionLabels' | 'showConstellationLabels' | 'showSystemLabels' | 'labels'
+>
 
 const meta = {
   title: 'eve-map/EveMap',
   parameters: { layout: 'fullscreen' },
-  args: { defaultView: '2d', labels: { mode: 'auto', max: 150 } },
-  argTypes: { defaultView: { control: 'inline-radio', options: ['2d', '3d'] } },
+  args: {
+    defaultView: '2d',
+    controls: true,
+    showRegionLabels: 2.5,
+    showConstellationLabels: [2, 8],
+    showSystemLabels: 6,
+  },
+  argTypes: {
+    defaultView: { control: 'inline-radio', options: ['2d', '3d'] },
+    controls: { control: 'boolean' },
+    showRegionLabels: { control: 'number' },
+    showConstellationLabels: { control: 'object' },
+    showSystemLabels: { control: 'number' },
+  },
 } satisfies Meta<Args>
 
 export default meta
@@ -232,14 +247,14 @@ export const Focus: Story = {
 }
 
 export const LargeLabelCounts: Story = {
-  args: { labels: { mode: 'auto', max: 1000 } },
+  args: { showSystemLabels: true, labels: { max: 1000 } },
   render: (args) => (
     <WithData>
       {(data) => (
         <EveMap
           data={data}
           {...args}
-          defaultCamera={{ viewHeight: 0.6 }}
+          defaultCamera={{ zoom: 4 }}
           style={fill}
         />
       )}
@@ -280,4 +295,53 @@ function ContextLossDemo({ data }: { data: MapData }) {
 
 export const ContextLoss: Story = {
   render: () => <WithData>{(data) => <ContextLossDemo data={data} />}</WithData>,
+}
+
+const HUBS = [['Jita'], ['Amarr'], ['Dodixie', 'Rens'], ['Hek', 'Rens'], ['Jita', 'Amarr', 'Dodixie', 'Rens', 'Hek']]
+
+function FollowDemo({ data, args }: { data: MapData; args: Args }) {
+  const [step, setStep] = useState(0)
+  const [view, setView] = useState<MapView>('2d')
+  useEffect(() => {
+    const timer = setInterval(() => setStep((s) => (s + 1) % HUBS.length), 4000)
+    return () => clearInterval(timer)
+  }, [])
+  const focus = useMemo(() => idsByName(data, HUBS[step]), [data, step])
+  return (
+    <EveMap
+      data={data}
+      {...args}
+      view={view}
+      onViewChange={setView}
+      focus={focus}
+      highlight={focus}
+      autoFocus={3000}
+      style={fill}
+    >
+      <div style={toolbar}>
+        <button
+          type="button"
+          onClick={() => setView(view === '2d' ? '3d' : '2d')}
+        >
+          Toggle view
+        </button>
+        <span style={{ color: '#fff' }}>
+          Following {HUBS[step].join(', ')}. Move the map to take over; it returns 3 s after you stop.
+        </span>
+      </div>
+    </EveMap>
+  )
+}
+
+export const Follow: Story = {
+  render: (args) => (
+    <WithData>
+      {(data) => (
+        <FollowDemo
+          data={data}
+          args={args}
+        />
+      )}
+    </WithData>
+  ),
 }

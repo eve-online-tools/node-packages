@@ -41,4 +41,14 @@ describe('prepareMap', () => {
     expect(prepared.systemsInRegion(10000002)).toEqual([3, 4, 5])
     expect(prepared.systemsInConstellation(20000001)).toEqual([0, 1])
   })
+
+  it('places region and constellation anchors at the centroid of their systems', () => {
+    const prepared = prepareMap(fixtureMapData())
+    const g = Array.from(prepared.regions.id).indexOf(10000001)
+    expect(prepared.regions.name[g]).toBe('Region One')
+    const members = prepared.systemsInRegion(10000001)
+    const mean = members.reduce((sum, i) => sum + prepared.position2d[i * 2], 0) / members.length
+    expect(prepared.regions.position2d[g * 2]).toBeCloseTo(mean)
+    expect(prepared.constellations.name).toEqual(['Const A', 'Const B', 'Const C'])
+  })
 })

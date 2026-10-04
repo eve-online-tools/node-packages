@@ -192,10 +192,12 @@ in vec3 aAnchor;
 in vec2 aAnchor2d;
 in vec4 aRect;
 in vec4 aUv;
-in float aEmphasis;
+in vec3 aColor;
+in float aAlpha;
 uniform vec2 uViewport;
 out vec2 vUv;
-out float vEmphasis;
+out vec3 vColor;
+out float vAlpha;
 
 void main() {
   vec4 clip = projectionMatrix * modelViewMatrix * vec4(morphed(aAnchor, aAnchor2d), 1.0);
@@ -204,24 +206,24 @@ void main() {
   clip.xy += vec2(offset.x, -offset.y) / (uViewport * 0.5) * clip.w;
   gl_Position = clip;
   vUv = mix(aUv.xy, aUv.zw, position.xy);
-  vEmphasis = aEmphasis;
+  vColor = aColor;
+  vAlpha = aAlpha;
 }
 `
 
 export const labelsFragment = /* glsl */ `
 ${OUTPUT}
 uniform sampler2D uAtlas;
-uniform vec3 uColor;
-uniform vec3 uEmphasisColor;
 uniform vec3 uHalo;
 in vec2 vUv;
-in float vEmphasis;
+in vec3 vColor;
+in float vAlpha;
 
 void main() {
   vec4 texel = texture(uAtlas, vUv);
-  if (texel.a < 0.02) discard;
+  float alpha = texel.a * vAlpha;
+  if (alpha < 0.02) discard;
   // Atlas glyphs are white fill over a black halo stroke.
-  vec3 fill = mix(uColor, uEmphasisColor, vEmphasis);
-  fragColor = vec4(mix(uHalo, fill, texel.r), texel.a);
+  fragColor = vec4(mix(uHalo, vColor, texel.r), alpha);
 }
 `
