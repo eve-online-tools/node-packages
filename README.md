@@ -9,6 +9,7 @@ apps/
   demo/          Vite showcase for components
   storybook/     Storybook for component development
 packages/
+  eve-map/       WebGL 2D/3D map of New Eden, React binding, SDE processor
   eve-resfile/   resfile index loader for Vite and Rollup
 internal/
   react-build/   Shared Rollup + post-build pipeline (@repo/react-build)
@@ -40,7 +41,7 @@ pnpm test
 
 Stories live next to components: `packages/*/src/**/*.story.tsx`.
 
-Vite and Storybook alias workspace packages to `packages/*/src` for HMR. Subpath exports like `styles.css` still resolve from `dist/` — run `pnpm build` once before first dev session if you rely on aggregated CSS files.
+Vite and Storybook alias workspace packages to `packages/*/src` for HMR, including subpath exports that have a `src/<subpath>/index.ts`. Subpath exports like `styles.css` still resolve from `dist/` — run `pnpm build` once before first dev session if you rely on aggregated CSS files.
 
 ## Adding packages
 

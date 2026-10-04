@@ -1,0 +1,86 @@
+{
+  "name": "@eve-online-tools/eve-map",
+  "version": "0.0.0",
+  "description": "Interactive WebGL 2D/3D map of New Eden",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./react": {
+      "import": {
+        "types": "./dist/react/index.d.ts",
+        "default": "./dist/react/index.js"
+      },
+      "require": {
+        "types": "./dist/react/index.d.cts",
+        "default": "./dist/react/index.cjs"
+      }
+    },
+    "./sde": {
+      "import": {
+        "types": "./dist/sde/index.d.ts",
+        "default": "./dist/sde/index.js"
+      },
+      "require": {
+        "types": "./dist/sde/index.d.cts",
+        "default": "./dist/sde/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eve-online-tools/node-packages.git",
+    "directory": "packages/eve-map"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "pnpm run clean && tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "pnpm --workspace-root vitest run packages/eve-map",
+    "format:check": "pnpm --workspace-root exec oxfmt --check \"packages/eve-map/src/**/*.{ts,tsx}\"",
+    "oxlint": "pnpm --workspace-root exec oxlint packages/eve-map"
+  },
+  "peerDependencies": {
+    "@eve-online-tools/eve-sde": "^0.1.0",
+    "react": "^18.x || ^19.x",
+    "three": ">=0.170.0"
+  },
+  "peerDependenciesMeta": {
+    "@eve-online-tools/eve-sde": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eve-online-tools/eve-sde": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/three": "catalog:",
+    "react": "catalog:",
+    "three": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  }
+}
