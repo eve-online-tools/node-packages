@@ -17,6 +17,7 @@ import { dogmaAttributeIdentifiersProcessor } from './src/data/processors/dogmaA
 import { typeBonusProcessor } from './src/data/processors/typeBonus'
 import { typeElementsProcessor } from './src/data/processors/typeElements'
 import { shipSizesProcessor } from './src/data/processors/shipSizes'
+import { skillsProcessor } from './src/data/processors/skills'
 import { shipTypeRequirementsProcessor } from './src/data/processors/shipTypeRequirements'
 import { typesProcessor } from './src/data/processors/types'
 
@@ -50,6 +51,7 @@ export default createReactRollupConfig({
       shipTreeGroupIdentifiersProcessor(),
       typeBonusProcessor(stripOptions),
       typeElementsProcessor(stripOptions),
+      skillsProcessor(stripOptions),
       factionsProcessor(stripOptions),
       shipTreeFactionIdentifiersProcessor(),
       staticExtraProcessor(),

@@ -1,0 +1,118 @@
+{"_key":3184,"name":{"en":"ORE Hauler"}}
+{"_key":3327,"name":{"en":"Spaceship Command"}}
+{"_key":3328,"name":{"en":"Gallente Frigate"}}
+{"_key":3329,"name":{"en":"Minmatar Frigate"}}
+{"_key":3330,"name":{"en":"Caldari Frigate"}}
+{"_key":3331,"name":{"en":"Amarr Frigate"}}
+{"_key":3332,"name":{"en":"Gallente Cruiser"}}
+{"_key":3333,"name":{"en":"Minmatar Cruiser"}}
+{"_key":3334,"name":{"en":"Caldari Cruiser"}}
+{"_key":3335,"name":{"en":"Amarr Cruiser"}}
+{"_key":3336,"name":{"en":"Gallente Battleship"}}
+{"_key":3337,"name":{"en":"Minmatar Battleship"}}
+{"_key":3338,"name":{"en":"Caldari Battleship"}}
+{"_key":3339,"name":{"en":"Amarr Battleship"}}
+{"_key":3340,"name":{"en":"Gallente Hauler"}}
+{"_key":3341,"name":{"en":"Minmatar Hauler"}}
+{"_key":3342,"name":{"en":"Caldari Hauler"}}
+{"_key":3343,"name":{"en":"Amarr Hauler"}}
+{"_key":3344,"name":{"en":"Gallente Titan"}}
+{"_key":3345,"name":{"en":"Minmatar Titan"}}
+{"_key":3346,"name":{"en":"Caldari Titan"}}
+{"_key":3347,"name":{"en":"Amarr Titan"}}
+{"_key":3402,"name":{"en":"Science"}}
+{"_key":3410,"name":{"en":"Astrogeology"}}
+{"_key":3456,"name":{"en":"Jump Drive Operation"}}
+{"_key":3755,"name":{"en":"Jove Frigate"}}
+{"_key":9955,"name":{"en":"Polaris"}}
+{"_key":10264,"name":{"en":"Concord"}}
+{"_key":11395,"name":{"en":"Deep Core Mining"}}
+{"_key":12092,"name":{"en":"Interceptors"}}
+{"_key":12093,"name":{"en":"Covert Ops"}}
+{"_key":12095,"name":{"en":"Assault Frigates"}}
+{"_key":12096,"name":{"en":"Logistics Cruisers"}}
+{"_key":12098,"name":{"en":"Interdictors"}}
+{"_key":16281,"name":{"en":"Ice Harvesting"}}
+{"_key":16591,"name":{"en":"Heavy Assault Cruisers"}}
+{"_key":17940,"name":{"en":"Mining Barge"}}
+{"_key":19430,"name":{"en":"Omnipotent"}}
+{"_key":19719,"name":{"en":"Transport Ships"}}
+{"_key":20342,"name":{"en":"Advanced Spaceship Command"}}
+{"_key":20524,"name":{"en":"Amarr Freighter"}}
+{"_key":20525,"name":{"en":"Amarr Dreadnought"}}
+{"_key":20526,"name":{"en":"Caldari Freighter"}}
+{"_key":20527,"name":{"en":"Gallente Freighter"}}
+{"_key":20528,"name":{"en":"Minmatar Freighter"}}
+{"_key":20530,"name":{"en":"Caldari Dreadnought"}}
+{"_key":20531,"name":{"en":"Gallente Dreadnought"}}
+{"_key":20532,"name":{"en":"Minmatar Dreadnought"}}
+{"_key":20533,"name":{"en":"Capital Ships"}}
+{"_key":21611,"name":{"en":"Jump Drive Calibration"}}
+{"_key":22551,"name":{"en":"Exhumers"}}
+{"_key":22761,"name":{"en":"Recon Ships"}}
+{"_key":23950,"name":{"en":"Command Ships"}}
+{"_key":24311,"name":{"en":"Amarr Carrier"}}
+{"_key":24312,"name":{"en":"Caldari Carrier"}}
+{"_key":24313,"name":{"en":"Gallente Carrier"}}
+{"_key":24314,"name":{"en":"Minmatar Carrier"}}
+{"_key":25863,"name":{"en":"Salvaging"}}
+{"_key":28374,"name":{"en":"Capital Industrial Ships"}}
+{"_key":28609,"name":{"en":"Heavy Interdiction Cruisers"}}
+{"_key":28615,"name":{"en":"Electronic Attack Ships"}}
+{"_key":28656,"name":{"en":"Black Ops"}}
+{"_key":28667,"name":{"en":"Marauders"}}
+{"_key":29029,"name":{"en":"Jump Freighters"}}
+{"_key":29637,"name":{"en":"Industrial Command Ships"}}
+{"_key":30532,"name":{"en":"Amarr Defensive Systems"}}
+{"_key":30537,"name":{"en":"Amarr Offensive Systems"}}
+{"_key":30538,"name":{"en":"Amarr Propulsion Systems"}}
+{"_key":30539,"name":{"en":"Amarr Core Systems"}}
+{"_key":30540,"name":{"en":"Gallente Defensive Systems"}}
+{"_key":30544,"name":{"en":"Caldari Defensive Systems"}}
+{"_key":30545,"name":{"en":"Minmatar Defensive Systems"}}
+{"_key":30546,"name":{"en":"Gallente Core Systems"}}
+{"_key":30547,"name":{"en":"Minmatar Core Systems"}}
+{"_key":30548,"name":{"en":"Caldari Core Systems"}}
+{"_key":30549,"name":{"en":"Caldari Offensive Systems"}}
+{"_key":30550,"name":{"en":"Gallente Offensive Systems"}}
+{"_key":30551,"name":{"en":"Minmatar Offensive Systems"}}
+{"_key":30552,"name":{"en":"Caldari Propulsion Systems"}}
+{"_key":30553,"name":{"en":"Gallente Propulsion Systems"}}
+{"_key":30554,"name":{"en":"Minmatar Propulsion Systems"}}
+{"_key":30650,"name":{"en":"Amarr Strategic Cruiser"}}
+{"_key":30651,"name":{"en":"Caldari Strategic Cruiser"}}
+{"_key":30652,"name":{"en":"Gallente Strategic Cruiser"}}
+{"_key":30653,"name":{"en":"Minmatar Strategic Cruiser"}}
+{"_key":32918,"name":{"en":"Mining Frigate"}}
+{"_key":33091,"name":{"en":"Amarr Destroyer"}}
+{"_key":33092,"name":{"en":"Caldari Destroyer"}}
+{"_key":33093,"name":{"en":"Gallente Destroyer"}}
+{"_key":33094,"name":{"en":"Minmatar Destroyer"}}
+{"_key":33095,"name":{"en":"Amarr Battlecruiser"}}
+{"_key":33096,"name":{"en":"Caldari Battlecruiser"}}
+{"_key":33097,"name":{"en":"Gallente Battlecruiser"}}
+{"_key":33098,"name":{"en":"Minmatar Battlecruiser"}}
+{"_key":33856,"name":{"en":"Expedition Frigates"}}
+{"_key":34327,"name":{"en":"ORE Freighter"}}
+{"_key":34390,"name":{"en":"Amarr Tactical Destroyer"}}
+{"_key":34533,"name":{"en":"Minmatar Tactical Destroyer"}}
+{"_key":35680,"name":{"en":"Caldari Tactical Destroyer"}}
+{"_key":35685,"name":{"en":"Gallente Tactical Destroyer"}}
+{"_key":37615,"name":{"en":"Command Destroyers"}}
+{"_key":40328,"name":{"en":"Logistics Frigates"}}
+{"_key":47445,"name":{"en":"Flag Cruisers"}}
+{"_key":47867,"name":{"en":"Precursor Frigate"}}
+{"_key":47868,"name":{"en":"Precursor Cruiser"}}
+{"_key":47869,"name":{"en":"Precursor Battleship"}}
+{"_key":49742,"name":{"en":"Precursor Destroyer"}}
+{"_key":49743,"name":{"en":"Precursor Battlecruiser"}}
+{"_key":52997,"name":{"en":"Precursor Dreadnought"}}
+{"_key":54794,"name":{"en":"EDENCOM Battleship"}}
+{"_key":55031,"name":{"en":"EDENCOM Frigate"}}
+{"_key":55032,"name":{"en":"EDENCOM Cruiser"}}
+{"_key":77738,"name":{"en":"Lancer Dreadnoughts"}}
+{"_key":81032,"name":{"en":"Upwell Hauler"}}
+{"_key":81044,"name":{"en":"Upwell Freighter"}}
+{"_key":89241,"name":{"en":"Mining Destroyer"}}
+{"_key":89609,"name":{"en":"Expedition Command Ships"}}
+{"_key":93983,"name":{"en":"Command Carriers"}}

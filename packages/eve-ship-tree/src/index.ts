@@ -16,8 +16,8 @@ export type {
   RequiredDataTables,
 } from './data-provider'
 
-export { SkillsProvider, useSkills } from './skills-provider'
-export type { EsiCharacterSkill, SkillsProviderProps, Skills, SkillsInput } from './skills-provider'
+export { SkillsProvider, useSkills, useSkillTraining } from './skills-provider'
+export type { EsiCharacterSkill, SkillsProviderProps, Skills, SkillsInput, SkillTraining } from './skills-provider'
 
 export {
   ShipTree,
@@ -31,6 +31,8 @@ export {
   useShipTreeTheme,
   preloadShipTreeSprites,
   shipTreeSprites,
+  GroupTooltip,
+  FloatingTooltip,
 } from './ship-tree'
 export type {
   ShipTreeProps,
@@ -42,6 +44,8 @@ export type {
   BottomFrameLabel,
   PanZoomOptions,
   PanZoomViewportProps,
+  GroupTooltipProps,
+  FloatingTooltipProps,
 } from './ship-tree'
 
 export {

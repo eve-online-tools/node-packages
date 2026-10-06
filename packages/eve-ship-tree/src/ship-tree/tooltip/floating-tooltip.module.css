@@ -1,0 +1,87 @@
+.root {
+  position: fixed;
+  z-index: 1000;
+  box-sizing: border-box;
+  max-width: calc(100vw - 16px);
+  padding: 12px;
+  color: rgb(255 255 255 / 75%);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  animation: fade-in 150ms ease-out backwards;
+}
+
+.root[data-state='closed'] {
+  pointer-events: none;
+  animation: fade-out 150ms ease-in forwards;
+}
+
+/* 9-slice panel art; its soft edge sits 15px outside the content box. */
+.root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: 0 solid transparent;
+  border-image: var(--ship-tree-tooltip-background) 19 fill / 19px / 15px stretch;
+  opacity: 0.95;
+}
+
+.root::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--ship-tree-tooltip-pointer) no-repeat;
+  opacity: 0.95;
+}
+
+/* Offsets line the sprite's base up with the panel edge, or its tip just past the corner. */
+.root[data-pointer='left']::after {
+  top: calc(var(--ship-tree-tooltip-arrow-top) - 12px);
+  left: -17px;
+}
+
+.root[data-pointer='right']::after {
+  top: calc(var(--ship-tree-tooltip-arrow-top) - 12px);
+  right: -18px;
+}
+
+.root[data-pointer='topleft']::after {
+  top: -15px;
+  left: -15px;
+}
+
+.root[data-pointer='topright']::after {
+  top: -15px;
+  right: -15px;
+}
+
+.root[data-pointer='bottomleft']::after {
+  bottom: -15px;
+  left: -15px;
+}
+
+.root[data-pointer='bottomright']::after {
+  right: -15px;
+  bottom: -15px;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .root[data-state='closed'] {
+    animation-duration: 1ms;
+  }
+}

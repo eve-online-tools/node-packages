@@ -3,13 +3,14 @@ import type { ReactElement } from 'react'
 
 import { filenames } from '../data/generated'
 import { DataProvider, type Data } from '../data-provider'
-import { SkillsProvider, type SkillsInput } from '../skills-provider'
+import { SkillsProvider, type SkillsInput, type SkillTraining } from '../skills-provider'
 
 export const emptyData = (): Data =>
   Object.fromEntries(filenames.map((fileName) => [fileName.replace(/\.jsonl$/, ''), {}])) as Data
 
 export type RenderWithShipTreeProvidersOptions = {
   skills?: SkillsInput
+  training?: SkillTraining
   data?: Data
   baseUrl?: string
   fetch?: typeof fetch
@@ -17,10 +18,13 @@ export type RenderWithShipTreeProvidersOptions = {
 
 export const renderWithShipTreeProviders = (
   ui: ReactElement,
-  { skills = {}, data = emptyData(), baseUrl, fetch, ...options }: RenderWithShipTreeProvidersOptions = {},
+  { skills = {}, training, data = emptyData(), baseUrl, fetch, ...options }: RenderWithShipTreeProvidersOptions = {},
 ): RenderResult =>
   render(
-    <SkillsProvider skills={skills}>
+    <SkillsProvider
+      skills={skills}
+      training={training}
+    >
       {baseUrl !== undefined ? (
         <DataProvider
           baseUrl={baseUrl}

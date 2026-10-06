@@ -5,6 +5,7 @@ export {
   type SkillsContextValue,
   type Skills,
   type SkillsInput,
+  type SkillTraining,
 } from './context'
 export { isEsiCharacterSkills, normalizeSkills } from './normalize-skills'
-export { useSkills } from './use-skills'
+export { useSkills, useSkillTraining } from './use-skills'

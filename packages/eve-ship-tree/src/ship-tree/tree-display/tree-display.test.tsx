@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import type { ReactElement } from 'react'
 
 import {
@@ -107,5 +107,97 @@ describe('TreeDisplay', () => {
     })
 
     expect(screen.getByTestId('group-status')).toHaveTextContent('locked')
+  })
+
+  describe('group tooltips', () => {
+    const frigateNode = () => screen.getByRole('img', { name: 'Frigate' })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('opens on focus and fades out on Escape', () => {
+      vi.useFakeTimers()
+      renderTreeDisplay(<TreeDisplay faction={500001} />, { data: minimalShipTreeData() })
+
+      fireEvent.focus(frigateNode())
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Frigate')
+      expect(frigateNode()).toHaveAttribute('aria-describedby', screen.getByRole('tooltip').id)
+
+      fireEvent.keyDown(document, { key: 'Escape' })
+      expect(screen.getByRole('tooltip')).toHaveAttribute('data-state', 'closed')
+      expect(frigateNode()).not.toHaveAttribute('aria-describedby')
+
+      act(() => {
+        vi.advanceTimersByTime(150)
+      })
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    })
+
+    it('opens on hover after a delay and closes after leaving', () => {
+      vi.useFakeTimers()
+      renderTreeDisplay(<TreeDisplay faction={500001} />, { data: minimalShipTreeData() })
+
+      fireEvent.pointerEnter(frigateNode())
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+
+      act(() => {
+        vi.advanceTimersByTime(300)
+      })
+      expect(screen.getByRole('tooltip')).toHaveAttribute('data-state', 'open')
+
+      fireEvent.pointerLeave(frigateNode())
+      act(() => {
+        vi.advanceTimersByTime(100 + 150)
+      })
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    })
+
+    it('stays open while the pointer moves into the tooltip', () => {
+      vi.useFakeTimers()
+      renderTreeDisplay(<TreeDisplay faction={500001} />, { data: minimalShipTreeData() })
+
+      fireEvent.pointerEnter(frigateNode())
+      act(() => {
+        vi.advanceTimersByTime(300)
+      })
+
+      fireEvent.pointerLeave(frigateNode())
+      fireEvent.pointerEnter(screen.getByRole('tooltip'))
+      act(() => {
+        vi.advanceTimersByTime(500)
+      })
+      expect(screen.getByRole('tooltip')).toHaveAttribute('data-state', 'open')
+
+      fireEvent.pointerLeave(screen.getByRole('tooltip'))
+      expect(screen.getByRole('tooltip')).toHaveAttribute('data-state', 'closed')
+    })
+
+    it('renders custom content', () => {
+      renderTreeDisplay(
+        <TreeDisplay
+          faction={500001}
+          groupTooltip={({ groupId }) => <span>custom {groupId}</span>}
+        />,
+        { data: minimalShipTreeData() },
+      )
+
+      fireEvent.focus(frigateNode())
+      expect(screen.getByRole('tooltip')).toHaveTextContent(`custom ${groups.frigate}`)
+    })
+
+    it('can be turned off', () => {
+      renderTreeDisplay(
+        <TreeDisplay
+          faction={500001}
+          groupTooltip={false}
+        />,
+        { data: minimalShipTreeData() },
+      )
+
+      expect(frigateNode()).not.toHaveAttribute('tabindex')
+      fireEvent.focus(frigateNode())
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    })
   })
 })

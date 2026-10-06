@@ -11,7 +11,12 @@ export type RequiredSkillsRecord = {
   requiredSkills?: Record<number, SkillLevel>
 }
 
+/** Text keyed by language code, for example `{ en: 'Frigate' }`. */
+export type LocalizedString = Record<string, string>
+
 export type ShipTreeGroupRecord = {
+  name?: LocalizedString
+  description?: LocalizedString
   elements?: Array<{ _key: number; _value: number }>
   preReqSkills?: Array<{
     _key: number
@@ -45,4 +50,13 @@ export type MasteryRecord = MasteryEntryRecord[] | { _value?: MasteryEntryRecord
 
 export type ShipSizeRecord = {
   typeIDs: number[]
+}
+
+export type ShipTreeElementRecord = {
+  name?: LocalizedString
+  description?: LocalizedString
+}
+
+export type SkillRecord = {
+  name?: LocalizedString
 }

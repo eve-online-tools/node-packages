@@ -70,6 +70,18 @@ const [faction, setFaction] = useState<FactionIdentifier>(500002);
 - `FactionSummary` shows logo, name, element glyphs and description in the client's 266px info bubble. It reads `shipTreeFactions` and `shipTreeElements` from the nearest `DataProvider`, or from its `data` prop. Without them it shows logo and name only.
 - `shipTreeFactionIdentifiers`, `shipTreeFactionNames` and `shipTreeFactionOrder` export the faction metadata.
 
+### Group tooltips
+
+Hovering or focusing a ship group node shows a tooltip with the group's icon, name, element glyphs and description. Locked groups list the skills required to unlock them; unlocked groups list the faction's bonus skills. Each skill shows the character's trained level. Pass the skill in training (for example the first entry of the ESI skill queue) to highlight its target level:
+
+```tsx
+<ShipTree.Root faction={500002} skills={skills} training={{ skillId: 3333, level: 4 }} baseUrl="/ship-tree-data">
+  <TreeDisplay />
+</ShipTree.Root>
+```
+
+`<TreeDisplay groupTooltip={false} />` turns tooltips off; a function, `({ groupId, faction }) => ReactNode`, replaces their content. `GroupTooltip` renders the default content. Names come from the optional `shipTreeElements` and `skills` tables; when they are missing the tooltip falls back to ids.
+
 ### Sprites
 
 `ShipTree` fetches and decodes all status sprites (frames, lines, mastery and tech badges) on mount, so switching characters does not make them pop in. Call `preloadShipTreeSprites()` to start earlier, for example on page load. `shipTreeSprites` lists their URLs.
