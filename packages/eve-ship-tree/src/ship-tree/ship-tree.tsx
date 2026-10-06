@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, type ComponentPropsWithoutRef, type CSSProperties, type PropsWithChildren } from 'react'
 
-import { SkillsProvider, type SkillsInput } from '../skills-provider'
+import { SkillsProvider, type SkillsInput, type SkillTraining } from '../skills-provider'
 import { useDataStatus, DataProvider, type DataProviderProps } from '../data-provider'
 import { LOAD_DATA_GENERIC_ERROR } from '../data-provider/types'
 import { Alert, LoadingOverlay } from './feedback'
@@ -122,11 +122,14 @@ export type ShipTreeRootProps = PropsWithChildren &
     'faction' | 'backgroundColor' | 'goldenCapsule' | 'isOmega' | 'strictMode' | 'panZoom' | 'style' | 'className'
   > & {
     skills: SkillsInput
+    /** Skill in training, shown in group tooltips. */
+    training?: SkillTraining
   } & DataProviderProps
 
 export const ShipTreeRoot = ({
   children,
   skills,
+  training,
   faction = 500001 as Identifier,
   backgroundColor,
   goldenCapsule,
@@ -137,7 +140,10 @@ export const ShipTreeRoot = ({
   className,
   ...dataProps
 }: ShipTreeRootProps) => (
-  <SkillsProvider skills={skills}>
+  <SkillsProvider
+    skills={skills}
+    training={training}
+  >
     <DataProvider {...dataProps}>
       <ShipTreeBase
         faction={faction}

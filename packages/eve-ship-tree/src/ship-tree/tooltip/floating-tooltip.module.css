@@ -1,0 +1,40 @@
+.root {
+  --ship-tree-tooltip-background: rgb(10 14 18 / 96%);
+  --ship-tree-tooltip-border: rgb(192 229 250 / 25%);
+
+  position: fixed;
+  z-index: 1000;
+  box-sizing: border-box;
+  max-width: min(360px, calc(100vw - 16px));
+  padding: 12px;
+  border: 1px solid var(--ship-tree-tooltip-border);
+  background-color: var(--ship-tree-tooltip-background);
+  color: #e6edf2;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.root::before {
+  content: '';
+  position: absolute;
+  top: var(--ship-tree-tooltip-arrow-top, 50%);
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--ship-tree-tooltip-border);
+  background-color: var(--ship-tree-tooltip-background);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.root[data-side='right']::before {
+  left: -6px;
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+
+.root[data-side='left']::before {
+  right: -6px;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}

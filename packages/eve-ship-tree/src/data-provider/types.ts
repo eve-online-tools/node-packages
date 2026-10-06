@@ -5,8 +5,10 @@ import type {
   MasteryRecord,
   RequiredSkillsRecord,
   ShipSizeRecord,
+  ShipTreeElementRecord,
   ShipTreeGroupRecord,
   ShipTypeRecord,
+  SkillRecord,
 } from './schema'
 
 type StripJsonlExtension<T extends string> = T extends `${infer Name}.jsonl` ? Name : never
@@ -26,9 +28,15 @@ export type RequiredDataTables = {
   shipSizes: Record<number, ShipSizeRecord>
 }
 
-type OtherDataTables = {
-  [K in Exclude<DataTableName, keyof RequiredDataTables>]: GenericTable
+/** Optional tables with a known shape, used by tooltips. */
+export type TypedOptionalDataTables = {
+  skills: Record<number, SkillRecord>
+  shipTreeElements: Record<number, ShipTreeElementRecord>
 }
+
+type OtherDataTables = {
+  [K in Exclude<DataTableName, keyof RequiredDataTables | keyof TypedOptionalDataTables>]: GenericTable
+} & TypedOptionalDataTables
 
 /** All tables as loaded by `loadShipTreeData`. */
 export type Data = RequiredDataTables & OtherDataTables

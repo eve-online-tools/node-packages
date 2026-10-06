@@ -1,6 +1,7 @@
-import { forwardRef, useMemo, type ComponentPropsWithoutRef } from 'react'
+import { forwardRef, useId, useMemo, type ComponentPropsWithoutRef, type ReactNode } from 'react'
 
 import type { Identifier as ShipTreeFactionId } from '../../data/identifiers/shipTreeFactions'
+import { names as groupNames, type Identifier as GroupIdentifier } from '../../data/identifiers/shipTreeGroups'
 import { useProcessedData } from '../../data-provider'
 import { factionLayouts, getFactionName, hasFactionLayout } from '../../layouts'
 import { useShipTreeTheme } from '../theme-provider'
@@ -13,6 +14,7 @@ import { OmegaIcon } from './omega-icon'
 import { collectLayout, computeViewBox, formatViewBox, gridToPixel } from './render-layout'
 import { buildSegmentMap } from './segment-map'
 import { GroupNode, ShipGroup } from './ship-group'
+import { FloatingTooltip, GroupTooltip, useTooltipTrigger, type GroupTooltipProps } from '../tooltip'
 import classes from './tree-display.module.css'
 
 export type TreeDisplayStylesNames = 'root' | 'surface' | 'lines' | 'line' | 'groups'
@@ -21,6 +23,8 @@ export interface TreeDisplayProps
   extends StylesApiProps<TreeDisplayStylesNames>, Omit<ComponentPropsWithoutRef<'div'>, 'className' | 'style'> {
   /** Defaults to the faction set on an ancestor `ShipTree`. */
   faction?: ShipTreeFactionId
+  /** Tooltip on ship group nodes. `false` turns it off; a function replaces its content. Defaults to `true`. */
+  groupTooltip?: boolean | ((props: GroupTooltipProps) => ReactNode)
 }
 
 const supportedFactionNames = (Object.keys(factionLayouts) as unknown as ShipTreeFactionId[])
@@ -29,7 +33,7 @@ const supportedFactionNames = (Object.keys(factionLayouts) as unknown as ShipTre
   .join(', ')
 
 export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
-  ({ classNames, className, style, styles, faction: factionProp, ...others }, ref) => {
+  ({ classNames, className, style, styles, faction: factionProp, groupTooltip = true, ...others }, ref) => {
     const { faction: themeFaction, strictMode = false } = useShipTreeTheme()
     const faction = factionProp ?? themeFaction
 
@@ -37,6 +41,8 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
       throw new Error('TreeDisplay requires a faction prop or a ShipTree ancestor with faction set')
     }
 
+    const tooltipId = useId()
+    const groupTooltips = useTooltipTrigger<GroupIdentifier>(groupTooltip !== false)
     const getStyles = createGetStyles<TreeDisplayStylesNames>(classes, { className, style, classNames, styles })
     const layout = factionLayouts[faction]
     const layoutSupported = hasFactionLayout(faction)
@@ -93,9 +99,11 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
           viewBox={viewBox}
           {...size}
           preserveAspectRatio="xMinYMid meet"
-          aria-hidden
         >
-          <g {...getStyles('lines')}>
+          <g
+            {...getStyles('lines')}
+            aria-hidden
+          >
             {linePaths.map((path, index) => (
               <LinePath
                 key={`path-${index}`}
@@ -112,10 +120,12 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
             ))}
           </g>
           <g {...getStyles('groups')}>
-            <Capsule
-              x={gridToPixel(0)}
-              y={gridToPixel(0)}
-            />
+            <g aria-hidden>
+              <Capsule
+                x={gridToPixel(0)}
+                y={gridToPixel(0)}
+              />
+            </g>
             {nodes.map((node, index) => {
               const groupId = node.group
               if (groupId === undefined) {
@@ -124,21 +134,33 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
 
               const x = gridToPixel(node.x)
               const y = gridToPixel(node.y)
+              const tooltipOpen = groupTooltips.active?.target === groupId
 
               return (
                 <g key={`group-${groupId}-${index}`}>
-                  <GroupNode
-                    faction={faction}
-                    x={x}
-                    y={y}
-                    groupId={groupId}
-                  />
-                  <ShipGroup
-                    faction={faction}
-                    groupId={groupId}
-                    groupNodeX={x}
-                    groupNodeY={y}
-                  />
+                  <g
+                    className={classes.groupTrigger}
+                    role="img"
+                    aria-label={groupNames[groupId as keyof typeof groupNames]}
+                    aria-describedby={tooltipOpen ? tooltipId : undefined}
+                    tabIndex={groupTooltip === false ? undefined : 0}
+                    {...groupTooltips.getTriggerProps(groupId)}
+                  >
+                    <GroupNode
+                      faction={faction}
+                      x={x}
+                      y={y}
+                      groupId={groupId}
+                    />
+                  </g>
+                  <g aria-hidden>
+                    <ShipGroup
+                      faction={faction}
+                      groupId={groupId}
+                      groupNodeX={x}
+                      groupNodeY={y}
+                    />
+                  </g>
                 </g>
               )
             })}
@@ -152,16 +174,35 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
               const y = gridToPixel(node.y)
 
               return (
-                <FactionNode
+                <g
                   key={`faction-${factionId}-${index}`}
-                  faction={factionId}
-                  x={x}
-                  y={y}
-                />
+                  aria-hidden
+                >
+                  <FactionNode
+                    faction={factionId}
+                    x={x}
+                    y={y}
+                  />
+                </g>
               )
             })}
           </g>
         </svg>
+        {groupTooltips.active ? (
+          <FloatingTooltip
+            id={tooltipId}
+            anchor={groupTooltips.active.anchor}
+          >
+            {typeof groupTooltip === 'function' ? (
+              groupTooltip({ groupId: groupTooltips.active.target, faction })
+            ) : (
+              <GroupTooltip
+                groupId={groupTooltips.active.target}
+                faction={faction}
+              />
+            )}
+          </FloatingTooltip>
+        ) : null}
       </div>
     )
   },

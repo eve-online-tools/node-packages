@@ -1,0 +1,113 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 320px;
+  max-width: 100%;
+}
+
+.header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.icon {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  background-color: #000;
+}
+
+.iconGlyph {
+  width: 100%;
+  height: 100%;
+  background-color: #c0e5fa;
+  mask: var(--ship-tree-tooltip-icon) center / 48px no-repeat;
+}
+
+.name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.elements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.element {
+  width: 18px;
+  height: 18px;
+  opacity: 0.85;
+}
+
+.description {
+  margin: 0;
+  color: #b9c4cc;
+}
+
+.skillsHeading {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #58a7d1;
+}
+
+.skills {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skill {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.levels {
+  display: flex;
+  flex: none;
+  gap: 2px;
+}
+
+.level {
+  width: 9px;
+  height: 9px;
+  background-color: rgb(255 255 255 / 15%);
+}
+
+.level[data-state='trained'] {
+  background-color: #e6edf2;
+}
+
+.level[data-state='training'] {
+  background-color: #3b9fe0;
+}
+
+.hint {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid rgb(166 128 255 / 40%);
+  background-color: rgb(97 63 170 / 35%);
+  color: #ddd2ff;
+}
+
+.hintGlyph {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background-color: currentcolor;
+  mask: var(--ship-tree-tooltip-hint-icon) center / contain no-repeat;
+}

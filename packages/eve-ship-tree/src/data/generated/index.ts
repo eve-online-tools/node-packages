@@ -9,6 +9,7 @@ export const filenames = [
   'shipTreeElements.jsonl',
   'shipTreeFactions.jsonl',
   'shipTreeGroups.jsonl',
+  'skills.jsonl',
   'typeBonus.jsonl',
   'typeElements.jsonl',
   'types.jsonl',

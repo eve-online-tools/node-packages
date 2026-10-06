@@ -8,6 +8,7 @@
 {"_key":7,"filename":"shipTreeElements.jsonl"}
 {"_key":8,"filename":"shipTreeFactions.jsonl"}
 {"_key":9,"filename":"shipTreeGroups.jsonl"}
-{"_key":10,"filename":"typeBonus.jsonl"}
-{"_key":11,"filename":"typeElements.jsonl"}
-{"_key":12,"filename":"types.jsonl"}
+{"_key":10,"filename":"skills.jsonl"}
+{"_key":11,"filename":"typeBonus.jsonl"}
+{"_key":12,"filename":"typeElements.jsonl"}
+{"_key":13,"filename":"types.jsonl"}
