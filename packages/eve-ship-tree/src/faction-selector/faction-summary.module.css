@@ -1,0 +1,75 @@
+.root {
+  --faction-summary-width: 266px;
+  --faction-summary-element-opacity: 0.5;
+  --faction-summary-frame-opacity: 0.95;
+
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  width: var(--faction-summary-width);
+  min-height: 72px;
+  margin-top: 8px;
+  padding: 12px 12px 16px;
+  color: white;
+}
+
+/* Separate layer so frame opacity does not dim the content. */
+.root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: var(--faction-summary-frame-opacity);
+  pointer-events: none;
+
+  /* Client InfoBubble: frame layers above the background, backMiddle stretched between the pinned top and bottom strips. */
+  background:
+    url('res:/ui/texture/classes/shiptree/infobubble/frameupper.png') top / 100% 36px no-repeat,
+    url('res:/ui/texture/classes/shiptree/infobubble/framelower.png') bottom / 100% 36px no-repeat,
+    url('res:/ui/texture/classes/shiptree/infobubble/backtopextender.png') top / 100% 1px no-repeat,
+    url('res:/ui/texture/classes/shiptree/infobubble/backbottom.png') bottom / 100% 6px no-repeat,
+    url('res:/ui/texture/classes/shiptree/infobubble/backmiddle.png') 0 1px / 100% calc(100% - 7px) no-repeat;
+}
+
+.header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.logo {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.name {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.elements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  max-width: 160px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.element {
+  display: block;
+  width: 30px;
+  height: 30px;
+  opacity: var(--faction-summary-element-opacity);
+}
+
+.description {
+  margin: 10px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  opacity: 0.85;
+}

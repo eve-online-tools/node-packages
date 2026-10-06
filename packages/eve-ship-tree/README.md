@@ -52,6 +52,24 @@ The batteries-included `ShipTree.Root` composes the required providers. Provider
 
 `TreeDisplay` reads the faction from `ShipTree` when the prop is omitted. All 17 ship tree factions have layouts: the four empires, CONCORD, ORE, EDENCOM, the Triglavian Collective and the pirate factions.
 
+### Faction selector
+
+`FactionSelector` and `FactionSummary` work outside `ShipTree`, so they can sit anywhere, for example pinned over the tree outside its pan and zoom.
+
+```tsx
+import { FactionSelector, FactionSummary, ShipTree, type FactionIdentifier } from "@eve-online-tools/eve-ship-tree";
+
+const [faction, setFaction] = useState<FactionIdentifier>(500002);
+
+<FactionSelector value={faction} onChange={setFaction} />
+<FactionSummary faction={faction} />
+<ShipTree.Root faction={faction} skills={skills} baseUrl="/ship-tree-data">...</ShipTree.Root>
+```
+
+- `FactionSelector` is a radiogroup of faction logos, five per row; arrow keys, Home and End move the selection. `factions` defaults to `shipTreeFactionOrder` (client order). `variant="compact"` renders a native select for narrow layouts. `onHoverChange` reports the hovered faction (`null` on leave); pass `hovered ?? value` to `FactionSummary` to preview it.
+- `FactionSummary` shows logo, name, element glyphs and description in the client's 266px info bubble. It reads `shipTreeFactions` and `shipTreeElements` from the nearest `DataProvider`, or from its `data` prop. Without them it shows logo and name only.
+- `shipTreeFactionIdentifiers`, `shipTreeFactionNames` and `shipTreeFactionOrder` export the faction metadata.
+
 ### Sprites
 
 `ShipTree` fetches and decodes all status sprites (frames, lines, mastery and tech badges) on mount, so switching characters does not make them pop in. Call `preloadShipTreeSprites()` to start earlier, for example on page load. `shipTreeSprites` lists their URLs.
