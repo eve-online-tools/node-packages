@@ -200,4 +200,67 @@ describe('TreeDisplay', () => {
       expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
     })
   })
+
+  describe('ship tooltips', () => {
+    const shipNode = () => screen.getByRole('img', { name: 'Ship 582' })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('opens on focus above or below the ship and fades out on Escape', () => {
+      vi.useFakeTimers()
+      renderTreeDisplay(<TreeDisplay faction={500001} />, { data: minimalShipTreeData() })
+
+      fireEvent.focus(shipNode())
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveTextContent('Ship 582')
+      expect(['top', 'bottom']).toContain(tooltip.getAttribute('data-side'))
+      expect(shipNode()).toHaveAttribute('aria-describedby', tooltip.id)
+
+      fireEvent.keyDown(document, { key: 'Escape' })
+      act(() => {
+        vi.advanceTimersByTime(150)
+      })
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    })
+
+    it('opens on hover after a delay', () => {
+      vi.useFakeTimers()
+      renderTreeDisplay(<TreeDisplay faction={500001} />, { data: minimalShipTreeData() })
+
+      fireEvent.pointerEnter(shipNode())
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+
+      act(() => {
+        vi.advanceTimersByTime(300)
+      })
+      expect(screen.getByRole('tooltip')).toHaveAttribute('data-state', 'open')
+    })
+
+    it('renders custom content', () => {
+      renderTreeDisplay(
+        <TreeDisplay
+          faction={500001}
+          shipTooltip={({ typeId }) => <span>custom {typeId}</span>}
+        />,
+        { data: minimalShipTreeData() },
+      )
+
+      fireEvent.focus(shipNode())
+      expect(screen.getByRole('tooltip')).toHaveTextContent('custom 582')
+    })
+
+    it('can be turned off', () => {
+      renderTreeDisplay(
+        <TreeDisplay
+          faction={500001}
+          shipTooltip={false}
+        />,
+        { data: minimalShipTreeData() },
+      )
+
+      expect(screen.queryByRole('img', { name: 'Ship 582' })).not.toBeInTheDocument()
+    })
+  })
 })

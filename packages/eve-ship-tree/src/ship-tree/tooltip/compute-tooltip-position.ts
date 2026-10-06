@@ -1,21 +1,27 @@
 export type TooltipRect = { left: number; top: number; width: number; height: number }
 
+/** `horizontal` places the tooltip right or left of the anchor, `vertical` above or below it. */
+export type TooltipPlacement = 'horizontal' | 'vertical'
+
+export type TooltipSide = 'left' | 'right' | 'top' | 'bottom'
+
 /** Direction the pointer points in, towards the anchor. */
-export type TooltipPointer = 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright'
+export type TooltipPointer = 'left' | 'right' | 'up' | 'down' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright'
 
 export type TooltipPosition = {
   left: number
   top: number
-  side: 'left' | 'right'
+  side: TooltipSide
   pointer: TooltipPointer
-  /** Pointer offset from the tooltip's top edge; only used by `left` and `right` pointers. */
-  arrowTop: number
+  /** Pointer offset along the edge facing the anchor; only used by `left`, `right`, `up` and `down` pointers. */
+  arrowOffset: number
 }
 
 export type ComputeTooltipPositionOptions = {
   anchor: TooltipRect
   tooltip: { width: number; height: number }
   viewport: { width: number; height: number }
+  placement?: TooltipPlacement
   gap?: number
   margin?: number
   arrowSize?: number
@@ -23,38 +29,69 @@ export type ComputeTooltipPositionOptions = {
 
 const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value))
 
-/** Places the tooltip right of the anchor, or left when it does not fit, kept inside the viewport. */
+const axes = {
+  horizontal: { start: 'left', size: 'width', crossStart: 'top', crossSize: 'height' },
+  vertical: { start: 'top', size: 'height', crossStart: 'left', crossSize: 'width' },
+} as const
+
+const resolvePointer = (side: TooltipSide, corner: 'start' | 'end' | undefined): TooltipPointer => {
+  switch (side) {
+    case 'right':
+    case 'left': {
+      const towards = side === 'right' ? 'left' : 'right'
+      return corner === undefined ? towards : `${corner === 'start' ? 'top' : 'bottom'}${towards}`
+    }
+    case 'bottom':
+    case 'top': {
+      const edge = side === 'bottom' ? 'top' : 'bottom'
+      if (corner === undefined) {
+        return side === 'bottom' ? 'up' : 'down'
+      }
+      return `${edge}${corner === 'start' ? 'left' : 'right'}`
+    }
+  }
+}
+
+/**
+ * Places the tooltip next to the anchor, kept inside the viewport.
+ * Horizontal prefers the right and flips left; vertical prefers above and flips below.
+ */
 export const computeTooltipPosition = ({
   anchor,
   tooltip,
   viewport,
+  placement = 'horizontal',
   gap = 12,
   margin = 8,
   arrowSize = 12,
 }: ComputeTooltipPositionOptions): TooltipPosition => {
-  const rightLeft = anchor.left + anchor.width + gap
-  const leftLeft = anchor.left - gap - tooltip.width
-  const fitsRight = rightLeft + tooltip.width <= viewport.width - margin
-  const fitsLeft = leftLeft >= margin
-  const side = fitsRight || !fitsLeft ? 'right' : 'left'
-  const left = clamp(
-    side === 'right' ? rightLeft : leftLeft,
-    margin,
-    Math.max(margin, viewport.width - margin - tooltip.width),
-  )
+  const { start, size, crossStart, crossSize } = axes[placement]
 
-  const anchorCenterY = anchor.top + anchor.height / 2
-  const top = clamp(
-    anchorCenterY - tooltip.height / 2,
-    margin,
-    Math.max(margin, viewport.height - margin - tooltip.height),
-  )
-  const anchorOffset = anchorCenterY - top
-  const arrowTop = clamp(anchorOffset, arrowSize, Math.max(arrowSize, tooltip.height - arrowSize))
-  // The anchor is past a corner when the tooltip is pushed down or up by the viewport edge.
-  const corner = anchorOffset < arrowSize ? 'top' : anchorOffset > tooltip.height - arrowSize ? 'bottom' : ''
-  const towards = side === 'right' ? 'left' : 'right'
-  const pointer = `${corner}${towards}` as TooltipPointer
+  const after = anchor[start] + anchor[size] + gap
+  const before = anchor[start] - gap - tooltip[size]
+  const fitsAfter = after + tooltip[size] <= viewport[size] - margin
+  const fitsBefore = before >= margin
+  const useAfter = placement === 'horizontal' ? fitsAfter || !fitsBefore : fitsAfter && !fitsBefore
+  const main = clamp(useAfter ? after : before, margin, Math.max(margin, viewport[size] - margin - tooltip[size]))
 
-  return { left, top, side, pointer, arrowTop }
+  const anchorCenter = anchor[crossStart] + anchor[crossSize] / 2
+  const cross = clamp(
+    anchorCenter - tooltip[crossSize] / 2,
+    margin,
+    Math.max(margin, viewport[crossSize] - margin - tooltip[crossSize]),
+  )
+  const anchorOffset = anchorCenter - cross
+  const arrowOffset = clamp(anchorOffset, arrowSize, Math.max(arrowSize, tooltip[crossSize] - arrowSize))
+  // The anchor is past a corner when the viewport edge pushes the tooltip along its cross axis.
+  const corner = anchorOffset < arrowSize ? 'start' : anchorOffset > tooltip[crossSize] - arrowSize ? 'end' : undefined
+
+  const side: TooltipSide = placement === 'horizontal' ? (useAfter ? 'right' : 'left') : useAfter ? 'bottom' : 'top'
+
+  return {
+    left: placement === 'horizontal' ? main : cross,
+    top: placement === 'horizontal' ? cross : main,
+    side,
+    pointer: resolvePointer(side, corner),
+    arrowOffset,
+  }
 }

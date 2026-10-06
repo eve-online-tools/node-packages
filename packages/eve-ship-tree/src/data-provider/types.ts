@@ -9,6 +9,8 @@ import type {
   ShipTreeGroupRecord,
   ShipTypeRecord,
   SkillRecord,
+  TypeBonusRecord,
+  TypeElementsRecord,
 } from './schema'
 
 type StripJsonlExtension<T extends string> = T extends `${infer Name}.jsonl` ? Name : never
@@ -32,6 +34,8 @@ export type RequiredDataTables = {
 export type TypedOptionalDataTables = {
   skills: Record<number, SkillRecord>
   shipTreeElements: Record<number, ShipTreeElementRecord>
+  typeBonus: Record<number, TypeBonusRecord>
+  typeElements: Record<number, TypeElementsRecord>
 }
 
 type OtherDataTables = {

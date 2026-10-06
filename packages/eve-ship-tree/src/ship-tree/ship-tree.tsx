@@ -8,7 +8,7 @@ import { PanZoomViewport, resolvePanZoomOptions, type PanZoomOptions } from './p
 import { resolveShipTreeTheme } from './resolve-theme'
 import classes from './ship-tree.module.css'
 import { createGetStyles, cx, type StylesApiProps } from './styles-api'
-import { ThemeProvider } from './theme-provider'
+import { ThemeProvider, type ShipPrices } from './theme-provider'
 import { Identifier } from '../data/identifiers/shipTreeFactions'
 import { TreeDisplay } from './tree-display'
 import { preloadShipTreeSprites } from './sprites'
@@ -25,6 +25,10 @@ export interface ShipTreeProps
   isOmega?: boolean
   strictMode?: boolean
   panZoom?: boolean | PanZoomOptions
+  /** Ship prices in ISK, shown in ship tooltips. Ships without a price show no price line. */
+  prices?: ShipPrices
+  /** Number format locale for tooltips. Defaults to the reader's locale. */
+  locale?: string
 }
 
 const ShipTreeBase = forwardRef<HTMLDivElement, ShipTreeProps>(
@@ -41,6 +45,8 @@ const ShipTreeBase = forwardRef<HTMLDivElement, ShipTreeProps>(
       isOmega = false,
       strictMode = false,
       panZoom = true,
+      prices,
+      locale,
       ...others
     },
     ref,
@@ -85,7 +91,7 @@ const ShipTreeBase = forwardRef<HTMLDivElement, ShipTreeProps>(
     )
 
     return (
-      <ThemeProvider theme={resolveShipTreeTheme(faction, { goldenCapsule, isOmega, strictMode })}>
+      <ThemeProvider theme={resolveShipTreeTheme(faction, { goldenCapsule, isOmega, strictMode, prices, locale })}>
         <div
           ref={ref}
           {...getStyles('root')}
@@ -119,7 +125,16 @@ ShipTreeBase.displayName = '@eve-online-tools/eve-ship-tree/ShipTree'
 export type ShipTreeRootProps = PropsWithChildren &
   Pick<
     ShipTreeProps,
-    'faction' | 'backgroundColor' | 'goldenCapsule' | 'isOmega' | 'strictMode' | 'panZoom' | 'style' | 'className'
+    | 'faction'
+    | 'backgroundColor'
+    | 'goldenCapsule'
+    | 'isOmega'
+    | 'strictMode'
+    | 'panZoom'
+    | 'prices'
+    | 'locale'
+    | 'style'
+    | 'className'
   > & {
     skills: SkillsInput
     /** Skill in training, shown in group tooltips. */
@@ -136,6 +151,8 @@ export const ShipTreeRoot = ({
   isOmega,
   strictMode,
   panZoom,
+  prices,
+  locale,
   style,
   className,
   ...dataProps
@@ -152,6 +169,8 @@ export const ShipTreeRoot = ({
         isOmega={isOmega}
         strictMode={strictMode}
         panZoom={panZoom}
+        prices={prices}
+        locale={locale}
         style={style}
         className={className}
       >

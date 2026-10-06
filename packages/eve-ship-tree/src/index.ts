@@ -32,7 +32,9 @@ export {
   preloadShipTreeSprites,
   shipTreeSprites,
   GroupTooltip,
+  ShipTooltip,
   FloatingTooltip,
+  defaultShipRenderUrl,
 } from './ship-tree'
 export type {
   ShipTreeProps,
@@ -45,7 +47,9 @@ export type {
   PanZoomOptions,
   PanZoomViewportProps,
   GroupTooltipProps,
+  ShipTooltipProps,
   FloatingTooltipProps,
+  ShipPrices,
 } from './ship-tree'
 
 export {

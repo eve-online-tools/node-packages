@@ -11,7 +11,7 @@ describe('computeTooltipPosition', () => {
       viewport,
     })
 
-    expect(position).toEqual({ left: 162, top: 225, side: 'right', pointer: 'left', arrowTop: 100 })
+    expect(position).toEqual({ left: 162, top: 225, side: 'right', pointer: 'left', arrowOffset: 100 })
   })
 
   it('flips left when there is no room on the right', () => {
@@ -42,5 +42,51 @@ describe('computeTooltipPosition', () => {
     expect(above.pointer).toBe('topleft')
     expect(below.top).toBe(800 - 8 - 200)
     expect(below.pointer).toBe('bottomright')
+  })
+
+  describe('vertical placement', () => {
+    it('places the tooltip above the anchor, centred horizontally', () => {
+      const position = computeTooltipPosition({
+        anchor: { left: 400, top: 500, width: 100, height: 100 },
+        tooltip,
+        viewport,
+        placement: 'vertical',
+      })
+
+      expect(position).toEqual({ left: 300, top: 288, side: 'top', pointer: 'down', arrowOffset: 150 })
+    })
+
+    it('flips below when there is no room above', () => {
+      const position = computeTooltipPosition({
+        anchor: { left: 400, top: 100, width: 100, height: 100 },
+        tooltip,
+        viewport,
+        placement: 'vertical',
+      })
+
+      expect(position.side).toBe('bottom')
+      expect(position.pointer).toBe('up')
+      expect(position.top).toBe(212)
+    })
+
+    it('uses a corner pointer when the viewport pushes the tooltip past the anchor', () => {
+      const left = computeTooltipPosition({
+        anchor: { left: 0, top: 100, width: 10, height: 50 },
+        tooltip,
+        viewport,
+        placement: 'vertical',
+      })
+      const right = computeTooltipPosition({
+        anchor: { left: 990, top: 500, width: 10, height: 50 },
+        tooltip,
+        viewport,
+        placement: 'vertical',
+      })
+
+      expect(left.left).toBe(8)
+      expect(left.pointer).toBe('topleft')
+      expect(right.left).toBe(1000 - 8 - 300)
+      expect(right.pointer).toBe('bottomright')
+    })
   })
 })

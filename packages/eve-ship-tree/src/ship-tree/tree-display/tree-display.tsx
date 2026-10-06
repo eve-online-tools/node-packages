@@ -2,7 +2,7 @@ import { forwardRef, useId, useMemo, type ComponentPropsWithoutRef, type ReactNo
 
 import type { Identifier as ShipTreeFactionId } from '../../data/identifiers/shipTreeFactions'
 import { names as groupNames, type Identifier as GroupIdentifier } from '../../data/identifiers/shipTreeGroups'
-import { useProcessedData } from '../../data-provider'
+import { useData, useProcessedData } from '../../data-provider'
 import { factionLayouts, getFactionName, hasFactionLayout } from '../../layouts'
 import { useShipTreeTheme } from '../theme-provider'
 import { Alert } from '../feedback'
@@ -14,7 +14,15 @@ import { OmegaIcon } from './omega-icon'
 import { collectLayout, computeViewBox, formatViewBox, gridToPixel } from './render-layout'
 import { buildSegmentMap } from './segment-map'
 import { GroupNode, ShipGroup } from './ship-group'
-import { FloatingTooltip, GroupTooltip, useTooltipTrigger, type GroupTooltipProps } from '../tooltip'
+import {
+  FloatingTooltip,
+  GroupTooltip,
+  ShipTooltip,
+  localize,
+  useTooltipTrigger,
+  type GroupTooltipProps,
+  type ShipTooltipProps,
+} from '../tooltip'
 import classes from './tree-display.module.css'
 
 export type TreeDisplayStylesNames = 'root' | 'surface' | 'lines' | 'line' | 'groups'
@@ -25,6 +33,8 @@ export interface TreeDisplayProps
   faction?: ShipTreeFactionId
   /** Tooltip on ship group nodes. `false` turns it off; a function replaces its content. Defaults to `true`. */
   groupTooltip?: boolean | ((props: GroupTooltipProps) => ReactNode)
+  /** Tooltip on ship nodes. `false` turns it off; a function replaces its content. Defaults to `true`. */
+  shipTooltip?: boolean | ((props: ShipTooltipProps) => ReactNode)
 }
 
 const supportedFactionNames = (Object.keys(factionLayouts) as unknown as ShipTreeFactionId[])
@@ -33,7 +43,10 @@ const supportedFactionNames = (Object.keys(factionLayouts) as unknown as ShipTre
   .join(', ')
 
 export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
-  ({ classNames, className, style, styles, faction: factionProp, groupTooltip = true, ...others }, ref) => {
+  (
+    { classNames, className, style, styles, faction: factionProp, groupTooltip = true, shipTooltip = true, ...others },
+    ref,
+  ) => {
     const { faction: themeFaction, strictMode = false } = useShipTreeTheme()
     const faction = factionProp ?? themeFaction
 
@@ -42,7 +55,9 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
     }
 
     const tooltipId = useId()
+    const shipTooltipId = useId()
     const groupTooltips = useTooltipTrigger<GroupIdentifier>(groupTooltip !== false)
+    const shipTooltips = useTooltipTrigger<number>(shipTooltip !== false)
     const getStyles = createGetStyles<TreeDisplayStylesNames>(classes, { className, style, classNames, styles })
     const layout = factionLayouts[faction]
     const layoutSupported = hasFactionLayout(faction)
@@ -52,6 +67,7 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
       [layout, layoutSupported],
     )
     const { shipTreeGroups, shipSizeByTypeId } = useProcessedData()
+    const { data } = useData()
 
     const { linePaths, omegaTransitions } = useMemo(
       () =>
@@ -153,14 +169,25 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
                       groupId={groupId}
                     />
                   </g>
-                  <g aria-hidden>
-                    <ShipGroup
-                      faction={faction}
-                      groupId={groupId}
-                      groupNodeX={x}
-                      groupNodeY={y}
-                    />
-                  </g>
+                  <ShipGroup
+                    faction={faction}
+                    groupId={groupId}
+                    groupNodeX={x}
+                    groupNodeY={y}
+                    getShipProps={
+                      shipTooltip === false
+                        ? undefined
+                        : (typeId) => ({
+                            className: classes.shipTrigger,
+                            role: 'img',
+                            'aria-label': localize(data?.types[typeId]?.name) ?? `Ship ${typeId}`,
+                            'aria-describedby':
+                              shipTooltips.open && shipTooltips.active?.target === typeId ? shipTooltipId : undefined,
+                            tabIndex: 0,
+                            ...shipTooltips.getTriggerProps(typeId),
+                          })
+                    }
+                  />
                 </g>
               )
             })}
@@ -200,6 +227,24 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
             ) : (
               <GroupTooltip
                 groupId={groupTooltips.active.target}
+                faction={faction}
+              />
+            )}
+          </FloatingTooltip>
+        ) : null}
+        {shipTooltips.active ? (
+          <FloatingTooltip
+            {...shipTooltips.tooltipProps}
+            id={shipTooltipId}
+            anchor={shipTooltips.active.anchor}
+            open={shipTooltips.open}
+            placement="vertical"
+          >
+            {typeof shipTooltip === 'function' ? (
+              shipTooltip({ typeId: shipTooltips.active.target, faction })
+            ) : (
+              <ShipTooltip
+                typeId={shipTooltips.active.target}
                 faction={faction}
               />
             )}

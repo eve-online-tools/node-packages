@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, type SVGProps } from 'react'
 
 import { type Identifier as GroupIdentifier, names as groupNames } from '../../../data/identifiers/shipTreeGroups'
 import type { Identifier as ShipTreeFactionId } from '../../../data/identifiers/shipTreeFactions'
@@ -14,9 +14,11 @@ export type ShipGroupProps = {
   groupId: GroupIdentifier
   groupNodeX: number
   groupNodeY: number
+  /** Props for the `<g>` around each ship, for example tooltip triggers. */
+  getShipProps?: (typeId: number) => SVGProps<SVGGElement>
 }
 
-export const ShipGroup = ({ faction, groupId, groupNodeX, groupNodeY }: ShipGroupProps) => {
+export const ShipGroup = ({ faction, groupId, groupNodeX, groupNodeY, getShipProps }: ShipGroupProps) => {
   const { shipTreeGroups, shipSizeByTypeId } = useProcessedData()
 
   const shipTypes = useMemo(
@@ -44,16 +46,18 @@ export const ShipGroup = ({ faction, groupId, groupNodeX, groupNodeY }: ShipGrou
 
   return (
     <g>
-      <FrameTopBorder
-        x={layout.topBorder.x}
-        y={layout.topBorder.y}
-        width={layout.topBorder.width}
-      />
-      <FrameBottomBorder
-        x={layout.bottomBorder.x}
-        y={layout.bottomBorder.y}
-        width={layout.bottomBorder.width}
-      />
+      <g aria-hidden>
+        <FrameTopBorder
+          x={layout.topBorder.x}
+          y={layout.topBorder.y}
+          width={layout.topBorder.width}
+        />
+        <FrameBottomBorder
+          x={layout.bottomBorder.x}
+          y={layout.bottomBorder.y}
+          width={layout.bottomBorder.width}
+        />
+      </g>
       {shipTypes.map((typeId, index) => {
         const position = layout.shipPositions[index]
         if (position === undefined) {
@@ -61,22 +65,28 @@ export const ShipGroup = ({ faction, groupId, groupNodeX, groupNodeY }: ShipGrou
         }
 
         return (
-          <Ship
+          <g
             key={typeId}
-            typeId={typeId}
-            x={position.x}
-            y={position.y}
-            width={shipNodeSize}
-            height={shipNodeSize}
-          />
+            {...(getShipProps?.(typeId) ?? { 'aria-hidden': true })}
+          >
+            <Ship
+              typeId={typeId}
+              x={position.x}
+              y={position.y}
+              width={shipNodeSize}
+              height={shipNodeSize}
+            />
+          </g>
         )
       })}
       {label ? (
-        <FrameLabel
-          x={layout.label.x}
-          y={layout.label.y}
-          label={label}
-        />
+        <g aria-hidden>
+          <FrameLabel
+            x={layout.label.x}
+            y={layout.label.y}
+            label={label}
+          />
+        </g>
       ) : null}
     </g>
   )

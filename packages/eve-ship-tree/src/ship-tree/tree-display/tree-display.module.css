@@ -15,11 +15,13 @@
   pointer-events: none;
 }
 
-.groupTrigger {
+.groupTrigger,
+.shipTrigger {
   outline: none;
 }
 
-.groupTrigger:focus-visible {
+.groupTrigger:focus-visible,
+.shipTrigger:focus-visible {
   outline: 2px solid #58a7d1;
   outline-offset: 2px;
 }
