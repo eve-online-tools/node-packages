@@ -443,6 +443,9 @@ importers:
       '@eve-online-tools/eve-sde':
         specifier: workspace:*
         version: link:../eve-sde
+      '@fontsource/saira-semi-condensed':
+        specifier: ^5.3.0
+        version: 5.3.0
       react:
         specifier: ^18.x || ^19.x
         version: 19.3.0
@@ -1028,6 +1031,9 @@ packages:
     peerDependenciesMeta:
       '@noble/hashes':
         optional: true
+
+  '@fontsource/saira-semi-condensed@5.3.0':
+    resolution: {integrity: sha512-ODnnx0osErt7pRMY+MhxqwXOpPEKlRNW6Bb1Ci70Y37JMnISFAUZYo6ZGv/VOWc2x/IetzdmMaiiEVNPtWMi9Q==}
 
   '@jest/diff-sequences@30.4.0':
     resolution: {integrity: sha512-zOpzlfUs45l6u7jm39qr87JCHUDsaeCtvL+kQe/Vn9jSnRB4/5IPXISm0h9I1vZW/o00Kn4UTJ2MOlhnUGwv3g==}
@@ -4792,6 +4798,8 @@ snapshots:
     optional: true
 
   '@exodus/bytes@1.16.0': {}
+
+  '@fontsource/saira-semi-condensed@5.3.0': {}
 
   '@jest/diff-sequences@30.4.0': {}
 

@@ -8,8 +8,7 @@
 
   --bottom-frame-font-size: 8px;
   --bottom-frame-line-height: 1.4;
-  --bottom-frame-font-family:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --bottom-frame-font-family: 'Saira Semi Condensed', system-ui, sans-serif;
   --bottom-frame-font-color: #aacbe7;
 
   user-select: none;
@@ -61,7 +60,7 @@
 
 .disclaimer {
   flex: 0 0 auto;
-  font-family: monospace;
+  font-family: var(--bottom-frame-font-family);
   white-space: nowrap;
   line-height: 1;
 }

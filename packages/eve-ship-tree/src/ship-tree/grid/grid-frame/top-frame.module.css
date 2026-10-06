@@ -8,8 +8,7 @@
   --top-frame-font-weight: 700;
   --top-frame-font-size: 12px;
   --top-frame-line-height: 1.75;
-  --top-frame-font-family:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --top-frame-font-family: 'Saira Semi Condensed', system-ui, sans-serif;
   --top-frame-font-color: #000;
 
   user-select: none;
@@ -38,7 +37,7 @@
   align-self: stretch;
   align-items: flex-start;
   width: fit-content;
-  font-family: monospace;
+  font-family: var(--top-frame-font-family);
   white-space: nowrap;
   background-image: url('res:/ui/texture/classes/shiptree/frame/topmiddle.png');
   background-repeat: repeat-x;

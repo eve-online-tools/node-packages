@@ -1,6 +1,6 @@
 .root {
   fill: #fff;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-family: 'Saira Semi Condensed', system-ui, sans-serif;
   font-size: 14px;
   text-transform: uppercase;
   pointer-events: none;

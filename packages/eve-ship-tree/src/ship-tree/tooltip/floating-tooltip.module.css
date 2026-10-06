@@ -5,7 +5,7 @@
   max-width: calc(100vw - 16px);
   padding: 12px;
   color: rgb(255 255 255 / 75%);
-  font-family: system-ui, sans-serif;
+  font-family: 'Saira Semi Condensed', system-ui, sans-serif;
   font-size: 13px;
   line-height: 1.4;
   animation: fade-in 150ms ease-out backwards;
