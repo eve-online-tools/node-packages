@@ -44,5 +44,20 @@ export type {
   PanZoomViewportProps,
 } from './ship-tree'
 
+export {
+  FactionSelector,
+  FactionSummary,
+  shipTreeFactionIdentifiers,
+  shipTreeFactionNames,
+  shipTreeFactionOrder,
+} from './faction-selector'
+export type {
+  FactionSelectorProps,
+  FactionSelectorStylesNames,
+  FactionSummaryData,
+  FactionSummaryProps,
+  FactionSummaryStylesNames,
+} from './faction-selector'
+
 export type { Identifier as FactionIdentifier } from './data/identifiers/shipTreeFactions'
 export type { Identifier as GroupIdentifier } from './data/identifiers/shipTreeGroups'

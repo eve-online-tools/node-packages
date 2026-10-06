@@ -1,0 +1,68 @@
+.root {
+  --faction-summary-border: rgb(255 255 255 / 25%);
+  --faction-summary-background: rgb(0 0 0 / 70%);
+  --faction-summary-notch-offset: 24px;
+
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--faction-summary-border);
+  background-color: var(--faction-summary-background);
+  color: white;
+}
+
+/* Notch pointing up at the selector. */
+.root::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: var(--faction-summary-notch-offset);
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid var(--faction-summary-border);
+  border-left: 1px solid var(--faction-summary-border);
+  background-color: inherit;
+  transform: rotate(45deg);
+}
+
+.header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.logo {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.name {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.elements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.element {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.description {
+  margin: 10px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  opacity: 0.85;
+}
