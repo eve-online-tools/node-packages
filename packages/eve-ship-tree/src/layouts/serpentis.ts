@@ -3,8 +3,8 @@ import { identifiers as g } from '../data/identifiers/shipTreeGroups'
 import { Root, Node, type RootEntry, type NodeEntry, FactionNode } from './layoutsystem'
 
 export const serpentisLayout = (): RootEntry => {
-  const addTop = (n: NodeEntry) => FactionNode(0, -6, n, f.caldariState)
-  const addBottom = (n: NodeEntry) => FactionNode(0, 6, n, f.gallenteFederation)
+  const addTop = (n: NodeEntry) => FactionNode(0, -7, n, f.caldariState)
+  const addBottom = (n: NodeEntry) => FactionNode(0, 7, n, f.gallenteFederation)
 
   const root = Root()
   let n: NodeEntry
@@ -21,21 +21,21 @@ export const serpentisLayout = (): RootEntry => {
   addTop(battleship)
   addBottom(battleship)
 
-  n = Node(8, 0, battleship)
+  n = Node(6, 0, battleship)
 
-  const dreadnought = Node(8, 0, n, g.dreadnought)
+  const dreadnought = Node(6, 0, n, g.dreadnought)
   addTop(dreadnought)
   addBottom(dreadnought)
 
-  n = Node(8, -12, n)
+  n = Node(6, -10, n)
 
-  const carrier = Node(8, 0, n, g.carrier)
+  const carrier = Node(6, 0, n, g.carrier)
   addTop(carrier)
   addBottom(carrier)
 
-  n = Node(8, -12, n)
+  n = Node(6, -10, n)
 
-  const titan = Node(8, 0, n, g.titan)
+  const titan = Node(6, 0, n, g.titan)
   addTop(titan)
   addBottom(titan)
 

@@ -234,7 +234,7 @@ describe('buildSegmentMap horizontal from-group inset', () => {
     const { segments } = collectLayout(empireLayout())
 
     const shuttleApproach = segments.find(
-      (segment) => segment.x1 === 7 && segment.y1 === 13 && segment.x2 === 13 && segment.y2 === 13,
+      (segment) => segment.x1 === 7 && segment.y1 === 10 && segment.x2 === 13 && segment.y2 === 10,
     )
 
     expect(shuttleApproach).toMatchObject({
@@ -247,7 +247,7 @@ describe('buildSegmentMap horizontal from-group inset', () => {
     const { segments } = collectLayout(empireLayout())
 
     const shuttleDeparture = segments.find(
-      (segment) => segment.x1 === 13 && segment.y1 === 13 && segment.x2 === 75 && segment.y2 === 13,
+      (segment) => segment.x1 === 13 && segment.y1 === 10 && segment.x2 === 75 && segment.y2 === 10,
     )
 
     expect(shuttleDeparture).toMatchObject({

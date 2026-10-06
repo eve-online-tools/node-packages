@@ -13,13 +13,13 @@ export const oreLayout = (): RootEntry => {
   const oreHauler = Node(36, 0, n, g.oreHauler)
 
   const factionMiningFrigate = Node(0, -6, miningFrigate, g.factionMiningFrigate)
-  n = Node(0, -6, factionMiningFrigate)
-  Node(4, -4, n, g.expeditionFrigate)
+  n = Node(0, -3, factionMiningFrigate)
+  Node(3, -3, n, g.expeditionFrigate)
 
   const miningDestroyer = Node(18, 0, miningFrigate, g.miningDestroyer)
   const factionMiningDestroyer = Node(0, -6, miningDestroyer, g.factionMiningDestroyer)
-  n = Node(0, -6, factionMiningDestroyer)
-  Node(4, -4, n, g.miningCommandDestroyer)
+  n = Node(0, -3, factionMiningDestroyer)
+  Node(3, -3, n, g.miningCommandDestroyer)
 
   const miningBarge = Node(15, 0, miningDestroyer, g.miningBarge)
   n = Node(0, -3, miningBarge)
@@ -28,7 +28,7 @@ export const oreLayout = (): RootEntry => {
   const industrialCommandShip = Node(12, 0, oreHauler, g.industrialCommandShip)
   Node(15, 0, industrialCommandShip, g.capitalIndustrialShip)
 
-  n = Node(0, 9, oreHauler)
+  n = Node(0, 12, oreHauler)
   Node(27, 0, n, g.freighter)
 
   return root

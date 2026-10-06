@@ -16,15 +16,15 @@ export const soeLayout = (): RootEntry => {
   addBottom(frigate)
 
   n = Node(0, 12, n)
-  const expeditionCommandShip = Node(24, 0, n, g.expeditionCommandShip)
+  const expeditionCommandShip = Node(18, 0, n, g.expeditionCommandShip)
   addTop(expeditionCommandShip)
   addBottom(expeditionCommandShip)
 
-  const cruiser = Node(12, 0, frigate, g.cruiser)
+  const cruiser = Node(9, 0, frigate, g.cruiser)
   addTop(cruiser)
   addBottom(cruiser)
 
-  const battleship = Node(12, 0, cruiser, g.battleship)
+  const battleship = Node(9, 0, cruiser, g.battleship)
   addTop(battleship)
   addBottom(battleship)
 
