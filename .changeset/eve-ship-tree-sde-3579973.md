@@ -1,5 +1,0 @@
----
-'@eve-online-tools/eve-ship-tree': patch
----
-
-Update SDE data to build 3579973.
