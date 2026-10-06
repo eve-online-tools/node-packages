@@ -1,4 +1,6 @@
 @import '../data/icons/index.css';
+@import '@fontsource/saira-semi-condensed/latin-400.css';
+@import '@fontsource/saira-semi-condensed/latin-700.css';
 
 .root {
   position: relative;

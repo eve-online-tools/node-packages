@@ -1,5 +1,8 @@
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import type { Plugin } from 'rollup'
 import { createReactRollupConfig } from '../../internal/react-build/create-rollup-config'
 import { copyGeneratedDataPlugin, staticDataFilesProcessor } from './src/data/processors/copy-generated-data'
 import { staticExtraProcessor } from './src/data/processors/static-extra-data'
@@ -20,6 +23,31 @@ import { shipSizesProcessor } from './src/data/processors/shipSizes'
 import { skillsProcessor } from './src/data/processors/skills'
 import { shipTypeRequirementsProcessor } from './src/data/processors/shipTypeRequirements'
 import { typesProcessor } from './src/data/processors/types'
+
+const fontPackageDir = path.dirname(
+  createRequire(import.meta.url).resolve('@fontsource/saira-semi-condensed/package.json'),
+)
+
+// postcss-import inlines the fontsource CSS but leaves its relative url(files/...) untouched.
+const fontAssetsPlugin = (outDir: string): Plugin => ({
+  name: 'font-assets',
+  writeBundle() {
+    const assetsDir = path.join(outDir, 'dist/assets')
+    mkdirSync(assetsDir, { recursive: true })
+    for (const fileName of readdirSync(path.join(fontPackageDir, 'files'))) {
+      if (/^saira-semi-condensed-latin-(400|700)-normal\.woff2?$/.test(fileName)) {
+        copyFileSync(path.join(fontPackageDir, 'files', fileName), path.join(assetsDir, fileName))
+      }
+    }
+  },
+  closeBundle() {
+    for (const cssPath of ['dist/esm/index.css', 'dist/cjs/index.css'].map((p) => path.join(outDir, p))) {
+      if (existsSync(cssPath)) {
+        writeFileSync(cssPath, readFileSync(cssPath, 'utf-8').replaceAll('url(files/', 'url(../assets/'))
+      }
+    }
+  },
+})
 
 const SDE_BUILD_NUMBER = '3579973'
 
@@ -58,5 +86,5 @@ export default createReactRollupConfig({
       staticDataFilesProcessor(),
     ],
   },
-  plugins: [copyGeneratedDataPlugin(packageDir)],
+  plugins: [copyGeneratedDataPlugin(packageDir), fontAssetsPlugin(packageDir)],
 })
