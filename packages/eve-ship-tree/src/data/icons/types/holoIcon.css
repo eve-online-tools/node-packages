@@ -2273,3 +2273,7 @@
 [data-type-id='92825'] {
   --types-holo-icon: url('res:/dx9/model/ship/minmatar/carrier/mca2/icons/mca2_t2_isis.png');
 }
+
+[data-type-id='95741'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc4/icons/abc4_t1_isis.png');
+}

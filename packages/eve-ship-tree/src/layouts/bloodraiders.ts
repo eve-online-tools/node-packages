@@ -17,7 +17,11 @@ export const bloodraidersLayout = (): RootEntry => {
   addTop(cruiser)
   addBottom(cruiser)
 
-  const battleship = Node(9, 0, cruiser, g.battleship)
+  const battlecruiser = Node(9, 0, cruiser, g.battlecruiser)
+  addTop(battlecruiser)
+  addBottom(battlecruiser)
+
+  const battleship = Node(9, 0, battlecruiser, g.battleship)
   addTop(battleship)
   addBottom(battleship)
 
