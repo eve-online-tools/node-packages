@@ -1,10 +1,14 @@
 export type TooltipRect = { left: number; top: number; width: number; height: number }
 
+/** Direction the pointer points in, towards the anchor. */
+export type TooltipPointer = 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright'
+
 export type TooltipPosition = {
   left: number
   top: number
   side: 'left' | 'right'
-  /** Arrow offset from the tooltip's top edge. */
+  pointer: TooltipPointer
+  /** Pointer offset from the tooltip's top edge; only used by `left` and `right` pointers. */
   arrowTop: number
 }
 
@@ -26,7 +30,7 @@ export const computeTooltipPosition = ({
   viewport,
   gap = 12,
   margin = 8,
-  arrowSize = 8,
+  arrowSize = 12,
 }: ComputeTooltipPositionOptions): TooltipPosition => {
   const rightLeft = anchor.left + anchor.width + gap
   const leftLeft = anchor.left - gap - tooltip.width
@@ -45,7 +49,12 @@ export const computeTooltipPosition = ({
     margin,
     Math.max(margin, viewport.height - margin - tooltip.height),
   )
-  const arrowTop = clamp(anchorCenterY - top, arrowSize, Math.max(arrowSize, tooltip.height - arrowSize))
+  const anchorOffset = anchorCenterY - top
+  const arrowTop = clamp(anchorOffset, arrowSize, Math.max(arrowSize, tooltip.height - arrowSize))
+  // The anchor is past a corner when the tooltip is pushed down or up by the viewport edge.
+  const corner = anchorOffset < arrowSize ? 'top' : anchorOffset > tooltip.height - arrowSize ? 'bottom' : ''
+  const towards = side === 'right' ? 'left' : 'right'
+  const pointer = `${corner}${towards}` as TooltipPointer
 
-  return { left, top, side, arrowTop }
+  return { left, top, side, pointer, arrowTop }
 }

@@ -7,4 +7,9 @@ export {
   type SkillLevelState,
 } from './group-tooltip'
 export { useTooltipTrigger, tooltipOpenDelayMs, type ActiveTooltip } from './use-tooltip-trigger'
-export { computeTooltipPosition, type TooltipPosition, type TooltipRect } from './compute-tooltip-position'
+export {
+  computeTooltipPosition,
+  type TooltipPointer,
+  type TooltipPosition,
+  type TooltipRect,
+} from './compute-tooltip-position'

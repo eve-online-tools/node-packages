@@ -30,21 +30,41 @@
 .root::after {
   content: '';
   position: absolute;
-  top: var(--ship-tree-tooltip-arrow-top, 50%);
   width: 24px;
   height: 24px;
-  background: var(--ship-tree-tooltip-pointer) center / contain no-repeat;
+  background: var(--ship-tree-tooltip-pointer) no-repeat;
   opacity: 0.95;
 }
 
-.root[data-side='right']::after {
-  left: -21px;
-  transform: translateY(-50%) rotate(90deg);
+/* Offsets line the sprite's base up with the panel edge, or its tip just past the corner. */
+.root[data-pointer='left']::after {
+  top: calc(var(--ship-tree-tooltip-arrow-top) - 12px);
+  left: -17px;
 }
 
-.root[data-side='left']::after {
-  right: -21px;
-  transform: translateY(-50%) rotate(-90deg);
+.root[data-pointer='right']::after {
+  top: calc(var(--ship-tree-tooltip-arrow-top) - 12px);
+  right: -18px;
+}
+
+.root[data-pointer='topleft']::after {
+  top: -15px;
+  left: -15px;
+}
+
+.root[data-pointer='topright']::after {
+  top: -15px;
+  right: -15px;
+}
+
+.root[data-pointer='bottomleft']::after {
+  bottom: -15px;
+  left: -15px;
+}
+
+.root[data-pointer='bottomright']::after {
+  right: -15px;
+  bottom: -15px;
 }
 
 @keyframes fade-in {

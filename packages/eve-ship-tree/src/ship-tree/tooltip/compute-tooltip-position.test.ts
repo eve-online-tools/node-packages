@@ -11,7 +11,7 @@ describe('computeTooltipPosition', () => {
       viewport,
     })
 
-    expect(position).toEqual({ left: 162, top: 225, side: 'right', arrowTop: 100 })
+    expect(position).toEqual({ left: 162, top: 225, side: 'right', pointer: 'left', arrowTop: 100 })
   })
 
   it('flips left when there is no room on the right', () => {
@@ -22,17 +22,25 @@ describe('computeTooltipPosition', () => {
     })
 
     expect(position.side).toBe('left')
+    expect(position.pointer).toBe('right')
     expect(position.left).toBe(800 - 12 - 300)
   })
 
-  it('stays inside the viewport and keeps the arrow on the anchor', () => {
-    const position = computeTooltipPosition({
+  it('uses a corner pointer when the viewport pushes the tooltip past the anchor', () => {
+    const above = computeTooltipPosition({
       anchor: { left: 100, top: 0, width: 50, height: 20 },
       tooltip,
       viewport,
     })
+    const below = computeTooltipPosition({
+      anchor: { left: 800, top: 780, width: 50, height: 20 },
+      tooltip,
+      viewport,
+    })
 
-    expect(position.top).toBe(8)
-    expect(position.arrowTop).toBe(8)
+    expect(above.top).toBe(8)
+    expect(above.pointer).toBe('topleft')
+    expect(below.top).toBe(800 - 8 - 200)
+    expect(below.pointer).toBe('bottomright')
   })
 })
