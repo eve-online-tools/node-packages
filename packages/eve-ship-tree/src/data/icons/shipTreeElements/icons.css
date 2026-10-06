@@ -1,119 +1,119 @@
 [data-element='7'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/armor.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/armor_32px.png');
 }
 
 [data-element='8'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/energy_turrets.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/energy_turrets_32px.png');
 }
 
 [data-element='9'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/missiles.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/missiles_32px.png');
 }
 
 [data-element='10'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/gunnery.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/gunnery_32px.png');
 }
 
 [data-element='11'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/drones.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/drones_32px.png');
 }
 
 [data-element='12'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/hybrid_turrets.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/hybrid_turrets_32px.png');
 }
 
 [data-element='13'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/capacitor_warfare.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/capacitor_warfare_32px.png');
 }
 
 [data-element='14'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/sensor_dampening.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/sensor_dampening_32px.png');
 }
 
 [data-element='15'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/ecm.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/ecm_32px.png');
 }
 
 [data-element='16'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/target_painting.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/target_painting_32px.png');
 }
 
 [data-element='17'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/tracking_disruption.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/tracking_disruption_32px.png');
 }
 
 [data-element='18'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/stasis_webifying.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/stasis_webifying_32px.png');
 }
 
 [data-element='19'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/warp_prevention.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/warp_prevention_32px.png');
 }
 
 [data-element='20'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/shields.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/shields_32px.png');
 }
 
 [data-element='22'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/attack.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/attack_32px.png');
 }
 
 [data-element='23'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/combat.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/combat_32px.png');
 }
 
 [data-element='24'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/disruption.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/disruption_32px.png');
 }
 
 [data-element='25'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/fleet_support.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/fleet_support_32px.png');
 }
 
 [data-element='26'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/hauling.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/hauling_32px.png');
 }
 
 [data-element='27'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/resource_harvesting.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/resource_harvesting_32px.png');
 }
 
 [data-element='28'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/explorer.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/career_icons/explorer_32px.png');
 }
 
 [data-element='29'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/tackling.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/tackling_32px.png');
 }
 
 [data-element='30'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/small.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/small_32px.png');
 }
 
 [data-element='31'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/medium.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/medium_32px.png');
 }
 
 [data-element='32'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/large.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/large_32px.png');
 }
 
 [data-element='33'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/extra_large.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/extra_large_32px.png');
 }
 
 [data-element='45'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/precursor.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/precursor_32px.png');
 }
 
 [data-element='2046'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/shields_armor.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/shields_armor_32px.png');
 }
 
 [data-element='2048'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/vorton_projector.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/vorton_projector_32px.png');
 }
 
 [data-element='2056'] {
-  --ship-tree-elements-icons: url('res:/ui/texture/classes/shiptree/attributes/damage_over_time.png');
+  --ship-tree-elements-icons: url('res:/ui/texture/eveicon/category_icons/damage_over_time_32px.png');
 }
