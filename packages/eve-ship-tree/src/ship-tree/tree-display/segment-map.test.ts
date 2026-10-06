@@ -234,7 +234,7 @@ describe('buildSegmentMap horizontal from-group inset', () => {
     const { segments } = collectLayout(empireLayout())
 
     const shuttleApproach = segments.find(
-      (segment) => segment.x1 === 7 && segment.y1 === 10 && segment.x2 === 13 && segment.y2 === 10,
+      (segment) => segment.x1 === 7 && segment.y1 === 12 && segment.x2 === 13 && segment.y2 === 12,
     )
 
     expect(shuttleApproach).toMatchObject({
@@ -247,7 +247,7 @@ describe('buildSegmentMap horizontal from-group inset', () => {
     const { segments } = collectLayout(empireLayout())
 
     const shuttleDeparture = segments.find(
-      (segment) => segment.x1 === 13 && segment.y1 === 10 && segment.x2 === 75 && segment.y2 === 10,
+      (segment) => segment.x1 === 13 && segment.y1 === 12 && segment.x2 === 75 && segment.y2 === 12,
     )
 
     expect(shuttleDeparture).toMatchObject({
@@ -706,7 +706,7 @@ describe('buildSegmentMap ore root junction', () => {
         path.points[0]?.x === junction.x &&
         path.points[0]?.y === junction.y &&
         path.points[1]?.x === junction.x &&
-        path.points[1]?.y === 288,
+        path.points[1]?.y === 336,
     )
 
     expect(approach?.points.at(-1)).toEqual(junction)
@@ -754,11 +754,11 @@ describe('buildSegmentMap soe root junction', () => {
         path.status === 'locked' &&
         path.fade === undefined &&
         path.points[0]?.x === junction.x &&
-        path.points[0]?.y === 5,
+        path.points[0]?.y === 2.5,
     )
 
     expect(approach?.points.at(-1)).toEqual(junction)
     expect(toFrigate?.points[0]).toEqual(junction)
-    expect(toExpedition?.points[0]).toEqual({ x: junction.x, y: 5 })
+    expect(toExpedition?.points[0]).toEqual({ x: junction.x, y: 2.5 })
   })
 })

@@ -64,13 +64,13 @@ describe('buildLinePaths', () => {
       {
         points: [
           { x: 0, y: 0 },
-          { x: 95, y: 0 },
+          { x: 97.5, y: 0 },
         ],
         status: 'unlocked',
       },
       {
         points: [
-          { x: 100, y: 5 },
+          { x: 100, y: 2.5 },
           { x: 100, y: 50 },
         ],
         status: 'locked',
@@ -103,7 +103,7 @@ describe('buildLinePaths', () => {
       },
       {
         points: [
-          { x: 100, y: 5 },
+          { x: 100, y: 2.5 },
           { x: 100, y: 50 },
         ],
         status: 'locked',

@@ -3,8 +3,8 @@ import { identifiers as g } from '../data/identifiers/shipTreeGroups'
 import { Root, Node, type RootEntry, type NodeEntry, FactionNode } from './layoutsystem'
 
 export const soeLayout = (): RootEntry => {
-  const addTop = (n: NodeEntry) => FactionNode(0, -6, n, f.amarrEmpire)
-  const addBottom = (n: NodeEntry) => FactionNode(0, 6, n, f.gallenteFederation)
+  const addTop = (n: NodeEntry) => FactionNode(0, -7, n, f.amarrEmpire)
+  const addBottom = (n: NodeEntry) => FactionNode(0, 7, n, f.gallenteFederation)
 
   const root = Root()
   let n: NodeEntry
@@ -15,16 +15,16 @@ export const soeLayout = (): RootEntry => {
   addTop(frigate)
   addBottom(frigate)
 
-  n = Node(0, 12, n)
-  const expeditionCommandShip = Node(18, 0, n, g.expeditionCommandShip)
+  n = Node(0, 14, n)
+  const expeditionCommandShip = Node(20, 0, n, g.expeditionCommandShip)
   addTop(expeditionCommandShip)
   addBottom(expeditionCommandShip)
 
-  const cruiser = Node(9, 0, frigate, g.cruiser)
+  const cruiser = Node(10, 0, frigate, g.cruiser)
   addTop(cruiser)
   addBottom(cruiser)
 
-  const battleship = Node(9, 0, cruiser, g.battleship)
+  const battleship = Node(10, 0, cruiser, g.battleship)
   addTop(battleship)
   addBottom(battleship)
 

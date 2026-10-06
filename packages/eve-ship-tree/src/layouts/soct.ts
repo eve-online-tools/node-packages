@@ -6,13 +6,13 @@ export const soctLayout = (): RootEntry => {
 
   const shuttle = Node(6, 0, root, g.shuttle)
 
-  const frigate = Node(12, 0, shuttle, g.frigate)
+  const frigate = Node(14, 0, shuttle, g.frigate)
 
-  const destroyer = Node(12, 0, frigate, g.destroyer)
+  const destroyer = Node(14, 0, frigate, g.destroyer)
 
-  const battlecruiser = Node(12, 0, destroyer, g.battlecruiser)
+  const battlecruiser = Node(14, 0, destroyer, g.battlecruiser)
 
-  Node(12, 0, battlecruiser, g.battleship)
+  Node(14, 0, battlecruiser, g.battleship)
 
   return root
 }

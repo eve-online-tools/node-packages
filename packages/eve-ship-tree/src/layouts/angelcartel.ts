@@ -13,31 +13,31 @@ export const angelLayout = (): RootEntry => {
   addTop(frigate)
   addBottom(frigate)
 
-  const destroyer = Node(9, 0, frigate, g.destroyer)
+  const destroyer = Node(10, 0, frigate, g.destroyer)
   addTop(destroyer)
   addBottom(destroyer)
 
-  const cruiser = Node(9, 0, destroyer, g.cruiser)
+  const cruiser = Node(10, 0, destroyer, g.cruiser)
   addTop(cruiser)
   addBottom(cruiser)
 
-  const battlecruiser = Node(9, 0, cruiser, g.battlecruiser)
+  const battlecruiser = Node(10, 0, cruiser, g.battlecruiser)
   addTop(battlecruiser)
   addBottom(battlecruiser)
 
-  const battleship = Node(9, 0, battlecruiser, g.battleship)
+  const battleship = Node(10, 0, battlecruiser, g.battleship)
   addTop(battleship)
   addBottom(battleship)
 
-  n = Node(6, 0, battleship)
+  n = Node(7, 0, battleship)
 
-  const dreadnought = Node(6, 0, n, g.dreadnought)
+  const dreadnought = Node(7, 0, n, g.dreadnought)
   addTop(dreadnought)
   addBottom(dreadnought)
 
-  n = Node(6, -10, n)
+  n = Node(7, -12, n)
 
-  const titan = Node(6, 0, n, g.titan)
+  const titan = Node(7, 0, n, g.titan)
   addTop(titan)
   addBottom(titan)
 

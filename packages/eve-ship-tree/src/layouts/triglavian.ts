@@ -7,23 +7,23 @@ export const triglavianLayout = (): RootEntry => {
 
   const frigate = Node(6, 0, root, g.frigate)
 
-  n = Node(0, -4, frigate)
+  n = Node(0, -6, frigate)
   Node(4, -4, n, g.assaultFrigate)
 
   const destroyer = Node(18, 0, frigate, g.destroyer)
-  n = Node(0, -4, destroyer)
+  n = Node(0, -6, destroyer)
   Node(4, -4, n, g.commandDestroyer)
 
   const cruiser = Node(18, 0, destroyer, g.cruiser)
-  n = Node(0, -4, cruiser)
+  n = Node(0, -6, cruiser)
   Node(4, -4, n, g.heavyAssaultCruiser)
-  n = Node(0, -6, n)
+  n = Node(0, -7, n)
   Node(4, -4, n, g.logisticsCruisers)
 
   const battlecruiser = Node(18, 0, cruiser, g.battlecruiser)
 
   const battleship = Node(18, 0, battlecruiser, g.battleship)
-  n = Node(0, -4, battleship)
+  n = Node(0, -6, battleship)
   Node(4, -4, n, g.marauder)
 
   Node(22, 0, battleship, g.dreadnought)
