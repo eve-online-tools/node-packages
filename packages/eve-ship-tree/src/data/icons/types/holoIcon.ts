@@ -3,6 +3,7 @@ import resDx9ModelShipAmarrBattlecruiserAbc1IconsAbc1T2aIsisPng from 'res:/dx9/m
 import resDx9ModelShipAmarrBattlecruiserAbc2IconsAbc2T1IsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc2/icons/abc2_t1_isis.png'
 import resDx9ModelShipAmarrBattlecruiserAbc2IconsAbc2T2IsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc2/icons/abc2_t2_isis.png'
 import resDx9ModelShipAmarrBattlecruiserAbc3IconsAbc3T1IsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc3/icons/abc3_t1_isis.png'
+import resDx9ModelShipAmarrBattlecruiserAbc4IconsAbc4T1IsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc4/icons/abc4_t1_isis.png'
 import resDx9ModelShipAmarrBattleshipAb1IconsAb1T1IsisPng from 'res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t1_isis.png'
 import resDx9ModelShipAmarrBattleshipAb1IconsAb1T2IsisPng from 'res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t2_isis.png'
 import resDx9ModelShipAmarrBattleshipAb2IconsAb2T1IsisPng from 'res:/dx9/model/ship/amarr/battleship/ab2/icons/ab2_t1_isis.png'
@@ -913,6 +914,7 @@ export const holoIcon = {
   92823: resDx9ModelShipCaldariCarrierCca1IconsCca1T2IsisPng,
   92824: resDx9ModelShipGallenteCarrierGca2IconsGca2T2IsisPng,
   92825: resDx9ModelShipMinmatarCarrierMca2IconsMca2T2IsisPng,
+  95741: resDx9ModelShipAmarrBattlecruiserAbc4IconsAbc4T1IsisPng,
 } as const
 
 export default holoIcon

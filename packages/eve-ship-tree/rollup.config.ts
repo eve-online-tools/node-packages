@@ -21,7 +21,7 @@ import { skillsProcessor } from './src/data/processors/skills'
 import { shipTypeRequirementsProcessor } from './src/data/processors/shipTypeRequirements'
 import { typesProcessor } from './src/data/processors/types'
 
-const SDE_BUILD_NUMBER = '3569502'
+const SDE_BUILD_NUMBER = '3579973'
 
 const packageDir = path.dirname(fileURLToPath(import.meta.url))
 const keepLanguages = ['en']
