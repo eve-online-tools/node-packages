@@ -3,8 +3,8 @@ import { identifiers as g } from '../data/identifiers/shipTreeGroups'
 import { Root, Node, type RootEntry, type NodeEntry, FactionNode } from './layoutsystem'
 
 export const mordusLayout = (): RootEntry => {
-  const addTop = (n: NodeEntry) => FactionNode(0, -6, n, f.caldariState)
-  const addBottom = (n: NodeEntry) => FactionNode(0, 6, n, f.gallenteFederation)
+  const addTop = (n: NodeEntry) => FactionNode(0, -7, n, f.caldariState)
+  const addBottom = (n: NodeEntry) => FactionNode(0, 7, n, f.gallenteFederation)
 
   const root = Root()
 
@@ -12,11 +12,11 @@ export const mordusLayout = (): RootEntry => {
   addTop(frigate)
   addBottom(frigate)
 
-  const cruiser = Node(9, 0, frigate, g.cruiser)
+  const cruiser = Node(10, 0, frigate, g.cruiser)
   addTop(cruiser)
   addBottom(cruiser)
 
-  const battleship = Node(9, 0, cruiser, g.battleship)
+  const battleship = Node(10, 0, cruiser, g.battleship)
   addTop(battleship)
   addBottom(battleship)
 

@@ -12,15 +12,15 @@ export const sanshasLayout = (): RootEntry => {
   addTop(frigate)
   addBottom(frigate)
 
-  const cruiser = Node(9, 0, frigate, g.cruiser)
+  const cruiser = Node(10, 0, frigate, g.cruiser)
   addTop(cruiser)
   addBottom(cruiser)
 
-  const battleship = Node(9, 0, cruiser, g.battleship)
+  const battleship = Node(10, 0, cruiser, g.battleship)
   addTop(battleship)
   addBottom(battleship)
 
-  const carrier = Node(12, 0, battleship, g.carrier)
+  const carrier = Node(14, 0, battleship, g.carrier)
   addTop(carrier)
   addBottom(carrier)
 

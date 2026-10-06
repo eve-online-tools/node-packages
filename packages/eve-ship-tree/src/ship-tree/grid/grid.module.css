@@ -29,6 +29,7 @@
   inset: 0;
   z-index: 0;
   background-image: url('res:/ui/texture/classes/shiptree/grid.png');
+  background-size: 96px 96px;
   opacity: 0.2;
   pointer-events: none;
 }

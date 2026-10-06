@@ -3,8 +3,8 @@ import { identifiers as g } from '../data/identifiers/shipTreeGroups'
 import { Root, Node, type RootEntry, type NodeEntry, FactionNode } from './layoutsystem'
 
 export const deathlessLayout = (): RootEntry => {
-  const addTop = (n: NodeEntry) => FactionNode(0, -6, n, f.caldariState)
-  const addBottom = (n: NodeEntry) => FactionNode(0, 6, n, f.minmatarRepublic)
+  const addTop = (n: NodeEntry) => FactionNode(0, -7, n, f.caldariState)
+  const addBottom = (n: NodeEntry) => FactionNode(0, 7, n, f.minmatarRepublic)
 
   const root = Root()
 
@@ -12,7 +12,7 @@ export const deathlessLayout = (): RootEntry => {
   addTop(destroyer)
   addBottom(destroyer)
 
-  const battlecruiser = Node(9, 0, destroyer, g.battlecruiser)
+  const battlecruiser = Node(10, 0, destroyer, g.battlecruiser)
   addTop(battlecruiser)
   addBottom(battlecruiser)
 

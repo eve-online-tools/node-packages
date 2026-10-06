@@ -6,11 +6,11 @@ export const concordLayout = (): RootEntry => {
 
   const shuttle = Node(6, 0, root, g.shuttle)
 
-  const covertOps = Node(15, 0, shuttle, g.covertOps)
+  const covertOps = Node(14, 0, shuttle, g.covertOps)
 
-  const reconShip = Node(15, 0, covertOps, g.reconShip)
+  const reconShip = Node(17, 0, covertOps, g.reconShip)
 
-  Node(15, 0, reconShip, g.blackOps)
+  Node(17, 0, reconShip, g.blackOps)
 
   const n = Node(0, -6, reconShip)
 

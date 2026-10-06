@@ -7,7 +7,7 @@ export const empireLayout = (): RootEntry => {
 
   const corvette = Node(6, 0, root, g.corvette)
 
-  n = Node(0, 9, corvette)
+  n = Node(0, 11, corvette)
   n = Node(1, 1, n)
   const shuttle = Node(6, 0, n, g.shuttle)
 
@@ -15,7 +15,7 @@ export const empireLayout = (): RootEntry => {
   n = Node(1, -1, n)
   const frigate = Node(0, -7, n, g.frigate)
   const navyFrigate = Node(0, -8, frigate, g.navyFrigate)
-  n = Node(0, -6, navyFrigate)
+  n = Node(0, -4, navyFrigate)
   Node(4, -4, n, g.interceptor)
   n = Node(0, -7, n)
   Node(4, -4, n, g.assaultFrigate)
@@ -28,7 +28,7 @@ export const empireLayout = (): RootEntry => {
 
   const destroyer = Node(18, 0, frigate, g.destroyer)
   const navyDestroyer = Node(0, -8, destroyer, g.navyDestroyer)
-  n = Node(0, -6, navyDestroyer)
+  n = Node(0, -4, navyDestroyer)
   Node(4, -4, n, g.interdictor)
   n = Node(0, -7, n)
   Node(4, -4, n, g.commandDestroyer)
@@ -37,7 +37,7 @@ export const empireLayout = (): RootEntry => {
 
   const cruiser = Node(18, 0, destroyer, g.cruiser)
   const navyCruiser = Node(0, -8, cruiser, g.navyCruiser)
-  n = Node(0, -6, navyCruiser)
+  n = Node(0, -4, navyCruiser)
   Node(4, -4, n, g.reconShip)
   n = Node(0, -7, n)
   Node(4, -4, n, g.heavyAssaultCruiser)
@@ -45,17 +45,17 @@ export const empireLayout = (): RootEntry => {
   Node(4, -4, n, g.heavyInterdictionCruiser)
   n = Node(0, -7, n)
   Node(4, -4, n, g.logisticsCruisers)
-  n = Node(0, -7, n)
+  n = Node(0, -9, n)
   Node(6, -6, n, g.strategicCruiser)
 
   const battlecruiser = Node(22, 0, cruiser, g.battlecruiser)
   const navyBattlecruiser = Node(0, -8, battlecruiser, g.navyBattlecruiser)
-  n = Node(0, -6, navyBattlecruiser)
+  n = Node(0, -4, navyBattlecruiser)
   Node(4, -4, n, g.commandShips)
 
   const battleship = Node(22, 0, battlecruiser, g.battleship)
   const navyBattleship = Node(0, -8, battleship, g.navyBattleship)
-  n = Node(0, -6, navyBattleship)
+  n = Node(0, -4, navyBattleship)
   Node(4, -4, n, g.blackOps)
   n = Node(0, -7, n)
   Node(4, -4, n, g.marauder)
@@ -80,7 +80,7 @@ export const empireLayout = (): RootEntry => {
   Node(3, -3, n, g.transportShip)
 
   const freighter = Node(43, 0, hauler, g.freighter)
-  n = Node(0, -4, freighter)
+  n = Node(0, -2, freighter)
   Node(7, -7, n, g.jumpFreighters)
 
   return root

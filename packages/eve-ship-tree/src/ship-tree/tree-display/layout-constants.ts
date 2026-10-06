@@ -52,4 +52,4 @@ export const computeSkillBarsExtentFromGroupCenter = (skillBarCount: number): nu
 
 // Connection line segments between groups (line-path)
 export const lineSpriteWidth = 10
-export const lineSpriteHeight = 10
+export const lineSpriteHeight = 5
