@@ -72,7 +72,7 @@ const [faction, setFaction] = useState<FactionIdentifier>(500002);
 
 ### Group tooltips
 
-Hovering or focusing a ship group node shows a tooltip with the group's icon, name, element glyphs, description and the faction's bonus skills with the character's trained levels. Pass the skill in training (for example the first entry of the ESI skill queue) to highlight its target level:
+Hovering or focusing a ship group node shows a tooltip with the group's icon, name, element glyphs and description. Locked groups list the skills required to unlock them; unlocked groups list the faction's bonus skills. Each skill shows the character's trained level. Pass the skill in training (for example the first entry of the ESI skill queue) to highlight its target level:
 
 ```tsx
 <ShipTree.Root faction={500002} skills={skills} training={{ skillId: 3333, level: 4 }} baseUrl="/ship-tree-data">
