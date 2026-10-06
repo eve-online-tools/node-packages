@@ -2,66 +2,87 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 320px;
+  width: 420px;
   max-width: 100%;
 }
 
 .header {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  gap: 12px;
+  align-items: flex-start;
 }
 
 .icon {
+  position: relative;
   flex: none;
-  width: 56px;
-  height: 56px;
-  background-color: #000;
+  width: 64px;
+  height: 64px;
+}
+
+.iconFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
 }
 
 .iconGlyph {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   background-color: #c0e5fa;
-  mask: var(--ship-tree-tooltip-icon) center / 48px no-repeat;
+  mask: var(--ship-tree-tooltip-mask) center / 64px no-repeat;
+}
+
+.heading {
+  min-width: 0;
 }
 
 .name {
   margin: 0;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.3;
   color: #fff;
 }
 
-.elements {
-  display: flex;
-  flex-wrap: wrap;
+.traits {
+  display: grid;
+  grid-template-columns: repeat(7, 30px);
   gap: 4px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
-.element {
-  width: 18px;
-  height: 18px;
-  opacity: 0.85;
+.trait {
+  width: 30px;
+  height: 30px;
+  opacity: 0.5;
+  transition: opacity 150ms;
+  animation: trait-in 200ms ease-out backwards;
+  animation-delay: calc(var(--ship-tree-tooltip-trait-index, 0) * 50ms);
+}
+
+.trait:hover {
+  opacity: 0.75;
 }
 
 .description {
   margin: 0;
-  color: #b9c4cc;
 }
 
 .skillsHeading {
   margin: 0 0 4px;
-  font-size: 13px;
-  font-weight: 400;
-  color: #58a7d1;
+  color: #c3e9ff;
+}
+
+.skillsHeading[data-locked='true'] {
+  font-weight: 700;
+  color: #4c8cb0;
 }
 
 .skills {
   display: flex;
   flex-direction: column;
-  gap: 4px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -69,9 +90,28 @@
 
 .skill {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
-  justify-content: space-between;
+  padding: 3px 4px;
+  color: rgb(255 255 255 / 75%);
+  transition: background-color 150ms;
+}
+
+.skill[data-met='true'] {
+  color: rgb(255 255 255 / 50%);
+}
+
+.skill:hover {
+  background-color: rgb(48 86 101 / 20%);
+}
+
+.skillName {
+  flex: 1;
+  min-width: 0;
+}
+
+.skillLevel {
+  opacity: 0.75;
 }
 
 .levels {
@@ -81,8 +121,8 @@
 }
 
 .level {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   background-color: rgb(255 255 255 / 15%);
 }
 
@@ -94,20 +134,57 @@
   background-color: #3b9fe0;
 }
 
+.omegaLocked,
+.partiallyTrained {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  background-color: rgb(252 194 7 / 80%);
+  mask: var(--ship-tree-tooltip-mask) center / contain no-repeat;
+}
+
+.partiallyTrained {
+  background-color: rgb(252 194 7 / 60%);
+}
+
+.status {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background-color: #f39058;
+  mask: var(--ship-tree-tooltip-mask) center / contain no-repeat;
+}
+
+.skill[data-met='true'] .status {
+  background-color: rgb(255 255 255 / 50%);
+}
+
 .hint {
   display: flex;
   gap: 8px;
   align-items: center;
   padding: 8px;
-  border: 1px solid rgb(166 128 255 / 40%);
-  background-color: rgb(97 63 170 / 35%);
-  color: #ddd2ff;
+  background-color: rgb(149 107 236 / 20%);
+  color: #956bec;
 }
 
-.hintGlyph {
+.hintIcon {
   flex: none;
   width: 16px;
   height: 16px;
   background-color: currentcolor;
-  mask: var(--ship-tree-tooltip-hint-icon) center / contain no-repeat;
+  mask: var(--ship-tree-tooltip-mask) center / contain no-repeat;
+}
+
+@keyframes trait-in {
+  from {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trait {
+    animation: none;
+  }
 }

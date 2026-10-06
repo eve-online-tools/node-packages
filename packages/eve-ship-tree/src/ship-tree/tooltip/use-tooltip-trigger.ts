@@ -3,28 +3,48 @@ import { useCallback, useEffect, useRef, useState, type FocusEvent, type Pointer
 export type ActiveTooltip<T> = { target: T; anchor: Element }
 
 export const tooltipOpenDelayMs = 300
+export const tooltipFadeMs = 150
+// Time to move the pointer from the node into the tooltip before it closes.
+export const tooltipLeaveGraceMs = 100
 
-/** Hover and focus state for tooltips on many nodes. Hover opens after a delay so panning does not flash them. */
+/**
+ * Hover and focus state for tooltips on many nodes. Hover opens after a delay so panning does not flash them.
+ * `active` stays set while the tooltip fades out; `open` is false during the fade.
+ */
 export const useTooltipTrigger = <T>(enabled: boolean, openDelayMs = tooltipOpenDelayMs) => {
   const [active, setActive] = useState<ActiveTooltip<T> | null>(null)
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const [open, setOpen] = useState(false)
+  const openTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   // Focus that follows a pointer press is not keyboard focus and should not open the tooltip.
   const pointerPressed = useRef(false)
 
-  const clearTimer = () => {
-    clearTimeout(timer.current)
-    timer.current = undefined
+  const clearTimers = () => {
+    clearTimeout(openTimer.current)
+    clearTimeout(closeTimer.current)
   }
 
-  const close = useCallback(() => {
-    clearTimer()
-    setActive(null)
+  const show = useCallback((next: ActiveTooltip<T>) => {
+    clearTimers()
+    setActive(next)
+    setOpen(true)
   }, [])
 
-  useEffect(() => clearTimer, [])
+  const close = useCallback(() => {
+    clearTimers()
+    setOpen(false)
+    closeTimer.current = setTimeout(() => setActive(null), tooltipFadeMs)
+  }, [])
+
+  const closeAfterGrace = () => {
+    clearTimers()
+    closeTimer.current = setTimeout(close, tooltipLeaveGraceMs)
+  }
+
+  useEffect(() => clearTimers, [])
 
   useEffect(() => {
-    if (active === null || !enabled) {
+    if (!open || !enabled) {
       return
     }
 
@@ -36,19 +56,19 @@ export const useTooltipTrigger = <T>(enabled: boolean, openDelayMs = tooltipOpen
 
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [active, enabled, close])
+  }, [open, enabled, close])
 
   const getTriggerProps = (target: T) =>
     enabled
       ? {
           onPointerEnter: (event: PointerEvent<Element>) => {
             const anchor = event.currentTarget
-            clearTimer()
-            timer.current = setTimeout(() => setActive({ target, anchor }), openDelayMs)
+            clearTimers()
+            openTimer.current = setTimeout(() => show({ target, anchor }), openDelayMs)
           },
           onPointerLeave: () => {
             pointerPressed.current = false
-            close()
+            closeAfterGrace()
           },
           onPointerDown: () => {
             pointerPressed.current = true
@@ -58,16 +78,28 @@ export const useTooltipTrigger = <T>(enabled: boolean, openDelayMs = tooltipOpen
             pointerPressed.current = false
           },
           onFocus: (event: FocusEvent<Element>) => {
-            if (pointerPressed.current) {
-              return
+            if (!pointerPressed.current) {
+              show({ target, anchor: event.currentTarget })
             }
-
-            clearTimer()
-            setActive({ target, anchor: event.currentTarget })
           },
           onBlur: close,
         }
       : {}
 
-  return { active: enabled ? active : null, close, getTriggerProps }
+  const tooltipProps = {
+    onPointerEnter: () => {
+      if (open) {
+        clearTimers()
+      }
+    },
+    onPointerLeave: close,
+  }
+
+  return {
+    active: enabled ? active : null,
+    open: enabled && open,
+    close,
+    getTriggerProps,
+    tooltipProps,
+  }
 }

@@ -1,15 +1,23 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ComponentPropsWithoutRef,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 import { createPortal } from 'react-dom'
 
+import background from 'res:/ui/texture/classes/framewithpointer/background_04.png'
+import pointer from 'res:/ui/texture/classes/framewithpointer/pointer_down_02.png'
 import { cx } from '../styles-api'
 import { computeTooltipPosition, type TooltipPosition } from './compute-tooltip-position'
 import classes from './floating-tooltip.module.css'
 
-export type FloatingTooltipProps = {
+export type FloatingTooltipProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
   anchor: Element
-  id?: string
-  className?: string
-  style?: CSSProperties
+  /** `false` fades the tooltip out; unmount it after `tooltipFadeMs`. */
+  open?: boolean
   children: ReactNode
 }
 
@@ -17,7 +25,14 @@ const samePosition = (a: TooltipPosition | null, b: TooltipPosition): boolean =>
   a !== null && a.left === b.left && a.top === b.top && a.side === b.side && a.arrowTop === b.arrowTop
 
 /** Fixed-position tooltip next to `anchor`. Follows the anchor every frame so it tracks pan and zoom. */
-export const FloatingTooltip = ({ anchor, id, className, style, children }: FloatingTooltipProps) => {
+export const FloatingTooltip = ({
+  anchor,
+  open = true,
+  className,
+  style,
+  children,
+  ...others
+}: FloatingTooltipProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState<TooltipPosition | null>(null)
 
@@ -28,9 +43,8 @@ export const FloatingTooltip = ({ anchor, id, className, style, children }: Floa
       const element = ref.current
 
       if (element) {
-        const anchorRect = anchor.getBoundingClientRect()
         const next = computeTooltipPosition({
-          anchor: anchorRect,
+          anchor: anchor.getBoundingClientRect(),
           tooltip: { width: element.offsetWidth, height: element.offsetHeight },
           viewport: { width: window.innerWidth, height: window.innerHeight },
         })
@@ -48,11 +62,12 @@ export const FloatingTooltip = ({ anchor, id, className, style, children }: Floa
 
   return createPortal(
     <div
+      {...others}
       ref={ref}
-      id={id}
       role="tooltip"
       className={cx(classes.root, className)}
       data-side={position?.side ?? 'right'}
+      data-state={open ? 'open' : 'closed'}
       style={
         {
           ...style,
@@ -60,6 +75,8 @@ export const FloatingTooltip = ({ anchor, id, className, style, children }: Floa
           top: position?.top ?? 0,
           visibility: position === null ? 'hidden' : undefined,
           '--ship-tree-tooltip-arrow-top': `${position?.arrowTop ?? 0}px`,
+          '--ship-tree-tooltip-background': `url("${background}")`,
+          '--ship-tree-tooltip-pointer': `url("${pointer}")`,
         } as CSSProperties
       }
     >

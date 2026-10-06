@@ -60,21 +60,24 @@ describe('resolveSkillLevelStates', () => {
 })
 
 describe('GroupTooltip', () => {
-  it('shows name, elements, description and displayed bonus skills', () => {
+  it('lists bonus skills of an unlocked group with the training hint', () => {
     renderWithShipTreeProviders(
       <GroupTooltip
         groupId={groups.frigate}
         faction={factions.caldariState}
       />,
-      { data: tooltipData(), skills: { 3330: 4 } },
+      { data: tooltipData(), skills: { 3330: 4, 3327: 1 } },
     )
 
     expect(screen.getByText('Frigate')).toBeInTheDocument()
     expect(screen.getByRole('img', { name: 'Small' })).toBeInTheDocument()
     expect(screen.getByText('Small, fast but fragile vessels.')).toBeInTheDocument()
+    expect(screen.getByText('Ship group bonus skills:')).toBeInTheDocument()
     expect(screen.getByText('Caldari Frigate')).toBeInTheDocument()
     expect(screen.queryByText('Spaceship Command')).not.toBeInTheDocument()
     expect(screen.getByRole('img', { name: 'Level 4 of 5' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Requirement met' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Requires Omega' })).toBeInTheDocument()
     expect(screen.getByText(/Train this skill to gain/)).toBeInTheDocument()
   })
 
@@ -84,11 +87,26 @@ describe('GroupTooltip', () => {
         groupId={groups.frigate}
         faction={factions.guristasPirates}
       />,
-      { data: tooltipData(), skills: { 3328: 4 }, training: { skillId: 3328, level: 5 } },
+      { data: tooltipData(), skills: { 3328: 4, 3330: 3 }, training: { skillId: 3328, level: 5 } },
     )
 
     expect(screen.getByRole('img', { name: 'Level 4 of 5, training level 5' })).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: 'Level 0 of 5' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Level 3 of 5' })).toBeInTheDocument()
     expect(screen.getByText(/Train these skills to gain/)).toBeInTheDocument()
+  })
+
+  it('lists all required skills of a locked group without the hint', () => {
+    renderWithShipTreeProviders(
+      <GroupTooltip
+        groupId={groups.frigate}
+        faction={factions.caldariState}
+      />,
+      { data: tooltipData(), skills: { 3330: 1 } },
+    )
+
+    expect(screen.getByText('Skills required to unlock')).toBeInTheDocument()
+    expect(screen.getByText('Spaceship Command')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Requirement not met' })).toBeInTheDocument()
+    expect(screen.queryByText(/to gain unique bonuses/)).not.toBeInTheDocument()
   })
 })

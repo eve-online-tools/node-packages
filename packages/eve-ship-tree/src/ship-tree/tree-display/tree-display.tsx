@@ -134,7 +134,7 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
 
               const x = gridToPixel(node.x)
               const y = gridToPixel(node.y)
-              const tooltipOpen = groupTooltips.active?.target === groupId
+              const tooltipOpen = groupTooltips.open && groupTooltips.active?.target === groupId
 
               return (
                 <g key={`group-${groupId}-${index}`}>
@@ -190,8 +190,10 @@ export const TreeDisplay = forwardRef<HTMLDivElement, TreeDisplayProps>(
         </svg>
         {groupTooltips.active ? (
           <FloatingTooltip
+            {...groupTooltips.tooltipProps}
             id={tooltipId}
             anchor={groupTooltips.active.anchor}
+            open={groupTooltips.open}
           >
             {typeof groupTooltip === 'function' ? (
               groupTooltip({ groupId: groupTooltips.active.target, faction })

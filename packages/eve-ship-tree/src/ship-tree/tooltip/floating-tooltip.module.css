@@ -1,40 +1,67 @@
 .root {
-  --ship-tree-tooltip-background: rgb(10 14 18 / 96%);
-  --ship-tree-tooltip-border: rgb(192 229 250 / 25%);
-
   position: fixed;
   z-index: 1000;
   box-sizing: border-box;
-  max-width: min(360px, calc(100vw - 16px));
+  max-width: calc(100vw - 16px);
   padding: 12px;
-  border: 1px solid var(--ship-tree-tooltip-border);
-  background-color: var(--ship-tree-tooltip-background);
-  color: #e6edf2;
+  color: rgb(255 255 255 / 75%);
   font-family: system-ui, sans-serif;
   font-size: 13px;
   line-height: 1.4;
-  pointer-events: none;
+  animation: fade-in 150ms ease-out backwards;
 }
 
+.root[data-state='closed'] {
+  pointer-events: none;
+  animation: fade-out 150ms ease-in forwards;
+}
+
+/* 9-slice panel art; its soft edge sits 15px outside the content box. */
 .root::before {
   content: '';
   position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: 0 solid transparent;
+  border-image: var(--ship-tree-tooltip-background) 19 fill / 19px / 15px stretch;
+  opacity: 0.95;
+}
+
+.root::after {
+  content: '';
+  position: absolute;
   top: var(--ship-tree-tooltip-arrow-top, 50%);
-  width: 10px;
-  height: 10px;
-  border: 1px solid var(--ship-tree-tooltip-border);
-  background-color: var(--ship-tree-tooltip-background);
-  transform: translateY(-50%) rotate(45deg);
+  width: 24px;
+  height: 24px;
+  background: var(--ship-tree-tooltip-pointer) center / contain no-repeat;
+  opacity: 0.95;
 }
 
-.root[data-side='right']::before {
-  left: -6px;
-  border-top-color: transparent;
-  border-right-color: transparent;
+.root[data-side='right']::after {
+  left: -21px;
+  transform: translateY(-50%) rotate(90deg);
 }
 
-.root[data-side='left']::before {
-  right: -6px;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
+.root[data-side='left']::after {
+  right: -21px;
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .root[data-state='closed'] {
+    animation-duration: 1ms;
+  }
 }
