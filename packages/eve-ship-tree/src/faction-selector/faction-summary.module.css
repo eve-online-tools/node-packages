@@ -1,5 +1,6 @@
 .root {
   --faction-summary-width: 266px;
+  --faction-summary-element-opacity: 0.5;
 
   box-sizing: border-box;
   width: var(--faction-summary-width);
@@ -50,6 +51,7 @@
   display: block;
   width: 30px;
   height: 30px;
+  opacity: var(--faction-summary-element-opacity);
 }
 
 .description {
