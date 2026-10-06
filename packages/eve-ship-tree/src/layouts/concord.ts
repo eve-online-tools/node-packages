@@ -12,7 +12,7 @@ export const concordLayout = (): RootEntry => {
 
   Node(15, 0, reconShip, g.blackOps)
 
-  const n = Node(0, -6, reconShip)
+  const n = Node(0, -4, reconShip)
 
   Node(4, -4, n, g.flagCruiser)
 

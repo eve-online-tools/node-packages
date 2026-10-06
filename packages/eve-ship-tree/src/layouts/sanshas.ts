@@ -3,8 +3,8 @@ import { identifiers as g } from '../data/identifiers/shipTreeGroups'
 import { Root, Node, type RootEntry, type NodeEntry, FactionNode } from './layoutsystem'
 
 export const sanshasLayout = (): RootEntry => {
-  const addTop = (n: NodeEntry) => FactionNode(0, -6, n, f.amarrEmpire)
-  const addBottom = (n: NodeEntry) => FactionNode(0, 6, n, f.caldariState)
+  const addTop = (n: NodeEntry) => FactionNode(0, -7, n, f.amarrEmpire)
+  const addBottom = (n: NodeEntry) => FactionNode(0, 7, n, f.caldariState)
 
   const root = Root()
 
@@ -20,7 +20,7 @@ export const sanshasLayout = (): RootEntry => {
   addTop(battleship)
   addBottom(battleship)
 
-  const carrier = Node(9, 0, battleship, g.carrier)
+  const carrier = Node(12, 0, battleship, g.carrier)
   addTop(carrier)
   addBottom(carrier)
 
