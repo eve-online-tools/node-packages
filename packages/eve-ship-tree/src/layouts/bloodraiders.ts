@@ -31,13 +31,13 @@ export const bloodraidersLayout = (): RootEntry => {
   addTop(dreadnought)
   addBottom(dreadnought)
 
-  n = Node(6, -10, n)
+  n = Node(6, -12, n)
 
   const carrier = Node(6, 0, n, g.carrier)
   addTop(carrier)
   addBottom(carrier)
 
-  n = Node(6, -10, n)
+  n = Node(6, -12, n)
 
   const titan = Node(6, 0, n, g.titan)
   addTop(titan)

@@ -16,7 +16,7 @@ export const edencomLayout = (): RootEntry => {
   const hauler = Node(9, 0, n, g.hauler)
   Node(30, 0, hauler, g.freighter)
 
-  n = Node(0, -3, hauler)
+  n = Node(0, -5, hauler)
   Node(4, -4, n, g.transportShip)
 
   return root
