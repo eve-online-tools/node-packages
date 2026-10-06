@@ -66,8 +66,8 @@ const [faction, setFaction] = useState<FactionIdentifier>(500002);
 <ShipTree.Root faction={faction} skills={skills} baseUrl="/ship-tree-data">...</ShipTree.Root>
 ```
 
-- `FactionSelector` is a radiogroup of faction logos, five per row; arrow keys, Home and End move the selection. `factions` defaults to `shipTreeFactionOrder` (client order). `variant="compact"` renders a native select for narrow layouts.
-- `FactionSummary` shows logo, name, element glyphs and description. It reads `shipTreeFactions` and `shipTreeElements` from the nearest `DataProvider`, or from its `data` prop. Without them it shows logo and name only.
+- `FactionSelector` is a radiogroup of faction logos, five per row; arrow keys, Home and End move the selection. `factions` defaults to `shipTreeFactionOrder` (client order). `variant="compact"` renders a native select for narrow layouts. `onHoverChange` reports the hovered faction (`null` on leave); pass `hovered ?? value` to `FactionSummary` to preview it.
+- `FactionSummary` shows logo, name, element glyphs and description in the client's 266px info bubble. It reads `shipTreeFactions` and `shipTreeElements` from the nearest `DataProvider`, or from its `data` prop. Without them it shows logo and name only.
 - `shipTreeFactionIdentifiers`, `shipTreeFactionNames` and `shipTreeFactionOrder` export the faction metadata.
 
 ### Sprites

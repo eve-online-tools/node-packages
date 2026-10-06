@@ -17,6 +17,8 @@ export interface FactionSelectorProps extends StylesApiProps<FactionSelectorStyl
   variant?: 'grid' | 'compact'
   /** Accessible name of the group. */
   label?: string
+  /** Hovered faction, `null` when the pointer leaves the grid. For previewing in `FactionSummary`. */
+  onHoverChange?: (faction: Identifier | null) => void
 }
 
 const keySteps: Record<string, number> = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }
@@ -27,6 +29,7 @@ export const FactionSelector = ({
   factions = shipTreeFactionOrder,
   variant = 'grid',
   label = 'Faction',
+  onHoverChange,
   className,
   style,
   classNames,
@@ -92,6 +95,8 @@ export const FactionSelector = ({
       aria-label={label}
       data-variant="grid"
       onKeyDown={onKeyDown}
+      // Leave on the grid, not per option, so moving across gaps does not flash back to the selection.
+      onPointerLeave={onHoverChange && (() => onHoverChange(null))}
     >
       {factions.map((faction, index) => {
         const selected = faction === value
@@ -112,6 +117,7 @@ export const FactionSelector = ({
             data-faction={faction}
             data-selected={selected || undefined}
             onClick={() => onChange(faction)}
+            onPointerEnter={onHoverChange && (() => onHoverChange(faction))}
           >
             <img
               {...getStyles('logo')}

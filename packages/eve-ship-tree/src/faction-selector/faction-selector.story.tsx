@@ -46,16 +46,18 @@ type Story = StoryObj<typeof meta>
 
 const WithSummary = ({ variant }: { variant?: 'grid' | 'compact' }) => {
   const [faction, setFaction] = useState<Identifier>(identifiers.minmatarRepublic)
+  const [hovered, setHovered] = useState<Identifier | null>(null)
 
   return (
-    <div style={{ width: 'fit-content', maxWidth: 300, padding: 16, backgroundColor: '#070d13' }}>
+    <div style={{ width: 'fit-content', padding: 16, backgroundColor: '#070d13' }}>
       <FactionSelector
         value={faction}
         onChange={setFaction}
+        onHoverChange={setHovered}
         variant={variant}
       />
       <FactionSummary
-        faction={faction}
+        faction={hovered ?? faction}
         data={data}
       />
     </div>

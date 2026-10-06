@@ -1,5 +1,5 @@
 .root {
-  --faction-selector-size: 56px;
+  --faction-selector-size: 50px;
   --faction-selector-gap: 4px;
   --faction-selector-accent: rgb(255 255 255 / 80%);
   --faction-selector-selected-color: #aacbe7;

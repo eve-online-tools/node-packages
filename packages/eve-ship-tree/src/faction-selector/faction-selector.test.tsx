@@ -70,6 +70,23 @@ describe('FactionSelector', () => {
     expect(screen.getByRole('radio', { name: 'Amarr Empire' })).toHaveAttribute('aria-checked', 'true')
   })
 
+  it('reports hovered faction and null on leaving the grid', async () => {
+    const onHoverChange = vi.fn()
+    render(
+      <FactionSelector
+        value={f.caldariState}
+        onChange={() => {}}
+        onHoverChange={onHoverChange}
+      />,
+    )
+
+    await userEvent.hover(screen.getByRole('radio', { name: 'Serpentis' }))
+    expect(onHoverChange).toHaveBeenLastCalledWith(f.serpentis)
+
+    await userEvent.unhover(screen.getByRole('radiogroup'))
+    expect(onHoverChange).toHaveBeenLastCalledWith(null)
+  })
+
   it('limits options to the factions prop', () => {
     render(
       <FactionSelector
