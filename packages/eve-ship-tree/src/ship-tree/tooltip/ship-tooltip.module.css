@@ -44,8 +44,8 @@
 
 .name {
   margin: 0;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 400;
   line-height: 1.3;
   color: #fff;
 }
@@ -53,13 +53,13 @@
 .glyphs {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .glyph {
-  width: 24px;
-  height: 24px;
-  opacity: 0.6;
+  width: 28px;
+  height: 28px;
+  opacity: 0.5;
 }
 
 .price {
@@ -76,7 +76,8 @@
   display: grid;
   grid-template-columns: max-content 1fr;
   column-gap: 8px;
-  row-gap: 2px;
+  row-gap: 4px;
+  line-height: 1.5;
 }
 
 .section,
@@ -85,7 +86,7 @@
   display: grid;
   grid-template-columns: subgrid;
   grid-column: 1 / -1;
-  row-gap: 2px;
+  row-gap: 4px;
 }
 
 .list {
@@ -96,8 +97,8 @@
 
 .sectionHeading {
   grid-column: 1 / -1;
-  margin: 6px 0 2px;
-  font-weight: 500;
+  margin: 10px 0 0;
+  font-weight: 400;
   color: #6f9fc6;
 }
 
@@ -107,8 +108,9 @@
 
 .value {
   justify-self: end;
+  padding-left: 20px;
   font-weight: 700;
-  color: #d8eefc;
+  color: #b7dcf2;
 }
 
 .value[data-bullet='true'] {

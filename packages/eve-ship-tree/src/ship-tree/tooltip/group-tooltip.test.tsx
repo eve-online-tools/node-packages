@@ -104,9 +104,11 @@ describe('GroupTooltip', () => {
       { data: tooltipData(), skills: { 3330: 1 } },
     )
 
-    expect(screen.getByText('Skills required to unlock')).toBeInTheDocument()
-    expect(screen.getByText('Spaceship Command')).toBeInTheDocument()
+    expect(screen.getByText('Skills required to unlock group:')).toBeInTheDocument()
+    expect(screen.getByText('Spaceship Command I')).toBeInTheDocument()
     expect(screen.getByRole('img', { name: 'Requirement not met' })).toBeInTheDocument()
+    // Locked groups show one box per required level.
+    expect(screen.getByRole('img', { name: 'Level 0 of 5' }).childElementCount).toBe(1)
     expect(screen.queryByText(/to gain unique bonuses/)).not.toBeInTheDocument()
   })
 })
