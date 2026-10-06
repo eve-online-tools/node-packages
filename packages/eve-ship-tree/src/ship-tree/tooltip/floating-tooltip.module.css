@@ -38,13 +38,23 @@
 
 /* Offsets line the sprite's base up with the panel edge, or its tip just past the corner. */
 .root[data-pointer='left']::after {
-  top: calc(var(--ship-tree-tooltip-arrow-top) - 12px);
+  top: calc(var(--ship-tree-tooltip-arrow-offset) - 12px);
   left: -17px;
 }
 
 .root[data-pointer='right']::after {
-  top: calc(var(--ship-tree-tooltip-arrow-top) - 12px);
+  top: calc(var(--ship-tree-tooltip-arrow-offset) - 12px);
   right: -18px;
+}
+
+.root[data-pointer='up']::after {
+  top: -17px;
+  left: calc(var(--ship-tree-tooltip-arrow-offset) - 12px);
+}
+
+.root[data-pointer='down']::after {
+  bottom: -18px;
+  left: calc(var(--ship-tree-tooltip-arrow-offset) - 12px);
 }
 
 .root[data-pointer='topleft']::after {

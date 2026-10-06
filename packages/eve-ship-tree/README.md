@@ -82,6 +82,18 @@ Hovering or focusing a ship group node shows a tooltip with the group's icon, na
 
 `<TreeDisplay groupTooltip={false} />` turns tooltips off; a function, `({ groupId, faction }) => ReactNode`, replaces their content. `GroupTooltip` renders the default content. Names come from the optional `shipTreeElements` and `skills` tables; when they are missing the tooltip falls back to ids.
 
+### Ship tooltips
+
+Hovering or focusing a ship node shows a tooltip above it, or below when there is no room: the ship render with its tech badge, name, element glyphs (size first) and the ship's bonuses per skill, role bonuses and misc bonuses. Prices are not in the SDE, so pass them in ISK, as a record or a lookup, to show an estimated price line. Ships without a price show no price line. `locale` sets the number format; it defaults to the reader's locale:
+
+```tsx
+<ShipTree.Root faction={500002} skills={skills} prices={(typeId) => marketPrices.get(typeId)} locale="en-GB" baseUrl="/ship-tree-data">
+  <TreeDisplay />
+</ShipTree.Root>
+```
+
+`<TreeDisplay shipTooltip={false} />` turns them off; a function, `({ typeId, faction }) => ReactNode`, replaces their content. `ShipTooltip` renders the default content; its `renderUrl` prop replaces the render URL, which defaults to the EVE image server (`defaultShipRenderUrl`). Bonuses come from the optional `typeBonus` table, glyphs from `typeElements`; sections whose data is missing are left out.
+
 ### Sprites
 
 `ShipTree` fetches and decodes all status sprites (frames, lines, mastery and tech badges) on mount, so switching characters does not make them pop in. Call `preloadShipTreeSprites()` to start earlier, for example on page load. `shipTreeSprites` lists their URLs.
@@ -167,7 +179,7 @@ const data = await loadShipTreeData({
 
 | Table | Key | Record | Derivation |
 | --- | --- | --- | --- |
-| `types` | type ID | `{ shipTreeGroupID?, factionID?, metaGroupID?, techLevel? }` | SDE `types` whose group has `categoryID` 6 (Ship). `techLevel` falls back to dogma attribute 422, then 1. |
+| `types` | type ID | `{ name?, shipTreeGroupID?, factionID?, metaGroupID?, techLevel? }` | SDE `types` whose group has `categoryID` 6 (Ship). `techLevel` falls back to dogma attribute 422, then 1. |
 | `requiredSkills` | type ID | `{ requiredSkills: Record<skillTypeID, level> }` | Dogma attribute pairs (skill, level): 182/277, 183/278, 184/279, 1285/1286, 1289/1287. Skip pairs whose skill is missing or 0; a missing level is 0. |
 | `masteries` | type ID | `[{ _key: masteryLevel, _value: certificateID[] }]` | SDE `masteries` for the types above. `_key` is 0 to 4. |
 | `certificates` | certificate ID | `{ skillTypes: [{ _key: skillTypeID, basic, standard, improved, advanced, elite }] }` | SDE `certificates` referenced by `masteries`. |

@@ -26,6 +26,8 @@ export type SkillLevelState = 'untrained' | 'trained' | 'training'
 
 const maxLevel = 5
 
+const romanLevels = ['I', 'II', 'III', 'IV', 'V']
+
 export const localize = (value: LocalizedString | undefined, language = 'en'): string | undefined =>
   value?.[language] ?? (value === undefined ? undefined : Object.values(value)[0])
 
@@ -79,7 +81,7 @@ const SkillEntry = ({ skillId, name, requiredLevel, showLevel }: SkillEntryProps
     >
       <span className={classes.skillName}>
         {name}
-        {showLevel ? <span className={classes.skillLevel}> Level {requiredLevel}</span> : null}
+        {showLevel ? ` ${romanLevels[requiredLevel - 1] ?? requiredLevel}` : null}
       </span>
       {states.includes('training') ? (
         <span
@@ -101,7 +103,7 @@ const SkillEntry = ({ skillId, name, requiredLevel, showLevel }: SkillEntryProps
         role="img"
         aria-label={describeLevels(level, states)}
       >
-        {states.map((state, index) => (
+        {states.slice(0, target).map((state, index) => (
           <span
             key={index}
             className={classes.level}
@@ -177,7 +179,7 @@ export const GroupTooltip = ({ groupId, faction }: GroupTooltipProps) => {
             className={classes.skillsHeading}
             data-locked={locked}
           >
-            {locked ? 'Skills required to unlock' : 'Ship group bonus skills:'}
+            {locked ? 'Skills required to unlock group:' : 'Ship group bonus skills:'}
           </p>
           <ul className={classes.skills}>
             {listedSkills.map((skill) => (

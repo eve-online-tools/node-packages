@@ -1,6 +1,7 @@
 import type { SkillLevel } from '../skills-provider/context'
 
 export type ShipTypeRecord = {
+  name?: LocalizedString
   shipTreeGroupID?: number
   factionID?: number
   metaGroupID?: number
@@ -59,4 +60,23 @@ export type ShipTreeElementRecord = {
 
 export type SkillRecord = {
   name?: LocalizedString
+}
+
+export type TypeBonusEntry = {
+  bonus?: number
+  /** Text with `<a href=showinfo:ID>`, `<b>`, `<i>` and `<u>` markup. */
+  bonusText?: LocalizedString
+  importance?: number
+  unitID?: number
+}
+
+export type TypeBonusRecord = {
+  /** Bonuses per level of the skill in `_key`. */
+  types?: Array<{ _key: number; _value: TypeBonusEntry[] }>
+  roleBonuses?: TypeBonusEntry[]
+  miscBonuses?: TypeBonusEntry[]
+}
+
+export type TypeElementsRecord = {
+  elements?: Array<{ _key: number; _value: number }>
 }

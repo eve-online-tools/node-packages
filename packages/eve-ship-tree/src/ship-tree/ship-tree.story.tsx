@@ -74,6 +74,8 @@ const meta = {
           isOmega={context.args.isOmega}
           strictMode={context.args.strictMode}
           panZoom={context.args.panZoom}
+          prices={context.args.prices}
+          locale={context.args.locale}
           style={{ flex: 1, minHeight: 0, width: '100%' }}
         >
           <Story />
@@ -113,6 +115,19 @@ export const ConstrainedViewport: Story = {
   },
   parameters: {
     viewportShellStyle: constrainedViewportShellStyle,
+  },
+  render: () => (
+    <Grid topLabel="Ship Tree">
+      <TreeDisplay />
+    </Grid>
+  ),
+}
+
+export const ShipPrices: Story = {
+  args: {
+    faction: 500001,
+    locale: 'de-DE',
+    prices: { 582: 520_000, 583: 610_000, 584: 540_000, 602: 590_000, 603: 650_000, 605: 560_000 },
   },
   render: () => (
     <Grid topLabel="Ship Tree">
