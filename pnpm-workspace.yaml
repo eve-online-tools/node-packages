@@ -22,9 +22,9 @@ catalog:
   '@use-gesture/react': 10.3.1
   '@vitejs/plugin-react': ^6.1.1
   esbuild: ^0.28.2
-  jsdom: ^30.1.1
+  jsdom: ^30.1.2
   motion: 12.43.0
-  postcss: ^8.5.28
+  postcss: ^8.5.29
   postcss-import: ^17.0.0
   react: 19.3.0
   react-dom: 19.3.0
@@ -37,7 +37,7 @@ catalog:
   three: ^0.186.1
   tsup: ^8.5.0
   typescript: 6.0.3
-  vite: ^8.3.1
+  vite: ^8.3.4
   vitest: ^5.0.3
 
 overrides:
