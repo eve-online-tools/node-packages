@@ -29,3 +29,27 @@ it('labels ships', async () => {
 Pass the instance in, or wrap components in `<SdeProvider sde={sde}>`, instead of reading the shared `sde` in code under
 test. Tables without a fixture fall through to the next source; with only `fixture` they throw, so a test cannot reach
 the network by accident.
+
+## Datasets
+
+`buildDataset` from `/node` runs a dataset and its dependencies against a source, with a temporary cache. It returns the
+value, the emitted files and the files the dataset would write, without touching the project:
+
+```ts
+import { fixture } from '@eve-online-tools/eve-sde'
+import { buildDataset } from '@eve-online-tools/eve-sde/node'
+import { expect, it } from 'vitest'
+
+import { shipNames } from './ship-names'
+
+it('names frigates', async () => {
+  const source = fixture({
+    groups: [{ groupID: 25, categoryID: 6, name: { en: 'Frigate' } }],
+    types: [{ typeID: 587, groupID: 25, published: true, name: { en: 'Rifter' } }],
+  })
+
+  const { value } = await buildDataset(shipNames, { source })
+
+  expect(value.names).toEqual({ 587: 'Rifter' })
+})
+```

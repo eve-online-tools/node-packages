@@ -4,7 +4,7 @@ import { join } from 'node:path'
 
 import { defineDataset } from '../core/dataset'
 import { fixture } from '../sources/embedded'
-import { orderDatasets, runDatasets } from './datasets'
+import { buildDataset, orderDatasets, runDatasets } from './datasets'
 import type { Lockfile } from './lockfile'
 
 const lockfile: Lockfile = {
@@ -159,5 +159,27 @@ describe('orderDatasets', () => {
   it('rejects two different datasets with the same id', () => {
     const other = { ...shipNames, version: '2' }
     expect(() => orderDatasets([shipNames, other])).toThrow('Two different datasets use the id "test:ship-names"')
+  })
+})
+
+describe('buildDataset', () => {
+  it('returns the value, emitted and written files without touching the project', async () => {
+    const dataset = defineDataset({
+      id: 'test:files',
+      version: '1',
+      tables: [],
+      dependsOn: [shipNames],
+      outDir: 'generated',
+      build: async ({ dataset: read, emit, write }) => {
+        await write('names.txt', Object.values(read(shipNames)).join())
+        return { url: emit('data.bin', 'x') }
+      },
+    })
+
+    const output = await buildDataset(dataset, { source })
+
+    expect(output.value).toEqual({ url: { __eveSdeAsset: 'data.bin' } })
+    expect(new TextDecoder().decode(output.writes.get('names.txt'))).toBe('Rifter')
+    expect(output.assets.has('data.bin')).toBe(true)
   })
 })

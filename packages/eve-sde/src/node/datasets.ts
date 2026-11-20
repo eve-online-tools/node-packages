@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto'
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path'
 
 import type { Dataset, DatasetAsset, DatasetContext } from '../core/dataset'
@@ -10,10 +11,13 @@ import type { SdeSource } from '../sources/types'
 import { files } from './files-source'
 import { lockfileManifest, type Lockfile } from './lockfile'
 
-export type DatasetOutput = {
+export type DatasetOutput<Value = unknown> = {
   /** JSON value; emitted files appear as asset placeholders. */
-  value: unknown
+  value: Value
+  /** Files passed to `emit`, by file name. */
   assets: ReadonlyMap<string, Uint8Array>
+  /** Files passed to `write`, by path relative to `outDir`. */
+  writes: ReadonlyMap<string, Uint8Array>
 }
 
 export type DatasetResult = {
@@ -283,4 +287,35 @@ export const runDatasets = async (options: RunDatasetsOptions): Promise<Map<stri
   }
 
   return new Map([...results].map(([id, { cacheKey: _, ...result }]) => [id, result]))
+}
+
+/**
+ * Builds a dataset and its dependencies from `source`, for tests. Uses a temporary cache and never writes into the
+ * project; written files are returned in `writes`.
+ */
+export const buildDataset = async <Value>(
+  dataset: Dataset<Value, TableName>,
+  options: { source: SdeSource },
+): Promise<DatasetOutput<Value>> => {
+  const root = await mkdtemp(join(tmpdir(), 'eve-sde-dataset-'))
+  try {
+    const tables = orderDatasets([dataset]).flatMap((entry) => entry.tables)
+    const lockfile: Lockfile = {
+      lockfileVersion: 1,
+      release: 'test',
+      buildNumber: 0,
+      releaseDate: new Date(0).toISOString(),
+      tables: Object.fromEntries(tables.map((table) => [table, { version: 'test' }])),
+    }
+    const results = await runDatasets({
+      datasets: [dataset],
+      lockfile,
+      source: options.source,
+      root,
+      cacheDir: join(root, 'cache'),
+    })
+    return (await results.get(dataset.id)!.load()) as DatasetOutput<Value>
+  } finally {
+    await rm(root, { recursive: true, force: true })
+  }
 }

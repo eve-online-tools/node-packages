@@ -222,7 +222,7 @@ connectQueryClient(sde, queryClient) // invalidates tables on `change`
 | Import | Contents |
 | --- | --- |
 | `@eve-online-tools/eve-sde` | `sde`, `createSde`, sources, `defineDataset`, `dehydrate` / `hydrate`, row types |
-| `@eve-online-tools/eve-sde/node` | `files`, lockfile, datasets runner, config, CLI commands |
+| `@eve-online-tools/eve-sde/node` | `files`, lockfile helpers, `buildDataset`, `defineConfig` |
 | `@eve-online-tools/eve-sde/vite` | Vite plugin, `defineConfig`, `defineDataset` |
 | `@eve-online-tools/eve-sde/rollup` | Rollup plugin, `defineConfig`, `defineDataset` |
 | `@eve-online-tools/eve-sde/react` | `SdeProvider`, `useSdeRow`, `useSdeRows` |
