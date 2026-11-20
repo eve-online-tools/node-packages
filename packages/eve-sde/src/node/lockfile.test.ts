@@ -19,8 +19,8 @@ const manifest: ReleaseManifest = {
 }
 
 const redirects: Record<string, string> = {
-  [manifest.tables.types!.fbUrl]: `/blobs/${hash('a')}.fb`,
-  [manifest.tables.types!.bfbsUrl]: `/blobs/${hash('b')}.bfbs`,
+  [manifest.tables.types!.fbUrl!]: `/blobs/${hash('a')}.fb`,
+  [manifest.tables.types!.bfbsUrl!]: `/blobs/${hash('b')}.bfbs`,
 }
 
 const fetchRedirects = (async (input: string | URL | Request) => {

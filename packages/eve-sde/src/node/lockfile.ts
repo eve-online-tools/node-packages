@@ -1,14 +1,17 @@
 import { readFile, writeFile } from 'node:fs/promises'
 
 import { SdeError } from '../core/errors'
-import type { FetchFn } from '../core/http'
+import { requestOk, type FetchFn } from '../core/http'
 import { sdeTenantUrl, type ReleaseManifest } from '../core/manifest'
 
 export const lockfileVersion = 1
 export const defaultLockfilePath = 'eve-sde.lock.json'
 
-/** Blob ids are the sha256 of the file; `version` changes only when the table's data changes. */
-export type LockedTable = { version: string; fb: string; bfbs: string }
+/**
+ * Blob ids are the sha256 of the file; `version` changes only when the table's data changes. Blob ids are absent when
+ * the release offers no FlatBuffers files for the table.
+ */
+export type LockedTable = { version: string; fb?: string; bfbs?: string }
 
 export type Lockfile = {
   lockfileVersion: typeof lockfileVersion
@@ -21,8 +24,11 @@ export type Lockfile = {
 const blobPattern = /\/blobs\/([0-9a-f]{64})\.\w+$/
 
 /** Resolves the content-addressed blob id a release file URL redirects to. */
-const resolveBlobId = async (fetchFn: FetchFn, url: string): Promise<string> => {
-  const response = await fetchFn(url, { redirect: 'manual' })
+const resolveBlobId = async (fetchFn: FetchFn, url: string | undefined): Promise<string | undefined> => {
+  if (url === undefined) {
+    return undefined
+  }
+  const response = await requestOk(fetchFn, url, { redirect: 'manual' })
   await response.body?.cancel()
   const id = blobPattern.exec(response.headers.get('location') ?? '')?.[1]
   if (!id) {
@@ -50,7 +56,7 @@ export const createLockfile = async (fetchFn: FetchFn, manifest: ReleaseManifest
   const tables = await mapLimit(names, 16, async (name): Promise<[string, LockedTable]> => {
     const info = manifest.tables[name]!
     const [fb, bfbs] = await Promise.all([resolveBlobId(fetchFn, info.fbUrl), resolveBlobId(fetchFn, info.bfbsUrl)])
-    return [name, { version: info.version, fb, bfbs }]
+    return [name, fb && bfbs ? { version: info.version, fb, bfbs } : { version: info.version }]
   })
   return {
     lockfileVersion,
@@ -63,7 +69,8 @@ export const createLockfile = async (fetchFn: FetchFn, manifest: ReleaseManifest
 
 const isLockedTable = (value: unknown): value is LockedTable => {
   const table = value as Partial<LockedTable> | null
-  return typeof table?.version === 'string' && typeof table.fb === 'string' && typeof table.bfbs === 'string'
+  const blobId = (id: unknown) => id === undefined || typeof id === 'string'
+  return typeof table?.version === 'string' && blobId(table.fb) && blobId(table.bfbs)
 }
 
 export const parseLockfile = (json: unknown, source = 'lockfile'): Lockfile => {
@@ -81,7 +88,7 @@ export const parseLockfile = (json: unknown, source = 'lockfile'): Lockfile => {
   const tables = lock.tables ?? {}
   const invalid = Object.entries(tables).find(([, table]) => !isLockedTable(table))
   if (invalid) {
-    throw new SdeError(`${source}: table "${invalid[0]}" needs version, fb and bfbs.`)
+    throw new SdeError(`${source}: table "${invalid[0]}" needs a version, and fb and bfbs blob ids as strings.`)
   }
   return lock as Lockfile
 }

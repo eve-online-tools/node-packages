@@ -1,6 +1,6 @@
 import { SdeHttpError } from '../core/errors'
 import { request } from '../core/http'
-import { tableInfo, type ReleaseManifest } from '../core/manifest'
+import { tableInfo, tableUrl, type ReleaseManifest } from '../core/manifest'
 import { projectRow } from '../core/projection'
 import type { AnyKey, AnyRow } from '../core/types'
 import { openFbTable, type FbTable } from '../formats/fb'
@@ -48,35 +48,41 @@ const bytesOf = async (response: Response): Promise<Uint8Array> => new Uint8Arra
 export const remote = (options: RemoteOptions = {}): SdeSource => {
   const mode = options.get ?? 'record'
   const served = options.tables && new Set(options.tables)
-  // Keyed by table version, so a release that leaves the table untouched reuses the download.
-  const fbTables = new Map<string, Promise<FbTable | undefined>>()
+  // One entry per table, reused while the table's version is unchanged; a new version replaces the old buffer.
+  const fbTables = new Map<string, { version: string; table: Promise<FbTable | undefined> }>()
 
   const loadFbTable = async (ctx: SourceContext, table: string): Promise<FbTable> => {
     const loaded = await withRelease(ctx, (manifest) => {
-      const info = tableInfo(manifest, table)
-      let pending = fbTables.get(info.version)
-      if (!pending) {
-        pending = Promise.all([request(ctx.fetch, info.fbUrl), request(ctx.fetch, info.bfbsUrl)]).then(
-          async ([data, schema]) =>
-            data && schema ? openFbTable(await bytesOf(data), await bytesOf(schema)) : undefined,
-        )
-        fbTables.set(info.version, pending)
-        pending.then(
-          (fb) => fb ?? fbTables.delete(info.version),
-          () => fbTables.delete(info.version),
-        )
+      const { version } = tableInfo(manifest, table)
+      const cached = fbTables.get(table)
+      if (cached?.version === version) {
+        return cached.table
       }
-      return pending
+      const urls = [tableUrl(manifest, table, 'fbUrl'), tableUrl(manifest, table, 'bfbsUrl')]
+      const entry = {
+        version,
+        table: Promise.all(urls.map((url) => request(ctx.fetch, url))).then(async ([data, schema]) =>
+          data && schema ? openFbTable(await bytesOf(data), await bytesOf(schema)) : undefined,
+        ),
+      }
+      fbTables.set(table, entry)
+      const forget = () => {
+        if (fbTables.get(table) === entry) {
+          fbTables.delete(table)
+        }
+      }
+      entry.table.then((fb) => fb ?? forget(), forget)
+      return entry.table
     })
     if (!loaded) {
-      throw new SdeHttpError(tableInfo(await ctx.manifest(), table).fbUrl, 404)
+      throw new SdeHttpError(tableUrl(await ctx.manifest(), table, 'fbUrl'), 404)
     }
     return loaded
   }
 
   const fetchRecord = (ctx: SourceContext, table: string, key: AnyKey): Promise<AnyRow | undefined> =>
     withRelease(ctx, async (manifest) => {
-      const url = tableInfo(manifest, table).recordUrlTemplate.replace('{key}', encodeURIComponent(String(key)))
+      const url = tableUrl(manifest, table, 'recordUrlTemplate').replace('{key}', encodeURIComponent(String(key)))
       const response = await request(ctx.fetch, url)
       return response ? ((await response.json()) as AnyRow) : undefined
     })
@@ -112,9 +118,9 @@ export const remote = (options: RemoteOptions = {}): SdeSource => {
         return
       }
 
-      const response = await withRelease(ctx, (manifest) => request(ctx.fetch, tableInfo(manifest, table).jsonlUrl))
+      const response = await withRelease(ctx, (manifest) => request(ctx.fetch, tableUrl(manifest, table, 'jsonlUrl')))
       if (!response?.body) {
-        throw new SdeHttpError(tableInfo(await ctx.manifest(), table).jsonlUrl, 404)
+        throw new SdeHttpError(tableUrl(await ctx.manifest(), table, 'jsonlUrl'), 404)
       }
       for await (const row of parseJsonLines(response.body)) {
         yield projectRow(row as AnyRow, projection)

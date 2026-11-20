@@ -3,15 +3,18 @@ import { request, requestOk, type FetchFn } from './http'
 
 export const sdeTenantUrl = 'https://sde.evetech.net/tranquility/'
 
+/** URLs are absent when a release does not offer that format for the table. */
 export type TableInfo = {
   /** Changes only when the table's data changes. */
   version: string
-  jsonlUrl: string
-  fbUrl: string
-  bfbsUrl: string
+  jsonlUrl?: string
+  fbUrl?: string
+  bfbsUrl?: string
   /** Contains `{key}`. */
-  recordUrlTemplate: string
+  recordUrlTemplate?: string
 }
+
+export type TableUrl = 'jsonlUrl' | 'fbUrl' | 'bfbsUrl' | 'recordUrlTemplate'
 
 export type ReleaseManifest = {
   release: string
@@ -32,17 +35,27 @@ const record = (value: unknown, path: string): Record<string, unknown> =>
 const string = (value: unknown, path: string): string =>
   typeof value === 'string' ? value : fail(`${path} is not a string.`)
 
-const parseTable = (name: string, value: unknown): TableInfo => {
-  const table = record(value, `tables.${name}`)
-  const jsonl = record(table.jsonl, `tables.${name}.jsonl`)
-  const flatbuffers = record(table.flatbuffers, `tables.${name}.flatbuffers`)
-  const recordInfo = record(table.record, `tables.${name}.record`)
+const optionalString = (value: unknown): string | undefined => (typeof value === 'string' ? value : undefined)
+
+const field = (value: unknown, key: string): unknown =>
+  typeof value === 'object' && value !== null ? (value as Record<string, unknown>)[key] : undefined
+
+/**
+ * Tables are parsed leniently so a future table with fewer formats, or a malformed entry, only affects reads of that
+ * table. Entries without a version are skipped: nothing can be cached or locked without one.
+ */
+const parseTable = (value: unknown): TableInfo | undefined => {
+  const version = optionalString(field(value, 'version'))
+  if (version === undefined) {
+    return undefined
+  }
+  const flatbuffers = field(value, 'flatbuffers')
   return {
-    version: string(table.version, `tables.${name}.version`),
-    jsonlUrl: string(jsonl.url, `tables.${name}.jsonl.url`),
-    fbUrl: string(flatbuffers.binaryUrl, `tables.${name}.flatbuffers.binaryUrl`),
-    bfbsUrl: string(flatbuffers.binarySchemaUrl, `tables.${name}.flatbuffers.binarySchemaUrl`),
-    recordUrlTemplate: string(recordInfo.urlTemplate, `tables.${name}.record.urlTemplate`),
+    version,
+    jsonlUrl: optionalString(field(field(value, 'jsonl'), 'url')),
+    fbUrl: optionalString(field(flatbuffers, 'binaryUrl')),
+    bfbsUrl: optionalString(field(flatbuffers, 'binarySchemaUrl')),
+    recordUrlTemplate: optionalString(field(field(value, 'record'), 'urlTemplate')),
   }
 }
 
@@ -58,7 +71,10 @@ export const parseManifest = (json: unknown): ReleaseManifest => {
     buildNumber: buildNumber as number,
     releaseDate: string(body.releaseDate, 'releaseDate'),
     tables: Object.fromEntries(
-      Object.entries(record(body.tables, 'tables')).map(([name, table]) => [name, parseTable(name, table)]),
+      Object.entries(record(body.tables, 'tables')).flatMap(([name, table]) => {
+        const info = parseTable(table)
+        return info ? [[name, info]] : []
+      }),
     ),
   }
 }
@@ -81,4 +97,20 @@ export const tableInfo = (manifest: ReleaseManifest, table: string): TableInfo =
     throw new SdeUnknownTableError(table)
   }
   return info
+}
+
+const formatNames: Record<TableUrl, string> = {
+  jsonlUrl: 'JSONL file',
+  fbUrl: 'FlatBuffers file',
+  bfbsUrl: 'FlatBuffers schema',
+  recordUrlTemplate: 'record endpoint',
+}
+
+/** A table's URL of one format, or an error naming what the release lacks. */
+export const tableUrl = (manifest: ReleaseManifest, table: string, kind: TableUrl): string => {
+  const url = tableInfo(manifest, table)[kind]
+  if (!url) {
+    throw new SdeError(`Table "${table}" has no ${formatNames[kind]} in SDE release ${manifest.release}.`)
+  }
+  return url
 }

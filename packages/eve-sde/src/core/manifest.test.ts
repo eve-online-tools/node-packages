@@ -1,4 +1,4 @@
-import { parseManifest } from './manifest'
+import { parseManifest, tableUrl } from './manifest'
 
 const table = {
   version: 'abc',
@@ -24,9 +24,17 @@ describe('parseManifest', () => {
     })
   })
 
-  it('rejects a body missing table URLs', () => {
-    expect(() =>
-      parseManifest({ release: 'R', buildNumber: 1, releaseDate: 'D', tables: { types: { version: 'abc' } } }),
-    ).toThrow('Invalid SDE release manifest: tables.types.jsonl is not an object.')
+  it('keeps tables with missing formats and skips tables without a version', () => {
+    const manifest = parseManifest({
+      release: 'R',
+      buildNumber: 1,
+      releaseDate: 'D',
+      tables: { types: { version: 'abc', jsonl: { url: 'https://x/types.jsonl' } }, broken: { jsonl: 'nope' } },
+    })
+    expect(manifest.tables).toEqual({ types: { version: 'abc', jsonlUrl: 'https://x/types.jsonl' } })
+    expect(tableUrl(manifest, 'types', 'jsonlUrl')).toBe('https://x/types.jsonl')
+    expect(() => tableUrl(manifest, 'types', 'fbUrl')).toThrow(
+      'Table "types" has no FlatBuffers file in SDE release R.',
+    )
   })
 })

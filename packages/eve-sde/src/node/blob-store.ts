@@ -70,6 +70,9 @@ export const createBlobStore = (options: { dir: string; fetch?: FetchFn; downloa
       throw new SdeError(`Table "${table}" is not in the lockfile for release ${lock.release}.`)
     }
     const id = locked[kind]
+    if (!id) {
+      throw new SdeError(`Table "${table}" has no FlatBuffers files in release ${lock.release}.`)
+    }
     const target = path(id, kind)
     if ((await readIfExists(target)) !== undefined) {
       return target

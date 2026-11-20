@@ -170,8 +170,9 @@ export default resolve(JSON.parse(${json(JSON.stringify(value))}))`
         for (const table of fileTables) {
           const [fb, bfbs] = await Promise.all(
             (['fb', 'bfbs'] as const).map(async (kind) => {
+              const source = await store.ensure(lockfile, table, kind)
               const fileName = `${lockfile.tables[table]![kind]}.${kind}`
-              serverFiles.set(fileName, await store.ensure(lockfile, table, kind))
+              serverFiles.set(fileName, source)
               return `fileURLToPath(new URL(${json(fileName)}, ${serverFilesToken}))`
             }),
           )
