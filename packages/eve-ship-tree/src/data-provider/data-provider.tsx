@@ -3,7 +3,7 @@ import { type PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import { DataContext, ProcessedContext, type DataContextValue } from './context'
 import { loadShipTreeData } from './loader'
 import { sanitizeLoadError } from './sanitize-load-error'
-import type { Data, DataStatus, PreloadedData } from './types'
+import type { Data, DataStatus, PreloadedData, ShipTreeDataSource } from './types'
 import {
   alphaSkillsProcessor,
   buildShipsByGroupFactionIndex,
@@ -14,18 +14,21 @@ import {
 import { useSkills } from '../skills-provider'
 
 export type DataProviderProps = PropsWithChildren &
-  ({ data: PreloadedData; baseUrl?: never; fetch?: never } | { baseUrl: string; data?: never; fetch?: typeof fetch })
+  (
+    | { data: PreloadedData; dataset?: never; fetch?: never }
+    | { dataset: ShipTreeDataSource; data?: never; fetch?: typeof fetch }
+  )
 
 export const DataProvider = (props: DataProviderProps) => {
   const { children, fetch = globalThis.fetch } = props
   const inlineData = 'data' in props ? props.data : undefined
-  const baseUrl = 'baseUrl' in props ? props.baseUrl : undefined
+  const url = 'dataset' in props ? props.dataset?.url : undefined
   const [fetchedData, setFetchedData] = useState<Data | null>(null)
   const [status, setStatus] = useState<DataStatus>(inlineData !== undefined ? 'ready' : 'loading')
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    if (baseUrl === undefined) {
+    if (url === undefined) {
       return
     }
 
@@ -40,7 +43,7 @@ export const DataProvider = (props: DataProviderProps) => {
       setFetchedData(null)
 
       try {
-        const data = await loadShipTreeData({ baseUrl, fetch })
+        const data = await loadShipTreeData({ url }, { fetch })
 
         if (cancelled || currentRequestId !== requestId) {
           return
@@ -63,10 +66,10 @@ export const DataProvider = (props: DataProviderProps) => {
     return () => {
       cancelled = true
     }
-  }, [baseUrl, fetch])
+  }, [url, fetch])
 
   const value = useMemo((): DataContextValue => {
-    if (baseUrl !== undefined) {
+    if (url !== undefined) {
       return {
         data: fetchedData,
         status,
@@ -79,11 +82,11 @@ export const DataProvider = (props: DataProviderProps) => {
       status: 'ready',
       error: null,
     }
-  }, [baseUrl, inlineData, fetchedData, status, error])
+  }, [url, inlineData, fetchedData, status, error])
 
   const currentSkills = useSkills()
 
-  const sourceData = baseUrl !== undefined ? fetchedData : inlineData
+  const sourceData = url !== undefined ? fetchedData : inlineData
 
   const shipsByGroupFaction = useMemo(() => {
     if (!sourceData) {

@@ -21,45 +21,45 @@ Optional peers, only for the matching entry point:
 | --- | --- |
 | `@eve-online-tools/eve-map` | `createMap`, data helpers, color helpers, types |
 | `@eve-online-tools/eve-map/react` | `<EveMap>`, `useEveMap` |
-| `@eve-online-tools/eve-map/sde` | `mapDataProcessor()` for `@eve-online-tools/eve-sde` (Node only) |
+| `@eve-online-tools/eve-map/sde` | `mapDataset()` for `@eve-online-tools/eve-sde` |
 
 Imports have no side effects and are SSR safe. Nothing touches `window` until `createMap` runs.
 
 ## Getting map data
 
-`createMap` takes a `MapData` object; where it comes from is up to the app. The SDE processor below is one option.
+`createMap` takes a `MapData` object; where it comes from is up to the app. The SDE dataset below is one option.
 
 ### From the SDE at build time (optional)
 
 ```ts
-// vite.config.ts
-import { sde } from '@eve-online-tools/eve-sde/vite'
-import { mapDataProcessor } from '@eve-online-tools/eve-map/sde'
+// eve-sde.config.ts
+import { defineConfig } from '@eve-online-tools/eve-sde/vite'
+import { mapDataset } from '@eve-online-tools/eve-map/sde'
 
 export default defineConfig({
-  plugins: [
-    sde({
-      outputDir: 'src/generated/sde',
-      processors: [mapDataProcessor({ locale: 'en', format: 'binary' })],
-    }),
-  ],
+  datasets: [mapDataset({ locale: 'en' })],
 })
+```
+
+```ts
+// vite.config.ts
+import { sde } from '@eve-online-tools/eve-sde/vite'
+
+export default defineConfig({ plugins: [sde()] })
 ```
 
 | Option | Default | |
 | --- | --- | --- |
-| `locale` | `en` | Language of the names written to the output, falls back to `en` |
+| `locale` | `en` | Language of the names in the output, falls back to `en` |
 | `systems` | IDs 30,000,000 to 30,999,999 | `(system: MapSystem) => boolean` filter |
-| `format` | `binary` | `binary` writes `map-data.bin`, `json` writes `MapData` as `map-data.json` |
-| `fileName` | by format | Output path relative to `outputDir` |
 
-The processor streams `mapSolarSystems`, `mapStargates`, `mapConstellations` and `mapRegions`. Its version includes a processor revision, the options and the filter source, so changing any of them invalidates the SDE lock.
+The dataset reads `mapSolarSystems`, `mapStargates`, `mapConstellations` and `mapRegions` and emits `map-data.bin`. Its version includes a revision, the locale and the filter source, so changing any of them rebuilds it; a new SDE release only rebuilds it when one of the map tables changed.
 
 ```ts
 import { decodeMapData } from '@eve-online-tools/eve-map'
-import mapDataUrl from './generated/sde/map-data.bin?url'
+import mapData from 'eve-sde:dataset/eve-map:map-data'
 
-const data = decodeMapData(await (await fetch(mapDataUrl)).arrayBuffer())
+const data = decodeMapData(await (await fetch(mapData.url)).arrayBuffer())
 ```
 
 ### From other sources

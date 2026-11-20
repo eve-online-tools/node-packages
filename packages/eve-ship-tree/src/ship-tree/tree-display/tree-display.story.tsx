@@ -1,14 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { filenames } from '../../data/generated'
 import { names, identifiers, type Identifier } from '../../data/identifiers/shipTreeFactions'
 import { DataProvider, type Data } from '../../data-provider'
 import { SkillsProvider } from '../../skills-provider'
 import { hasFactionLayout } from '../../layouts'
 import { TreeDisplay } from './tree-display'
 
-const emptyData = (): Data =>
-  Object.fromEntries(filenames.map((fileName) => [fileName.replace(/\.jsonl$/, ''), {}])) as Data
+const emptyData = (): Data => ({
+  types: {},
+  requiredSkills: {},
+  certificates: {},
+  masteries: {},
+  cloneGrades: {},
+  shipTreeGroups: {},
+  shipSizes: {},
+  skills: {},
+  shipTreeElements: {},
+  shipTreeFactions: {},
+  typeBonus: {},
+  typeElements: {},
+})
 
 const implementedFactionEntries = Object.values(identifiers)
   .filter(hasFactionLayout)

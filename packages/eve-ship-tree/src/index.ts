@@ -1,19 +1,14 @@
-export {
-  DataProvider,
-  loadShipTreeData,
-  assertSafeDataBaseUrl,
-  useData,
-  useDataStatus,
-  useProcessedData,
-} from './data-provider'
+export { DataProvider, loadShipTreeData, useData, useDataStatus, useProcessedData } from './data-provider'
 export type {
   Data,
   DataProviderProps,
   DataStatus,
   DataTableName,
   LoadDataOptions,
+  OptionalDataTables,
   PreloadedData,
   RequiredDataTables,
+  ShipTreeDataSource,
 } from './data-provider'
 
 export { SkillsProvider, useSkills, useSkillTraining } from './skills-provider'

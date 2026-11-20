@@ -1,2 +1,4 @@
 export { sde } from './plugin'
-export type { SdeOptions } from '../types'
+export type { SdePluginOptions } from '../plugin/core'
+export { defineConfig } from '../node/config'
+export { defineDataset } from '../core/dataset'

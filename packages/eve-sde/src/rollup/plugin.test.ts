@@ -1,52 +1,39 @@
-import { existsSync } from 'node:fs'
-import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
+// @vitest-environment node
+// Rollup checks asset sources with instanceof, which fails across jsdom's realm.
+import { mkdtemp, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 
-import { archivePath } from '../cache'
-import { createFixtureArchive } from '../fixtures/create-fixture-archive'
-import { getHook } from '../test-utils/get-hook'
+import { rollup, type OutputAsset, type OutputChunk } from 'rollup'
+
+import { defineDataset } from '../core/dataset'
 import { sde } from './plugin'
 
+const lockfile = { lockfileVersion: 1, release: 'R', buildNumber: 1, releaseDate: 'D', tables: {} }
+
 describe('rollup plugin', () => {
-  let rootDir: string
-  let cacheDir: string
-  let outputDir: string
-
-  beforeEach(async () => {
-    rootDir = await mkdtemp(join(tmpdir(), 'eve-sde-rollup-'))
-    cacheDir = join(rootDir, 'cache')
-    outputDir = join(rootDir, 'generated')
-
-    await mkdir(join(cacheDir, '123456'), { recursive: true })
-    await writeFile(
-      archivePath(cacheDir, '123456'),
-      createFixtureArchive({
-        groups: '{"_key": 10, "name": {"en": "Group"}}\n',
-      }),
-    )
-  })
-
-  afterEach(async () => {
-    await rm(rootDir, { recursive: true, force: true })
-  })
-
-  it('generates SDE artifacts during buildStart', async () => {
-    const plugin = sde({
-      root: rootDir,
-      outputDir: 'generated',
-      cacheDir: 'cache',
-      buildNumber: '123456',
-      tables: ['groups'],
+  it('bundles dataset values and emits their files', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'eve-sde-rollup-'))
+    await writeFile(join(root, 'eve-sde.lock.json'), JSON.stringify(lockfile))
+    await writeFile(join(root, 'main.js'), "export { default } from 'eve-sde:dataset/test:data'\n")
+    const dataset = defineDataset({
+      id: 'test:data',
+      version: '1',
+      tables: [],
+      build: ({ emit }) => ({ count: 1, url: emit('data.json', '[1]') }),
     })
 
-    const context = {
-      info: vi.fn(),
-    }
+    const bundle = await rollup({
+      input: join(root, 'main.js'),
+      plugins: [sde({ root, datasets: [dataset], cacheDir: join(root, '.cache') })],
+      onwarn: () => {},
+    })
+    const { output } = await bundle.generate({ format: 'es' })
 
-    await getHook(plugin.buildStart)?.call(context as never, {} as never)
-
-    expect(existsSync(join(outputDir, 'groups.json'))).toBe(true)
-    expect(context.info).toHaveBeenCalledWith('Generated SDE artifacts (build 123456, 1 table dumps).')
+    const chunk = output.find((file): file is OutputChunk => file.type === 'chunk')!
+    const asset = output.find((file): file is OutputAsset => file.type === 'asset')!
+    expect(new TextDecoder().decode(asset.source as Uint8Array)).toBe('[1]')
+    expect(chunk.code).toContain(asset.fileName)
+    expect(chunk.code).toContain('count')
   })
 })

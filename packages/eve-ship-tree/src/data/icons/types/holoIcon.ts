@@ -2,6 +2,7 @@ import resDx9ModelShipAmarrBattlecruiserAbc1IconsAbc1T1IsisPng from 'res:/dx9/mo
 import resDx9ModelShipAmarrBattlecruiserAbc1IconsAbc1T2aIsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc1/icons/abc1_t2a_isis.png'
 import resDx9ModelShipAmarrBattlecruiserAbc2IconsAbc2T1IsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc2/icons/abc2_t1_isis.png'
 import resDx9ModelShipAmarrBattlecruiserAbc2IconsAbc2T2IsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc2/icons/abc2_t2_isis.png'
+import resDx9ModelShipAmarrBattlecruiserAbc3IconsAbc3FnIsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc3/icons/abc3_fn_isis.png'
 import resDx9ModelShipAmarrBattlecruiserAbc3IconsAbc3T1IsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc3/icons/abc3_t1_isis.png'
 import resDx9ModelShipAmarrBattlecruiserAbc4IconsAbc4T1IsisPng from 'res:/dx9/model/ship/amarr/battlecruiser/abc4/icons/abc4_t1_isis.png'
 import resDx9ModelShipAmarrBattleshipAb1IconsAb1T1IsisPng from 'res:/dx9/model/ship/amarr/battleship/ab1/icons/ab1_t1_isis.png'
@@ -15,6 +16,7 @@ import resDx9ModelShipAmarrCarrierAca2IconsAca2T2IsisPng from 'res:/dx9/model/sh
 import resDx9ModelShipAmarrCruiserAc1IconsAc1T1IsisPng from 'res:/dx9/model/ship/amarr/cruiser/ac1/icons/ac1_t1_isis.png'
 import resDx9ModelShipAmarrCruiserAc1IconsAc1T2aIsisPng from 'res:/dx9/model/ship/amarr/cruiser/ac1/icons/ac1_t2a_isis.png'
 import resDx9ModelShipAmarrCruiserAc1IconsAc1T2bIsisPng from 'res:/dx9/model/ship/amarr/cruiser/ac1/icons/ac1_t2b_isis.png'
+import resDx9ModelShipAmarrCruiserAc1IconsAc1XxiiIsisPng from 'res:/dx9/model/ship/amarr/cruiser/ac1/icons/ac1_xxii_isis.png'
 import resDx9ModelShipAmarrCruiserAc2IconsAc2IxIsisPng from 'res:/dx9/model/ship/amarr/cruiser/ac2/icons/ac2_ix_isis.png'
 import resDx9ModelShipAmarrCruiserAc2IconsAc2T1IsisPng from 'res:/dx9/model/ship/amarr/cruiser/ac2/icons/ac2_t1_isis.png'
 import resDx9ModelShipAmarrCruiserAc2IconsAc2T2aIsisPng from 'res:/dx9/model/ship/amarr/cruiser/ac2/icons/ac2_t2a_isis.png'
@@ -40,6 +42,7 @@ import resDx9ModelShipAmarrFreighterAfr1IconsAfr1T2IsisPng from 'res:/dx9/model/
 import resDx9ModelShipAmarrFrigateAf1IconsAf1T1IsisPng from 'res:/dx9/model/ship/amarr/frigate/af1/icons/af1_t1_isis.png'
 import resDx9ModelShipAmarrFrigateAf2IconsAf2T1IsisPng from 'res:/dx9/model/ship/amarr/frigate/af2/icons/af2_t1_isis.png'
 import resDx9ModelShipAmarrFrigateAf2IconsAf2T2IsisPng from 'res:/dx9/model/ship/amarr/frigate/af2/icons/af2_t2_isis.png'
+import resDx9ModelShipAmarrFrigateAf2IconsAf2XxiiIsisPng from 'res:/dx9/model/ship/amarr/frigate/af2/icons/af2_xxii_isis.png'
 import resDx9ModelShipAmarrFrigateAf3IconsAf3IxIsisPng from 'res:/dx9/model/ship/amarr/frigate/af3/icons/af3_ix_isis.png'
 import resDx9ModelShipAmarrFrigateAf3IconsAf3T1IsisPng from 'res:/dx9/model/ship/amarr/frigate/af3/icons/af3_t1_isis.png'
 import resDx9ModelShipAmarrFrigateAf3IconsAf3T2aIsisPng from 'res:/dx9/model/ship/amarr/frigate/af3/icons/af3_t2a_isis.png'
@@ -83,6 +86,7 @@ import resDx9ModelShipCaldariBattlecruiserCbc1IconsCbc1T1IsisPng from 'res:/dx9/
 import resDx9ModelShipCaldariBattlecruiserCbc1IconsCbc1T2bIsisPng from 'res:/dx9/model/ship/caldari/battlecruiser/cbc1/icons/cbc1_t2b_isis.png'
 import resDx9ModelShipCaldariBattlecruiserCbc2IconsCbc2T1IsisPng from 'res:/dx9/model/ship/caldari/battlecruiser/cbc2/icons/cbc2_t1_isis.png'
 import resDx9ModelShipCaldariBattlecruiserCbc2IconsCbc2T2IsisPng from 'res:/dx9/model/ship/caldari/battlecruiser/cbc2/icons/cbc2_t2_isis.png'
+import resDx9ModelShipCaldariBattlecruiserCbc3IconsCbc3FnIsisPng from 'res:/dx9/model/ship/caldari/battlecruiser/cbc3/icons/cbc3_fn_isis.png'
 import resDx9ModelShipCaldariBattlecruiserCbc3IconsCbc3T1IsisPng from 'res:/dx9/model/ship/caldari/battlecruiser/cbc3/icons/cbc3_t1_isis.png'
 import resDx9ModelShipCaldariBattlecruiserCbc3IconsCbc3XxiIsisPng from 'res:/dx9/model/ship/caldari/battlecruiser/cbc3/icons/cbc3_xxi_isis.png'
 import resDx9ModelShipCaldariBattleshipCb1IconsCb1T1IsisPng from 'res:/dx9/model/ship/caldari/battleship/cb1/icons/cb1_t1_isis.png'
@@ -162,6 +166,7 @@ import resDx9ModelShipGallenteBattlecruiserGbc1IconsGbc1T1IsisPng from 'res:/dx9
 import resDx9ModelShipGallenteBattlecruiserGbc1IconsGbc1T2aIsisPng from 'res:/dx9/model/ship/gallente/battlecruiser/gbc1/icons/gbc1_t2a_isis.png'
 import resDx9ModelShipGallenteBattlecruiserGbc2IconsGbc2T1IsisPng from 'res:/dx9/model/ship/gallente/battlecruiser/gbc2/icons/gbc2_t1_isis.png'
 import resDx9ModelShipGallenteBattlecruiserGbc2IconsGbc2T2IsisPng from 'res:/dx9/model/ship/gallente/battlecruiser/gbc2/icons/gbc2_t2_isis.png'
+import resDx9ModelShipGallenteBattlecruiserGbc3IconsGbc3FnIsisPng from 'res:/dx9/model/ship/gallente/battlecruiser/gbc3/icons/gbc3_fn_isis.png'
 import resDx9ModelShipGallenteBattlecruiserGbc3IconsGbc3T1IsisPng from 'res:/dx9/model/ship/gallente/battlecruiser/gbc3/icons/gbc3_t1_isis.png'
 import resDx9ModelShipGallenteBattleshipGb1IconsGb1T1IsisPng from 'res:/dx9/model/ship/gallente/battleship/gb1/icons/gb1_t1_isis.png'
 import resDx9ModelShipGallenteBattleshipGb1IconsGb1T2IsisPng from 'res:/dx9/model/ship/gallente/battleship/gb1/icons/gb1_t2_isis.png'
@@ -227,6 +232,7 @@ import resDx9ModelShipMinmatarBattlecruiserMbc1IconsMbc1T1IsisPng from 'res:/dx9
 import resDx9ModelShipMinmatarBattlecruiserMbc1IconsMbc1T2cIsisPng from 'res:/dx9/model/ship/minmatar/battlecruiser/mbc1/icons/mbc1_t2c_isis.png'
 import resDx9ModelShipMinmatarBattlecruiserMbc2IconsMbc2T1IsisPng from 'res:/dx9/model/ship/minmatar/battlecruiser/mbc2/icons/mbc2_t1_isis.png'
 import resDx9ModelShipMinmatarBattlecruiserMbc2IconsMbc2T2IsisPng from 'res:/dx9/model/ship/minmatar/battlecruiser/mbc2/icons/mbc2_t2_isis.png'
+import resDx9ModelShipMinmatarBattlecruiserMbc3IconsMbc3FnIsisPng from 'res:/dx9/model/ship/minmatar/battlecruiser/mbc3/icons/mbc3_fn_isis.png'
 import resDx9ModelShipMinmatarBattlecruiserMbc3IconsMbc3T1IsisPng from 'res:/dx9/model/ship/minmatar/battlecruiser/mbc3/icons/mbc3_t1_isis.png'
 import resDx9ModelShipMinmatarBattleshipMb1IconsMb1T1IsisPng from 'res:/dx9/model/ship/minmatar/battleship/mb1/icons/mb1_t1_isis.png'
 import resDx9ModelShipMinmatarBattleshipMb1IconsMb1T2bIsisPng from 'res:/dx9/model/ship/minmatar/battleship/mb1/icons/mb1_t2b_isis.png'
@@ -914,7 +920,26 @@ export const holoIcon = {
   92823: resDx9ModelShipCaldariCarrierCca1IconsCca1T2IsisPng,
   92824: resDx9ModelShipGallenteCarrierGca2IconsGca2T2IsisPng,
   92825: resDx9ModelShipMinmatarCarrierMca2IconsMca2T2IsisPng,
+  95629: resDx9ModelShipAmarrBattlecruiserAbc3IconsAbc3FnIsisPng,
+  95630: resDx9ModelShipCaldariBattlecruiserCbc3IconsCbc3FnIsisPng,
+  95631: resDx9ModelShipGallenteBattlecruiserGbc3IconsGbc3FnIsisPng,
+  95632: resDx9ModelShipMinmatarBattlecruiserMbc3IconsMbc3FnIsisPng,
   95741: resDx9ModelShipAmarrBattlecruiserAbc4IconsAbc4T1IsisPng,
+  95859: resDx9ModelShipCaldariFrigateCf7IconsCf7T1IsisPng,
+  95860: resDx9ModelShipGallenteFrigateGf4IconsGf4T1IsisPng,
+  95861: resDx9ModelShipMinmatarFrigateMf2IconsMf2T1IsisPng,
+  95862: resDx9ModelShipOreFrigateOref1IconsOref1T1IsisPng,
+  97266: resDx9ModelShipCaldariFrigateCf6IconsCf6T1IsisPng,
+  97267: resDx9ModelShipGallenteFrigateGf3IconsGf3T1IsisPng,
+  97268: resDx9ModelShipMinmatarFrigateMf4IconsMf4T1IsisPng,
+  97269: resDx9ModelShipMinmatarFrigateMf5IconsMf5T1IsisPng,
+  97270: resDx9ModelShipAmarrFrigateAf3IconsAf3T1IsisPng,
+  97271: resDx9ModelShipAmarrFrigateAf6IconsAf6T1IsisPng,
+  97272: resDx9ModelShipCaldariFrigateCf3IconsCf3T1IsisPng,
+  97273: resDx9ModelShipGallenteFrigateGf5IconsGf5T1IsisPng,
+  97274: resDx9ModelShipAmarrFrigateAf7IconsAf7T1IsisPng,
+  97793: resDx9ModelShipAmarrFrigateAf2IconsAf2XxiiIsisPng,
+  97904: resDx9ModelShipAmarrCruiserAc1IconsAc1XxiiIsisPng,
 } as const
 
 export default holoIcon

@@ -1,7 +1,10 @@
 {
   "extends": "../../internal/tsconfig/node.json",
-  "include": ["src"],
+  "include": ["src", "scripts", "vitest.live.config.ts", "tsup.config.ts"],
   "compilerOptions": {
+    "target": "ES2022",
+    "jsx": "react-jsx",
+    "paths": { "@eve-online-tools/eve-sde/config": ["./src/runtime-config.ts"] },
     "noEmit": true,
     "types": ["node", "vitest/globals"]
   }

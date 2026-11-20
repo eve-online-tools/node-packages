@@ -10,7 +10,20 @@ pnpm add @eve-online-tools/eve-ship-tree motion @use-gesture/react
 
 ## Usage
 
-Import the package styles once:
+Ship tree data is built from the SDE by an [eve-sde](../eve-sde) dataset in your app's build. Register `shipTreeDataset()` in `eve-sde.config.ts` and add the eve-sde plugin (see the eve-sde README):
+
+```ts
+// eve-sde.config.ts
+import { defineConfig } from "@eve-online-tools/eve-sde/vite";
+import { shipTreeDataset } from "@eve-online-tools/eve-ship-tree/sde";
+
+export default defineConfig({
+  datasets: [shipTreeDataset()],
+  dts: "src/eve-sde.d.ts",
+});
+```
+
+Import the dataset value, `{ url }` of the emitted JSON file, and pass it to `ShipTree.Root`. Import the package styles once:
 
 ```tsx
 import "@eve-online-tools/eve-ship-tree/styles.css";
@@ -20,12 +33,13 @@ import {
   TreeDisplay,
   type Skills,
 } from "@eve-online-tools/eve-ship-tree";
+import shipTreeData from "eve-sde:dataset/eve-ship-tree:data";
 
 const skills: Skills = { 3330: 3 };
 
 export function App() {
   return (
-    <ShipTree.Root faction={500001} skills={skills} baseUrl="/ship-tree-data">
+    <ShipTree.Root faction={500001} skills={skills} dataset={shipTreeData}>
       <Grid topLabel="Ship Tree">
         <TreeDisplay />
       </Grid>
@@ -40,7 +54,7 @@ The batteries-included `ShipTree.Root` composes the required providers. Provider
 
 ```tsx
 <SkillsProvider skills={skills}>
-  <DataProvider baseUrl="/ship-tree-data">
+  <DataProvider dataset={shipTreeData}>
     <ShipTree faction={500001}>
       <Grid topLabel="Ship Tree">
         <TreeDisplay />
@@ -63,7 +77,7 @@ const [faction, setFaction] = useState<FactionIdentifier>(500002);
 
 <FactionSelector value={faction} onChange={setFaction} />
 <FactionSummary faction={faction} />
-<ShipTree.Root faction={faction} skills={skills} baseUrl="/ship-tree-data">...</ShipTree.Root>
+<ShipTree.Root faction={faction} skills={skills} dataset={shipTreeData}>...</ShipTree.Root>
 ```
 
 - `FactionSelector` is a radiogroup of faction logos, five per row; arrow keys, Home and End move the selection. `factions` defaults to `shipTreeFactionOrder` (client order). `variant="compact"` renders a native select for narrow layouts. `onHoverChange` reports the hovered faction (`null` on leave); pass `hovered ?? value` to `FactionSummary` to preview it.
@@ -75,7 +89,7 @@ const [faction, setFaction] = useState<FactionIdentifier>(500002);
 Hovering or focusing a ship group node shows a tooltip with the group's icon, name, element glyphs and description. Locked groups list the skills required to unlock them; unlocked groups list the faction's bonus skills. Each skill shows the character's trained level. Pass the skill in training (for example the first entry of the ESI skill queue) to highlight its target level:
 
 ```tsx
-<ShipTree.Root faction={500002} skills={skills} training={{ skillId: 3333, level: 4 }} baseUrl="/ship-tree-data">
+<ShipTree.Root faction={500002} skills={skills} training={{ skillId: 3333, level: 4 }} dataset={shipTreeData}>
   <TreeDisplay />
 </ShipTree.Root>
 ```
@@ -87,7 +101,7 @@ Hovering or focusing a ship group node shows a tooltip with the group's icon, na
 Hovering or focusing a ship node shows a tooltip above it, or below when there is no room: the ship render with its tech badge, name, element glyphs (size first) and the ship's bonuses per skill, role bonuses and misc bonuses. Prices are not in the SDE, so pass them in ISK, as a record or a lookup, to show an estimated price line. Ships without a price show no price line. `locale` sets the number format; it defaults to the reader's locale:
 
 ```tsx
-<ShipTree.Root faction={500002} skills={skills} prices={(typeId) => marketPrices.get(typeId)} locale="en-GB" baseUrl="/ship-tree-data">
+<ShipTree.Root faction={500002} skills={skills} prices={(typeId) => marketPrices.get(typeId)} locale="en-GB" dataset={shipTreeData}>
   <TreeDisplay />
 </ShipTree.Root>
 ```
@@ -100,69 +114,17 @@ Hovering or focusing a ship node shows a tooltip above it, or below when there i
 
 ## Data
 
-Ship tree structure and metadata ship as JSONL files in `dist/data/generated/`. Icons and layout geometry stay bundled in the package; the JSONL files are fetched or preloaded at runtime.
+`shipTreeDataset()` emits one JSON file with every table below, for the ships in the tree, with English text. Icons and layout geometry are bundled in the package.
 
-### Static hosting
+### Loading
 
-Copy the published data files into your app's static directory:
-
-```bash
-cp node_modules/@eve-online-tools/eve-ship-tree/dist/data/generated/*.jsonl public/ship-tree-data/
-```
-
-With Vite, you can also use `vite-plugin-static-copy`:
-
-```ts
-viteStaticCopy({
-  targets: [
-    {
-      src: "node_modules/@eve-online-tools/eve-ship-tree/dist/data/generated/*.jsonl",
-      dest: "ship-tree-data",
-    },
-  ],
-});
-```
-
-### Fetch mode
+`ShipTree.Root` and `DataProvider` take the dataset value as `dataset` and fetch the file on mount; pass `fetch` to replace the global one. To load it yourself, for example in a route loader, call `loadShipTreeData` and pass the tables as `data`:
 
 ```tsx
-import {
-  DataProvider,
-  ShipTree,
-  SkillsProvider,
-  TreeDisplay,
-  type Skills,
-} from "@eve-online-tools/eve-ship-tree";
+import { DataProvider, loadShipTreeData } from "@eve-online-tools/eve-ship-tree";
+import shipTreeData from "eve-sde:dataset/eve-ship-tree:data";
 
-const skills: Skills = { 3330: 3 };
-
-<ShipTree faction={500001}>
-  <SkillsProvider skills={skills}>
-    <DataProvider baseUrl="/ship-tree-data">
-      <TreeDisplay />
-    </DataProvider>
-  </SkillsProvider>
-</ShipTree>
-```
-
-When using fetch mode, nest `DataProvider` inside `SkillsProvider` and keep `ShipTree` as the loading/error gate for children.
-
-### Preloaded mode
-
-Load once on the server or in a parent loader, then pass the parsed tables directly:
-
-```tsx
-import {
-  DataProvider,
-  loadShipTreeData,
-  ShipTree,
-  TreeDisplay,
-} from "@eve-online-tools/eve-ship-tree";
-
-const data = await loadShipTreeData({
-  baseUrl: "https://cdn.example.com/ship-tree-data",
-  validateBaseUrl: true,
-});
+const data = await loadShipTreeData(shipTreeData, { timeoutMs: 10_000 });
 
 <SkillsProvider skills={skills}>
   <ShipTree faction={500001}>
@@ -173,49 +135,41 @@ const data = await loadShipTreeData({
 </SkillsProvider>;
 ```
 
+The URL is relative to the app, so on a server read the file from the build output or prefix the origin.
+
+### Without a bundler plugin
+
+`eve-sde build --out <dir>` runs the registered datasets without Vite or Rollup. It writes the data file to `<dir>/eve-ship-tree%3Adata/ship-tree-data.json` and the value to `<dir>/eve-ship-tree%3Adata.json`, with `url` relative to `<dir>`. Serve the data file and pass its public URL as `dataset={{ url }}`.
+
 ### Data tables
 
-`data` is typed as `PreloadedData`: the seven tables below are required and the other generated tables are optional. Each table maps a numeric key to a record. To build them without the bundled JSONL (for example from your own SDE copy), derive them as follows. Field names follow the SDE YAML/JSONL export.
+`data` is typed as `PreloadedData`: the seven tables the tree reads are required, the tooltip and `FactionSummary` tables are optional. Each table maps a numeric key to the SDE row without its key field, keeping only the fields below.
 
 | Table | Key | Record | Derivation |
 | --- | --- | --- | --- |
-| `types` | type ID | `{ name?, shipTreeGroupID?, factionID?, metaGroupID?, techLevel? }` | SDE `types` whose group has `categoryID` 6 (Ship). `techLevel` falls back to dogma attribute 422, then 1. |
-| `requiredSkills` | type ID | `{ requiredSkills: Record<skillTypeID, level> }` | Dogma attribute pairs (skill, level): 182/277, 183/278, 184/279, 1285/1286, 1289/1287. Skip pairs whose skill is missing or 0; a missing level is 0. |
-| `masteries` | type ID | `[{ _key: masteryLevel, _value: certificateID[] }]` | SDE `masteries` for the types above. `_key` is 0 to 4. |
-| `certificates` | certificate ID | `{ skillTypes: [{ _key: skillTypeID, basic, standard, improved, advanced, elite }] }` | SDE `certificates` referenced by `masteries`. |
-| `cloneGrades` | clone grade ID | `{ skills: [{ typeID, level }] }` | SDE `cloneGrades` as is. |
-| `shipTreeGroups` | ship tree group ID | `{ elements: [{ _key, _value }], preReqSkills: [{ _key: factionID, skills: [{ _key: skillTypeID, level, display }] }] }` | SDE `shipTreeGroups` as is. |
-| `shipSizes` | rig size | `{ typeIDs: number[] }` | Types grouped by dogma attribute 1547 (rig size, missing is 0). Ship tree groups 37 (Freighter) and 38 (Jump Freighter) are forced to 4. |
-
-### Security (server loaders)
-
-`loadShipTreeData` accepts a trusted static `baseUrl`. Never pass user-controlled URLs to it on the server without validation — that enables SSRF against internal networks.
-
-When loading in Node, validation runs by default. Pass an explicit trusted origin or disable only for same-origin static paths you control:
-
-```ts
-await loadShipTreeData({
-  baseUrl: process.env.SHIP_TREE_DATA_URL!,
-  validateBaseUrl: true,
-});
-```
+| `types` | type ID | `{ name, shipTreeGroupID, factionID?, metaGroupID?, techLevel }` | SDE `types` in category 6 (Ship) with a `shipTreeGroupID`. `techLevel` falls back to dogma attribute 422, then 1. |
+| `requiredSkills` | type ID | `{ requiredSkills: Record<skillTypeID, level> }` | Dogma attribute pairs (skill, level): 182/277, 183/278, 184/279, 1285/1286, 1289/1287. Pairs whose skill is missing or 0 are skipped; a missing level is 0. |
+| `masteries` | type ID | `{ levels: [{ level, certificateIDs }] }` | SDE `masteries`. `level` is 0 to 4. |
+| `certificates` | certificate ID | `{ skillTypes: [{ typeID, basic, standard, improved, advanced, elite }] }` | SDE `certificates` referenced by `masteries`. |
+| `cloneGrades` | clone grade ID | `{ skills: [{ typeID, level }] }` | SDE `cloneGrades`. |
+| `shipTreeGroups` | ship tree group ID | `{ name, description?, elements: [{ position, elementID }], preReqSkills: [{ factionID, skills: [{ skillTypeID, level, display }] }] }` | SDE `shipTreeGroups`. |
+| `shipSizes` | rig size | `{ typeIDs: number[] }` | Types grouped by dogma attribute 1547 (rig size, missing is 0). Ship tree groups 37 (Freighter) and 38 (Jump Freighter) are size 4. |
+| `skills` | type ID | `{ name }` | Skills referenced by `shipTreeGroups`, `typeBonus` and `requiredSkills`. |
+| `shipTreeElements` | element ID | `{ name, description }` | SDE `shipTreeElements`. |
+| `shipTreeFactions` | faction ID | `{ description, elements: [{ position, elementID }] }` | SDE `shipTreeFactions`. |
+| `typeBonus` | type ID | `{ types?: [{ typeID, bonuses }], roleBonuses?, miscBonuses? }` | SDE `typeBonus`. |
+| `typeElements` | type ID | `{ elements: [{ position, elementID }] }` | SDE `typeElements`. |
 
 Fetch failures are logged to the console; the UI shows a generic error message.
 
 ### SDE data version
 
-Committed JSONL is generated from a pinned EVE SDE build in `rollup.config.ts` (`SDE_BUILD_NUMBER`). The active build is also recorded in `src/data/.sde-lock.json` after each build.
+The data follows the SDE release locked in the app's `eve-sde.lock.json`. Icons and identifiers compiled into this package are generated from the release in its own `eve-sde.lock.json` by the datasets in `src/data/datasets`, which `rollup -c` runs through `eve-sde.config.ts`. `src/data/.eve-sde-dataset.json` records their fingerprints; builds skip regeneration while the input tables are unchanged.
 
-To fetch the latest SDE build, update the pin, and regenerate all artifacts:
+To lock the latest SDE release and regenerate them:
 
 ```bash
 pnpm --filter @eve-online-tools/eve-ship-tree sde:update
-```
-
-To pin a specific build:
-
-```bash
-pnpm --filter @eve-online-tools/eve-ship-tree sde:update 3409592
 ```
 
 ## Development

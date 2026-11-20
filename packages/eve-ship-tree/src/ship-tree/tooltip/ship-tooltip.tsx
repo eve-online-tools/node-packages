@@ -104,19 +104,19 @@ export const ShipTooltip = ({ typeId, renderUrl = defaultShipRenderUrl }: ShipTo
   const name = localize(data?.types[typeId]?.name) ?? `Ship ${typeId}`
   const badge = getTechLevelIcon(shipTypes[typeId]?.techLevel)
   const elements = [...(data?.typeElements?.[typeId]?.elements ?? [])]
-    .sort((a, b) => a._key - b._key)
-    .map((entry) => entry._value)
+    .sort((a, b) => a.position - b.position)
+    .map((entry) => entry.elementID)
   const price = resolvePrice(prices, typeId)
   const bonus = data?.typeBonus?.[typeId]
 
   const sections: BonusSection[] = [
     // Class skills (Interceptors) have higher ids than racial hull skills (Minmatar Frigate); the client lists them first.
     ...[...(bonus?.types ?? [])]
-      .sort((a, b) => b._key - a._key)
+      .sort((a, b) => b.typeID - a.typeID)
       .map((entry) => ({
-        key: `skill-${entry._key}`,
-        heading: `${localize(data?.skills?.[entry._key]?.name) ?? `Skill ${entry._key}`} bonuses (per skill level):`,
-        bonuses: entry._value,
+        key: `skill-${entry.typeID}`,
+        heading: `${localize(data?.skills?.[entry.typeID]?.name) ?? `Skill ${entry.typeID}`} bonuses (per skill level):`,
+        bonuses: entry.bonuses,
       })),
     { key: 'role', heading: 'Role Bonus:', bonuses: bonus?.roleBonuses ?? [] },
     { key: 'misc', heading: 'Misc bonus:', bonuses: bonus?.miscBonuses ?? [] },

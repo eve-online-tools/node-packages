@@ -1,7 +1,7 @@
 import { decodeMapData, regionColor, type MapData, type MapView, type SystemEvent } from '@eve-online-tools/eve-map'
 import { EveMap } from '@eve-online-tools/eve-map/react'
 import { useEffect, useMemo, useState } from 'react'
-import mapDataUrl from './generated/sde/map-data.bin?url'
+import mapData from 'eve-sde:dataset/eve-map:map-data'
 
 type ColorMode = 'security' | 'region'
 
@@ -17,7 +17,7 @@ export function MapDemo() {
   const [locked, setLocked] = useState(false)
 
   useEffect(() => {
-    fetch(mapDataUrl)
+    fetch(mapData.url)
       .then((response) => response.arrayBuffer())
       .then((buffer) => setData(decodeMapData(buffer)))
       .catch((reason: unknown) => setError(String(reason)))

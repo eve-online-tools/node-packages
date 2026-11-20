@@ -1,4 +1,3 @@
-import type { filenames } from '../data/generated'
 import type {
   CertificateRecord,
   CloneGradeRecord,
@@ -6,18 +5,13 @@ import type {
   RequiredSkillsRecord,
   ShipSizeRecord,
   ShipTreeElementRecord,
+  ShipTreeFactionRecord,
   ShipTreeGroupRecord,
   ShipTypeRecord,
   SkillRecord,
   TypeBonusRecord,
   TypeElementsRecord,
 } from './schema'
-
-type StripJsonlExtension<T extends string> = T extends `${infer Name}.jsonl` ? Name : never
-
-export type DataTableName = StripJsonlExtension<(typeof filenames)[number]>
-
-type GenericTable = Record<number, unknown>
 
 /** Tables the tree reads. Other loaders must produce these; see README "Data tables". */
 export type RequiredDataTables = {
@@ -30,35 +24,35 @@ export type RequiredDataTables = {
   shipSizes: Record<number, ShipSizeRecord>
 }
 
-/** Optional tables with a known shape, used by tooltips. */
-export type TypedOptionalDataTables = {
+/** Tables used by tooltips and `FactionSummary`; missing ones leave those parts out. */
+export type OptionalDataTables = {
   skills: Record<number, SkillRecord>
   shipTreeElements: Record<number, ShipTreeElementRecord>
+  shipTreeFactions: Record<number, ShipTreeFactionRecord>
   typeBonus: Record<number, TypeBonusRecord>
   typeElements: Record<number, TypeElementsRecord>
 }
 
-type OtherDataTables = {
-  [K in Exclude<DataTableName, keyof RequiredDataTables | keyof TypedOptionalDataTables>]: GenericTable
-} & TypedOptionalDataTables
+/** All tables, as built by `shipTreeDataset()` and loaded by `loadShipTreeData`. */
+export type Data = RequiredDataTables & OptionalDataTables
 
-/** All tables as loaded by `loadShipTreeData`. */
-export type Data = RequiredDataTables & OtherDataTables
+export type DataTableName = keyof Data
 
 /** Accepted by `DataProvider` and `ShipTree.Root`: the tables the tree reads, the rest optional. */
-export type PreloadedData = RequiredDataTables & Partial<OtherDataTables>
+export type PreloadedData = RequiredDataTables & Partial<OptionalDataTables>
+
+/** The value of `eve-sde:dataset/eve-ship-tree:data`. */
+export type ShipTreeDataSource = {
+  /** URL of the emitted data file. */
+  url: string
+}
 
 export type DataStatus = 'idle' | 'loading' | 'ready' | 'error'
 
 export type LoadDataOptions = {
-  baseUrl: string
   fetch?: typeof fetch
-  /** Reject unsafe origins when loading in Node (SSRF mitigation). */
-  validateBaseUrl?: boolean
-  /** Per-request timeout in milliseconds. Defaults to 30_000. */
+  /** Request timeout in milliseconds. Defaults to 30_000. */
   timeoutMs?: number
-  /** Maximum bytes per JSONL file before aborting. Defaults to 50 MiB. */
-  maxBytesPerFile?: number
 }
 
 export const LOAD_DATA_GENERIC_ERROR = 'Failed to load ship tree data. Check the console for details.'

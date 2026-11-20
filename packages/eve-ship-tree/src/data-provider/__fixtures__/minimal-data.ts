@@ -6,11 +6,11 @@ import { emptyData } from '../../test/render-with-ship-tree-providers'
 const bantamTypeId = 582
 
 const frigateGroup = {
-  elements: [{ _key: 1, _value: 30 }],
+  elements: [{ position: 1, elementID: 30 }],
   preReqSkills: [
     {
-      _key: factions.caldariState,
-      skills: [{ _key: 3330, display: true, level: 1 }],
+      factionID: factions.caldariState,
+      skills: [{ skillTypeID: 3330, display: true, level: 1 }],
     },
   ],
 }

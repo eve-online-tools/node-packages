@@ -40,7 +40,7 @@ describe('ShipTree', () => {
       <ShipTree>
         <span>ship tree child</span>
       </ShipTree>,
-      { baseUrl: '/ship-tree-data', fetch: fetchImpl as typeof fetch },
+      { dataset: { url: '/ship-tree-data.json' }, fetch: fetchImpl as typeof fetch },
     )
 
     expect(screen.queryByText('ship tree child')).not.toBeInTheDocument()
@@ -55,7 +55,7 @@ describe('ShipTree', () => {
       <ShipTree>
         <span>ship tree child</span>
       </ShipTree>,
-      { baseUrl: '/ship-tree-data', fetch: fetchImpl as typeof fetch },
+      { dataset: { url: '/ship-tree-data.json' }, fetch: fetchImpl as typeof fetch },
     )
 
     await waitFor(() => {

@@ -61,7 +61,7 @@
     "oxlint": "pnpm --workspace-root exec oxlint packages/eve-map"
   },
   "peerDependencies": {
-    "@eve-online-tools/eve-sde": "^0.1.0",
+    "@eve-online-tools/eve-sde": "^1.0.0",
     "react": "^18.x || ^19.x",
     "three": ">=0.170.0"
   },

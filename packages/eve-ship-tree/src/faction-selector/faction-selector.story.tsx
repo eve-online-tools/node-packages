@@ -1,27 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 
-import shipTreeFactions from '../data/generated/shipTreeFactions.jsonl?raw'
-import shipTreeElements from '../data/generated/shipTreeElements.jsonl?raw'
 import { identifiers, type Identifier } from '../data/identifiers/shipTreeFactions'
+import { loadShipTreeData } from '../data-provider'
 import { FactionSelector } from './faction-selector'
 import { FactionSummary, type FactionSummaryData } from './faction-summary'
 
-const parseTable = (content: string) =>
-  Object.fromEntries(
-    content
-      .split('\n')
-      .filter(Boolean)
-      .map((line) => {
-        const { _key, ...record } = JSON.parse(line) as { _key: number }
-        return [_key, record]
-      }),
-  )
-
-const data: FactionSummaryData = {
-  shipTreeFactions: parseTable(shipTreeFactions),
-  shipTreeElements: parseTable(shipTreeElements),
-}
+// Registered in the Storybook eve-sde config.
+import shipTreeDataset from 'eve-sde:dataset/eve-ship-tree:data'
 
 const meta = {
   title: 'eve-ship-tree/FactionSelector',
@@ -44,7 +30,7 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-const WithSummary = ({ variant }: { variant?: 'grid' | 'compact' }) => {
+const WithSummary = ({ variant, data }: { variant?: 'grid' | 'compact'; data: FactionSummaryData }) => {
   const [faction, setFaction] = useState<Identifier>(identifiers.minmatarRepublic)
   const [hovered, setHovered] = useState<Identifier | null>(null)
 
@@ -65,5 +51,11 @@ const WithSummary = ({ variant }: { variant?: 'grid' | 'compact' }) => {
 }
 
 export const Default: Story = {
-  render: ({ variant }) => <WithSummary variant={variant} />,
+  loaders: [async () => ({ data: await loadShipTreeData(shipTreeDataset) })],
+  render: ({ variant }, { loaded }) => (
+    <WithSummary
+      variant={variant}
+      data={loaded.data as FactionSummaryData}
+    />
+  ),
 }

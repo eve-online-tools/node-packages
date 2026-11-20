@@ -1,14 +1,9 @@
 {
   "extends": "../../internal/tsconfig/react.json",
   "include": ["src", "../../@types"],
-  "exclude": [
-    "**/*.story.tsx",
-    "**/*.story.ts",
-    "src/data/processors/copy-generated-data.ts",
-    "src/data/processors/static-extra-data.ts"
-  ],
+  "exclude": ["**/*.story.tsx", "**/*.story.ts"],
   "compilerOptions": {
     "noEmit": true,
-    "types": ["vitest/globals", "@testing-library/jest-dom/vitest"]
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom/vitest"]
   }
 }
