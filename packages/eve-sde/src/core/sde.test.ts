@@ -210,6 +210,29 @@ describe('update checks', () => {
     expect(await sde.table('groups').get(25)).toEqual(frigates)
   })
 
+  it('finishes a check when a change listener throws', async () => {
+    const fake = createFakeSde()
+    fake.publish('20261118T000000Z', { types: [rifter], groups: [frigate] })
+    const sde = createSde({
+      fetch: fake.fetch,
+      updates: 'off',
+      sources: [embedded({ groups: [frigate] }, { versions: { groups: fake.versionOf([frigate]) } }), remote()],
+    })
+    await sde.manifest()
+    fake.publish('20261119T000000Z', { types: [slasher], groups: [{ ...frigate, name: { en: 'Frigates' } }] })
+    const events: string[] = []
+    sde.on('change', () => {
+      throw new Error('listener')
+    })
+    sde.on('error', () => events.push('error'))
+    sde.on('stale', () => events.push('stale'))
+
+    await sde.checkForUpdates()
+
+    expect(events).toEqual(['error', 'stale'])
+    expect((await sde.manifest()).release).toBe('20261119T000000Z')
+  })
+
   it('reports stale data when no source serves some changed tables', async () => {
     const fake = createFakeSde()
     fake.publish('20261118T000000Z', { types: [rifter], groups: [frigate] })

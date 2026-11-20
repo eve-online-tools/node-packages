@@ -7,12 +7,13 @@ type FakeRelease = { release: string; tables: Record<string, AnyRow[]> }
 
 /**
  * In-memory SDE HTTP API serving manifests, records and JSONL. Releases are published newest last; only the newest
- * `retained` releases resolve, like the real API. FlatBuffers are not served.
+ * `retained` releases resolve, like the real API. FlatBuffers files are served once added with `serveFlatBuffers`.
  */
 export const createFakeSde = (options: { retained?: number } = {}) => {
   const releases: FakeRelease[] = []
   const requests: string[] = []
   const retained = options.retained ?? 2
+  const binaries = new Map<string, Uint8Array>()
 
   // FNV-1a over the JSON, so any content change yields a new version.
   const versionOf = (rows: AnyRow[]): string => {
@@ -71,6 +72,11 @@ export const createFakeSde = (options: { retained?: number } = {}) => {
       return rows ? new Response(rows.map((row) => JSON.stringify(row)).join('\n')) : notFound()
     }
 
+    if (/^\w+\.(fb|bfbs)$/.test(rest)) {
+      const bytes = binaries.get(`${release.release}/${rest}`)
+      return bytes ? new Response(bytes) : notFound()
+    }
+
     const record = /^(\w+)\/(.+)\.json$/.exec(rest)
     if (record) {
       const [, table, key] = record
@@ -87,6 +93,10 @@ export const createFakeSde = (options: { retained?: number } = {}) => {
     requests,
     publish: (release: string, tables: Record<string, AnyRow[]>) => {
       releases.push({ release, tables })
+    },
+    serveFlatBuffers: (release: string, table: string, files: { fb: Uint8Array; bfbs: Uint8Array }) => {
+      binaries.set(`${release}/${table}.fb`, files.fb)
+      binaries.set(`${release}/${table}.bfbs`, files.bfbs)
     },
     versionOf,
   }
