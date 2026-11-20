@@ -10,12 +10,17 @@ import type { SdeSource } from '../sources/types'
 import { files } from './files-source'
 import { lockfileManifest, type Lockfile } from './lockfile'
 
-export type DatasetResult = {
-  id: string
-  fingerprint: string
+export type DatasetOutput = {
   /** JSON value; emitted files appear as asset placeholders. */
   value: unknown
   assets: ReadonlyMap<string, Uint8Array>
+}
+
+export type DatasetResult = {
+  id: string
+  fingerprint: string
+  /** Reads the cached output, building the dataset when the cache has none. */
+  load: () => Promise<DatasetOutput>
 }
 
 export type RunDatasetsOptions = {
@@ -29,6 +34,10 @@ export type RunDatasetsOptions = {
 }
 
 const markerFileName = '.eve-sde-dataset.json'
+
+declare const __EVE_SDE_VERSION__: string | undefined
+// Set by the package build; decoder fixes in a new release must not reuse results cached by an older one.
+const packageVersion = typeof __EVE_SDE_VERSION__ === 'string' ? __EVE_SDE_VERSION__ : 'source'
 
 const toBytes = (data: Uint8Array | string): Uint8Array =>
   typeof data === 'string' ? new TextEncoder().encode(data) : data
@@ -84,7 +93,17 @@ const fingerprintOf = (dataset: Dataset<unknown, TableName>, lock: Lockfile, dep
     }
     return [table, locked.version]
   })
-  return sha256(JSON.stringify({ id: dataset.id, version: dataset.version, tables, dependencies }))
+  // The build source catches edits made without bumping `version`; helpers it calls are still covered by `version` only.
+  return sha256(
+    JSON.stringify({
+      id: dataset.id,
+      version: dataset.version,
+      build: String(dataset.build),
+      eveSde: packageVersion,
+      tables,
+      dependencies,
+    }),
+  )
 }
 
 type CachedDataset = { value: unknown; assets: Map<string, Uint8Array>; writes: Map<string, Uint8Array> }
@@ -187,7 +206,10 @@ const build = async (
   return { value, assets, writes }
 }
 
-/** Builds datasets in dependency order, reusing cached results whose inputs are unchanged. */
+/**
+ * Resolves datasets in dependency order. Outputs are built when their cache entry is missing, except for datasets whose
+ * `outDir` is already up to date: those build only when something loads their value.
+ */
 export const runDatasets = async (options: RunDatasetsOptions): Promise<Map<string, DatasetResult>> => {
   const { lockfile, cacheDir, root } = options
   const sde = createSde({
@@ -196,35 +218,49 @@ export const runDatasets = async (options: RunDatasetsOptions): Promise<Map<stri
     updates: 'off',
   })
   const results = new Map<string, DatasetResult>()
-  const values = new Map<string, unknown>()
 
   for (const dataset of orderDatasets(options.datasets)) {
-    const dependencies = (dataset.dependsOn ?? []).map((dependency) => results.get(dependency.id)!.fingerprint)
-    const fingerprint = fingerprintOf(dataset, lockfile, dependencies)
+    const dependencies = (dataset.dependsOn ?? []).map((dependency) => results.get(dependency.id)!)
+    const fingerprint = fingerprintOf(
+      dataset,
+      lockfile,
+      dependencies.map((dependency) => dependency.fingerprint),
+    )
     const dir = cacheDirOf(cacheDir, dataset.id, fingerprint)
 
-    let cached = await readCache(dir)
-    if (!cached) {
-      cached = await build(dataset, sde, lockfile, values)
-      await mkdir(dir, { recursive: true })
-      await writeCache(dir, cached)
+    let loading: Promise<CachedDataset> | undefined
+    const load = (): Promise<CachedDataset> => {
+      loading ??= (async () => {
+        const cached = await readCache(dir)
+        if (cached) {
+          return cached
+        }
+        const values = new Map<string, unknown>()
+        for (const dependency of dependencies) {
+          values.set(dependency.id, (await dependency.load()).value)
+        }
+        const built = await build(dataset, sde, lockfile, values)
+        await mkdir(dir, { recursive: true })
+        await writeCache(dir, built)
+        return built
+      })()
+      return loading
     }
 
-    if (dataset.outDir) {
-      const outDir = resolve(root, dataset.outDir)
-      const marker = await readMarker(outDir)
-      if (marker[dataset.id] !== fingerprint) {
-        await writeFiles(outDir, cached.writes)
-        await mkdir(outDir, { recursive: true })
-        await writeFile(
-          join(outDir, markerFileName),
-          `${JSON.stringify({ ...marker, [dataset.id]: fingerprint }, null, 2)}\n`,
-        )
-      }
+    const outDir = dataset.outDir && resolve(root, dataset.outDir)
+    const marker = outDir ? await readMarker(outDir) : {}
+    if (outDir && marker[dataset.id] !== fingerprint) {
+      await writeFiles(outDir, (await load()).writes)
+      await mkdir(outDir, { recursive: true })
+      await writeFile(
+        join(outDir, markerFileName),
+        `${JSON.stringify({ ...marker, [dataset.id]: fingerprint }, null, 2)}\n`,
+      )
+    } else if (!outDir) {
+      await load()
     }
 
-    values.set(dataset.id, cached.value)
-    results.set(dataset.id, { id: dataset.id, fingerprint, value: cached.value, assets: cached.assets })
+    results.set(dataset.id, { id: dataset.id, fingerprint, load })
   }
 
   return results

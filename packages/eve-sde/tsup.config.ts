@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 
 import { defineConfig } from 'tsup'
@@ -26,6 +27,7 @@ export default defineConfig({
   target: 'es2022',
   platform: 'node',
   // The config is imported by package name so build plugins can replace it.
+  define: { __EVE_SDE_VERSION__: JSON.stringify(JSON.parse(readFileSync('package.json', 'utf8')).version) },
   external: ['react', '@tanstack/react-query', 'vite', 'rollup', '@eve-online-tools/eve-sde/config'],
   onSuccess: async () => {
     for (const file of clientEntries) {

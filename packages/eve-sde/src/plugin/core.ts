@@ -113,10 +113,11 @@ export const createPluginCore = (options: SdePluginOptions | undefined) => {
         `Dataset "${id}" is not registered. Add it to \`datasets\` in the eve-sde config${config.datasets.length > 0 ? ` (registered: ${known.join(', ')})` : ''}.`,
       )
     }
+    const output = await result.load()
     const placeholders = new Map<string, string>()
-    const value = resolveAssets(result.value, (fileName) => {
+    const value = resolveAssets(output.value, (fileName) => {
       const marker = `__eve_sde_asset_${placeholders.size}__`
-      placeholders.set(marker, emit(fileName, result.assets.get(fileName)!))
+      placeholders.set(marker, emit(fileName, output.assets.get(fileName)!))
       return marker
     })
     let code = `export default JSON.parse(${json(JSON.stringify(value))})`

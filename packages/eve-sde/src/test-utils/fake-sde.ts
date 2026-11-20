@@ -14,7 +14,14 @@ export const createFakeSde = (options: { retained?: number } = {}) => {
   const requests: string[] = []
   const retained = options.retained ?? 2
 
-  const versionOf = (rows: AnyRow[]): string => `v${JSON.stringify(rows).length}-${rows.length}`
+  // FNV-1a over the JSON, so any content change yields a new version.
+  const versionOf = (rows: AnyRow[]): string => {
+    let hash = 0x811c9dc5
+    for (const char of JSON.stringify(rows)) {
+      hash = Math.imul(hash ^ char.charCodeAt(0), 0x01000193) >>> 0
+    }
+    return `v${hash.toString(16)}`
+  }
   const live = () => releases.slice(-retained)
   const find = (release: string) => live().find((candidate) => candidate.release === release)
 

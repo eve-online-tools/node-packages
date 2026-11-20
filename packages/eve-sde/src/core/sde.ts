@@ -8,7 +8,10 @@ import { fulfilled, track } from './thenable'
 import type { AnyKey, AnyRow, FieldName, Key, Projection, Row, TableName } from './types'
 
 export type SdeEvents = {
-  /** Tables read at runtime moved to a newer release; their cached rows were dropped. */
+  /**
+   * Tables read at runtime moved to a newer release, or build-time tables switched to the HTTP API by
+   * `onStale: 'remote'`. Their cached rows were dropped.
+   */
   change: { release: string; tables: string[] }
   /** Build-time data differs from the latest release. */
   stale: { release: string; tables: string[] }
@@ -97,7 +100,7 @@ export const getInternals = (reader: Sde | SdeScope): SdeInternals => {
 }
 
 const defaultUpdateIntervalMs = 5 * 60_000
-// After a check, a 404 within this window is treated as a missing row rather than an expired release.
+// How long a confirmed release counts as alive when its URLs return 404.
 const releaseMissingRecheckMs = 60_000
 
 type Deferred = { resolve: (row: AnyRow | undefined) => void; reject: (error: unknown) => void }
@@ -158,12 +161,17 @@ export const createSde = (options: SdeOptions = {}): Sde => {
     return manifestPromise
   }
 
-  const sourceFor = (table: string): SdeSource => {
+  /** `undefined` when no source serves the table. */
+  const servingSource = (table: string): SdeSource | undefined => {
     if (remoteTables.has(table)) {
       fallbackRemote ??= sources.find((source) => source.live) ?? remote()
       return fallbackRemote
     }
-    const source = sources.find((candidate) => candidate.has(table))
+    return sources.find((candidate) => candidate.has(table))
+  }
+
+  const sourceFor = (table: string): SdeSource => {
+    const source = servingSource(table)
     if (!source) {
       throw new SdeError(`No source serves SDE table "${table}". Sources: ${sources.map((s) => s.name).join(', ')}.`)
     }
@@ -195,29 +203,29 @@ export const createSde = (options: SdeOptions = {}): Sde => {
           (table) => current.tables[table]?.version !== latest.tables[table]!.version,
         )
         const moved = latest.release !== current.release
-        if (moved) {
-          setManifest(latest)
-        }
-
-        const liveChanged = changed.filter((table) => sourceFor(table).live)
-        for (const table of liveChanged) {
-          cache.delete(table)
-        }
-        if (liveChanged.length > 0) {
-          emit('change', { release: latest.release, tables: liveChanged })
-        }
-
+        const liveChanged = changed.filter((table) => servingSource(table)?.live)
         const stale = sources
           .flatMap((source) => Object.entries(source.versions ?? {}))
           .filter(([table, version]) => latest.tables[table] && latest.tables[table].version !== version)
           .map(([table]) => table)
           .filter((table) => !reportedStale.has(table))
+        const switched = stale.filter((table) => options.onStale?.[table as TableName] === 'remote')
+
+        if (moved) {
+          setManifest(latest)
+        }
         for (const table of stale) {
           reportedStale.add(table)
-          if (options.onStale?.[table as TableName] === 'remote') {
-            remoteTables.add(table)
-            cache.delete(table)
-          }
+        }
+        for (const table of switched) {
+          remoteTables.add(table)
+        }
+        const changedTables = [...new Set([...liveChanged, ...switched])]
+        for (const table of changedTables) {
+          cache.delete(table)
+        }
+        if (changedTables.length > 0) {
+          emit('change', { release: latest.release, tables: changedTables })
         }
         if (stale.length > 0) {
           emit('stale', { release: latest.release, tables: stale })
@@ -254,15 +262,39 @@ export const createSde = (options: SdeOptions = {}): Sde => {
     }
   }
 
+  // A 404 within the API's two-release window is a missing row, so the release is confirmed instead of checking latest.
+  const releaseChecks = new Map<string, { at: number; alive: Promise<boolean> }>()
+  const releaseAlive = (release: string): Promise<boolean> => {
+    const known = releaseChecks.get(release)
+    if (known && Date.now() - known.at < releaseMissingRecheckMs) {
+      return known.alive
+    }
+    const alive = fetchReleaseManifest(fetchFn, release).then((found) => found !== undefined)
+    const entry = { at: Date.now(), alive }
+    releaseChecks.set(release, entry)
+    alive.catch(() => {
+      if (releaseChecks.get(release) === entry) {
+        releaseChecks.delete(release)
+      }
+    })
+    return alive
+  }
+
   const ctx: SourceContext = {
     fetch: fetchFn,
     manifest,
     releaseMissing: async (release) => {
       if (checking) {
         await checking
-      } else if (Date.now() - lastCheckAt >= releaseMissingRecheckMs) {
-        await check()
       }
+      if (resolvedRelease !== release) {
+        return true
+      }
+      if (await releaseAlive(release)) {
+        return false
+      }
+      // Only an expired release moves the instance, whatever `updates` says: its URLs no longer serve anything.
+      await check()
       return resolvedRelease !== release
     },
   }

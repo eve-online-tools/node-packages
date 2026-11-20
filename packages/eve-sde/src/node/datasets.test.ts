@@ -1,4 +1,4 @@
-import { mkdtemp, readFile } from 'node:fs/promises'
+import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -59,8 +59,8 @@ describe('runDatasets', () => {
       build: ({ dataset }) => Object.keys(dataset(shipNames)).length,
     })
     const results = await run([count])
-    expect(results.get('test:ship-names')?.value).toEqual({ 587: 'Rifter' })
-    expect(results.get('test:count')?.value).toBe(1)
+    expect((await results.get('test:ship-names')!.load()).value).toEqual({ 587: 'Rifter' })
+    expect((await results.get('test:count')!.load()).value).toBe(1)
   })
 
   it('reuses the cached result while inputs are unchanged', async () => {
@@ -84,10 +84,34 @@ describe('runDatasets', () => {
         return { url: emit('data.bin', new Uint8Array([1, 2])) }
       },
     })
-    const result = (await run([dataset])).get('test:files')!
+    const result = await (await run([dataset])).get('test:files')!.load()
     expect(result.value).toEqual({ url: { __eveSdeAsset: 'data.bin' } })
     expect([...result.assets.get('data.bin')!]).toEqual([1, 2])
     expect(await readFile(join(root, 'generated/names.txt'), 'utf8')).toBe('Rifter')
+  })
+
+  it('rebuilds when the build code changes without a version bump', async () => {
+    const { run } = await setup()
+    const first = await run([defineDataset({ id: 'test:edited', version: '1', tables: [], build: () => 1 })])
+    const second = await run([defineDataset({ id: 'test:edited', version: '1', tables: [], build: () => 2 })])
+    expect(first.get('test:edited')!.fingerprint).not.toBe(second.get('test:edited')!.fingerprint)
+    expect((await second.get('test:edited')!.load()).value).toBe(2)
+  })
+
+  it('skips datasets whose outDir is up to date until their value is loaded', async () => {
+    const { root, run } = await setup()
+    const build = vi.fn(async ({ write }: { write: (path: string, data: string) => Promise<void> }) => {
+      await write('names.txt', 'Rifter')
+      return 'value'
+    })
+    const dataset = defineDataset({ id: 'test:committed', version: '1', tables: ['types'], outDir: 'generated', build })
+    await run([dataset])
+    await rm(join(root, '.cache'), { recursive: true })
+
+    const results = await run([dataset])
+    expect(build).toHaveBeenCalledTimes(1)
+    expect((await results.get('test:committed')!.load()).value).toBe('value')
+    expect(build).toHaveBeenCalledTimes(2)
   })
 
   it('rejects reads of undeclared tables', async () => {

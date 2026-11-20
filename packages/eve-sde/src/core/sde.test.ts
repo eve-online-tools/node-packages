@@ -84,6 +84,23 @@ describe('createSde with the remote source', () => {
   })
 })
 
+describe('pinned releases', () => {
+  it('treat a 404 as a missing row while the release is alive', async () => {
+    const fake = createFakeSde()
+    fake.publish('20261118T000000Z', { types: [rifter] })
+    fake.publish('20261119T000000Z', { types: [rifter, slasher] })
+    const sde = createSde({ fetch: fake.fetch, release: '20261118T000000Z', updates: 'off' })
+    const changes: unknown[] = []
+    sde.on('change', (event) => changes.push(event))
+
+    expect(await sde.table('types').get(585)).toBeUndefined()
+    expect(await sde.table('types').get(1)).toBeUndefined()
+    expect((await sde.manifest()).release).toBe('20261118T000000Z')
+    expect(changes).toEqual([])
+    expect(fake.requests.filter((url) => url.includes('/latest/'))).toEqual([])
+  })
+})
+
 describe('preload', () => {
   it('loads a whole table with one JSONL request and answers missing keys from the cache', async () => {
     const { fake, sde } = setup()
@@ -156,11 +173,31 @@ describe('update checks', () => {
     expect(await sde.table('groups').get(25)).toEqual(frigate)
 
     const stale: unknown[] = []
+    const changes: unknown[] = []
+    sde.on('stale', (event) => stale.push(event))
+    sde.on('change', (event) => changes.push(event))
+    await sde.checkForUpdates()
+
+    expect(stale).toEqual([{ release: '20261119T000000Z', tables: ['groups'] }])
+    expect(changes).toEqual([{ release: '20261119T000000Z', tables: ['groups'] }])
+    expect(await sde.table('groups').get(25)).toEqual(frigates)
+  })
+
+  it('reports stale data when no source serves some changed tables', async () => {
+    const fake = createFakeSde()
+    fake.publish('20261118T000000Z', { types: [rifter], groups: [frigate] })
+    const sde = createSde({
+      fetch: fake.fetch,
+      sources: [embedded({ groups: [frigate] }, { versions: { groups: fake.versionOf([frigate]) } })],
+    })
+    await sde.manifest()
+    fake.publish('20261119T000000Z', { types: [slasher], groups: [{ ...frigate, name: { en: 'Frigates' } }] })
+
+    const stale: unknown[] = []
     sde.on('stale', (event) => stale.push(event))
     await sde.checkForUpdates()
 
     expect(stale).toEqual([{ release: '20261119T000000Z', tables: ['groups'] }])
-    expect(await sde.table('groups').get(25)).toEqual(frigates)
   })
 
   it('does not touch the network for fixture-only instances', async () => {

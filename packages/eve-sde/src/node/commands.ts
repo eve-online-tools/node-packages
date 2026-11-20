@@ -66,9 +66,13 @@ export const fetchBlobs = async (options: CommandOptions & { all?: boolean }): P
   return tables.length
 }
 
+/** File name for a dataset id: `:` and other characters a URL would escape become `_`, so static servers find it. */
+const outputName = (id: string): string => id.replace(/[^\w.-]/g, '_')
+
 /**
- * Runs the configured datasets without a bundler. Each value is written to `<outDir>/<id>.json` and its emitted files
- * under `<outDir>/<id>/`, with asset placeholders replaced by paths relative to `outDir`.
+ * Runs the configured datasets without a bundler. Each value is written to `<outDir>/<name>.json` and its emitted files
+ * under `<outDir>/<name>/`, where `<name>` is the id with `:` replaced by `_`. Asset placeholders become paths relative
+ * to `outDir`.
  */
 export const build = async (options: CommandOptions & { outDir: string }): Promise<void> => {
   const lock = await requireLockfile(options.config)
@@ -79,15 +83,16 @@ export const build = async (options: CommandOptions & { outDir: string }): Promi
     root: options.config.root,
   })
   for (const result of results.values()) {
-    const name = encodeURIComponent(result.id)
-    for (const [fileName, bytes] of result.assets) {
+    const name = outputName(result.id)
+    const { value, assets } = await result.load()
+    for (const [fileName, bytes] of assets) {
       const path = join(options.outDir, name, fileName)
       await mkdir(dirname(path), { recursive: true })
       await writeFile(path, bytes)
     }
-    const value = resolveAssets(result.value, (fileName) => `${name}/${fileName}`)
     await mkdir(options.outDir, { recursive: true })
-    await writeFile(join(options.outDir, `${name}.json`), `${JSON.stringify(value)}\n`)
+    const resolved = resolveAssets(value, (fileName) => `${name}/${fileName}`)
+    await writeFile(join(options.outDir, `${name}.json`), `${JSON.stringify(resolved)}\n`)
   }
   options.log?.(`${results.size} datasets built into ${relative(options.config.root, options.outDir) || '.'}.`)
 }
