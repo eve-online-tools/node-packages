@@ -16,4 +16,6 @@ type Shared = {
 const key = Symbol.for('@eve-online-tools/eve-sde@1')
 const realm = globalThis as typeof globalThis & { [key]?: Shared }
 
-export const shared: Shared = (realm[key] ??= { internals: new WeakMap() })
+realm[key] ??= { internals: new WeakMap() }
+
+export const shared: Shared = realm[key]
