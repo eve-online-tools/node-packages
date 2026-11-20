@@ -259,6 +259,39 @@ describe('update checks', () => {
   })
 })
 
+describe('lifecycle', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('checks on a timer in watch mode until disposed', async () => {
+    vi.useFakeTimers()
+    const fake = createFakeSde()
+    fake.publish('20261118T000000Z', { types: [rifter] })
+    const sde = createSde({ fetch: fake.fetch, updates: 'watch', updateIntervalMs: 60_000 })
+    const changes: unknown[] = []
+    sde.on('change', (event) => changes.push(event))
+    await sde.table('types').get(587)
+
+    fake.publish('20261119T000000Z', { types: [{ ...rifter, name: { en: 'Rifter II' } }] })
+    await vi.advanceTimersByTimeAsync(60_000)
+    expect(changes).toEqual([{ release: '20261119T000000Z', tables: ['types'] }])
+
+    sde.dispose()
+    const requests = fake.requests.length
+    await vi.advanceTimersByTimeAsync(180_000)
+    expect(fake.requests).toHaveLength(requests)
+  })
+
+  it('refetches cleared rows', async () => {
+    const { fake, sde } = setup()
+    await sde.table('types').get(587)
+    sde.clear('types')
+    await sde.table('types').get(587)
+    expect(recordRequests(fake.requests)).toHaveLength(2)
+  })
+})
+
 describe('dehydrate and hydrate', () => {
   it('serves rows read on the server without refetching on the client', async () => {
     const { sde: server } = setup()

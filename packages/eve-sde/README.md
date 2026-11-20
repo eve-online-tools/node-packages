@@ -79,6 +79,8 @@ sde.on('error', ({ error }) => {}) // a background check failed
 
 An instance created with a release id or manifest is pinned: checks report `stale` but do not move it. The API keeps the current and previous release. When a request for an expired release returns 404, the instance moves to the latest release, emits `change` and retries.
 
+Rows stay cached for the instance's lifetime. `sde.clear(table?)` drops them, for example in a long-running server that reads many keys once. `sde.dispose()` stops the `watch` timer and removes listeners, for instances created per test or per HMR update.
+
 ## Build plugins
 
 ```ts

@@ -76,6 +76,10 @@ export type Sde = SdeReader & {
   on: <E extends keyof SdeEvents>(event: E, handler: (event: SdeEvents[E]) => void) => () => void
   /** A view that shares this instance's cache and records which rows it read, for SSR dehydration. */
   scope: () => SdeScope
+  /** Forgets cached rows of one table, or of every table. Later reads fetch again. */
+  clear: (table?: TableName) => void
+  /** Stops the `watch` timer and removes event listeners. Reads keep working; `watch` restarts on the next read. */
+  dispose: () => void
 }
 
 export type SdeScope = SdeReader & {
@@ -507,6 +511,20 @@ export const createSde = (options: SdeOptions = {}): Sde => {
         listeners[event].delete(handler)
       }
     },
+    clear: (table) => {
+      if (table === undefined) {
+        cache.clear()
+      } else {
+        cache.delete(table)
+      }
+    },
+    dispose: () => {
+      clearInterval(watchTimer)
+      watchTimer = undefined
+      for (const handlers of Object.values(listeners)) {
+        handlers.clear()
+      }
+    },
     scope: () => {
       const reads: Array<readonly [string, AnyKey]> = []
       const seen = new Set<string>()
@@ -574,6 +592,8 @@ export const createLazySde = (resolve: () => Sde): Sde => {
     checkForUpdates: () => get().checkForUpdates(),
     on: (event, handler) => get().on(event, handler),
     scope: () => get().scope(),
+    clear: (table) => get().clear(table),
+    dispose: () => get().dispose(),
   }
   internals.set(facade, {
     loadRow: (table, key) => getInternals(get()).loadRow(table, key),
