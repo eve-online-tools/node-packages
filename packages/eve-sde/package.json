@@ -1,6 +1,6 @@
 {
   "name": "@eve-online-tools/eve-sde",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Typed access to the EVE Online Static Data Export over HTTP, with Vite and Rollup plugins",
   "license": "MIT",
   "publishConfig": {
