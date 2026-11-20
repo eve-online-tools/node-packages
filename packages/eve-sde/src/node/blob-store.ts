@@ -1,5 +1,5 @@
-import { createHash } from 'node:crypto'
-import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
+import { createHash, randomUUID } from 'node:crypto'
+import { access, mkdir, rename, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 import { SdeError, SdeHttpError } from '../core/errors'
@@ -20,16 +20,20 @@ export type BlobStore = {
 
 const sha256 = (bytes: Uint8Array): string => createHash('sha256').update(bytes).digest('hex')
 
-const readIfExists = async (path: string): Promise<Uint8Array | undefined> => {
+const exists = async (path: string): Promise<boolean> => {
   try {
-    return await readFile(path)
+    await access(path)
+    return true
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      return undefined
+      return false
     }
     throw error
   }
 }
+
+// Keyed by target path: stores over the same directory (dev client and SSR, tests) share downloads.
+const inFlight = new Map<string, Promise<string>>()
 
 /**
  * Content-addressed cache of table files. Downloads try the permanent blob URL first and the locked release second,
@@ -38,7 +42,6 @@ const readIfExists = async (path: string): Promise<Uint8Array | undefined> => {
 export const createBlobStore = (options: { dir: string; fetch?: FetchFn; download?: boolean }): BlobStore => {
   const fetchFn = options.fetch ?? ((input, init) => globalThis.fetch(input, init))
   const blobsDir = join(options.dir, 'blobs')
-  const inFlight = new Map<string, Promise<string>>()
   const path = (id: string, kind: BlobKind): string => join(blobsDir, `${id}.${kind}`)
 
   const download = async (lock: Lockfile, table: string, kind: BlobKind, id: string): Promise<Uint8Array> => {
@@ -74,7 +77,7 @@ export const createBlobStore = (options: { dir: string; fetch?: FetchFn; downloa
       throw new SdeError(`Table "${table}" has no FlatBuffers files in release ${lock.release}.`)
     }
     const target = path(id, kind)
-    if ((await readIfExists(target)) !== undefined) {
+    if (await exists(target)) {
       return target
     }
     if (options.download === false) {
@@ -83,7 +86,7 @@ export const createBlobStore = (options: { dir: string; fetch?: FetchFn; downloa
 
     const bytes = await download(lock, table, kind, id)
     await mkdir(blobsDir, { recursive: true })
-    const temporary = `${target}.${process.pid}.tmp`
+    const temporary = `${target}.${randomUUID()}.tmp`
     await writeFile(temporary, bytes)
     await rename(temporary, target)
     return target
@@ -93,7 +96,8 @@ export const createBlobStore = (options: { dir: string; fetch?: FetchFn; downloa
     dir: options.dir,
     path,
     ensure: (lock, table, kind) => {
-      const key = `${lock.tables[table]?.[kind]}.${kind}`
+      const id = lock.tables[table]?.[kind]
+      const key = id ? path(id, kind) : `${blobsDir}:${table}.${kind}`
       let pending = inFlight.get(key)
       if (!pending) {
         pending = ensure(lock, table, kind).finally(() => inFlight.delete(key))

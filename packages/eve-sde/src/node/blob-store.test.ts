@@ -42,6 +42,17 @@ describe('createBlobStore', () => {
     expect(requests).toEqual([`${sdeBlobUrl}${id}.fb`])
   })
 
+  it('shares a download between stores over the same directory', async () => {
+    const { fetch, requests } = serving({ [`${sdeBlobUrl}${id}.fb`]: () => new Response(bytes) })
+    const dir = await tempDir()
+    const [first, second] = [createBlobStore({ dir, fetch }), createBlobStore({ dir, fetch })]
+
+    const paths = await Promise.all([first.ensure(lock, 'races', 'fb'), second.ensure(lock, 'races', 'fb')])
+
+    expect(paths[0]).toBe(paths[1])
+    expect(requests).toHaveLength(1)
+  })
+
   it('falls back to the locked release when the blob URL refuses', async () => {
     const { fetch } = serving({
       [`${sdeBlobUrl}${id}.fb`]: () => new Response('', { status: 403 }),
