@@ -1,2 +1,2 @@
-export { isKnownSpace, mapDataProcessor } from './map-data-processor'
-export type { MapDataProcessorOptions } from './map-data-processor'
+export { isKnownSpace, mapDataset } from './map-dataset'
+export type { Locale, MapDatasetOptions } from './map-dataset'
