@@ -51,6 +51,8 @@
   },
   "devDependencies": {
     "@eve-online-tools/eve-resfile": "workspace:*",
-    "@eve-online-tools/eve-sde": "workspace:*"
+    "@eve-online-tools/eve-sde": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }

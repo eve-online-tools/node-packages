@@ -70,6 +70,8 @@
   "devDependencies": {
     "@eve-online-tools/eve-sde": "workspace:*",
     "@use-gesture/react": "catalog:",
-    "motion": "catalog:"
+    "motion": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }
