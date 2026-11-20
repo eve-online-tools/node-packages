@@ -1,9 +1,5 @@
-import { mkdtemp } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-
 import { fixture } from '@eve-online-tools/eve-sde'
-import { runDatasets, type Lockfile } from '@eve-online-tools/eve-sde/node'
+import { buildDataset } from '@eve-online-tools/eve-sde/node'
 
 import type { Data } from '../data-provider/types'
 import { dogmaAttributeIds as ids } from './dogma'
@@ -61,23 +57,8 @@ const source = fixture({
   typeElements: [{ typeID: 582, elements: [{ position: 1, elementID: 30 }] }],
 })
 
-const locked = { version: 'v1', fb: 'f', bfbs: 'b' }
-const lockfile: Lockfile = {
-  lockfileVersion: 1,
-  release: '20261119T000000Z',
-  buildNumber: 1,
-  releaseDate: '2026-11-19T00:00:00Z',
-  tables: Object.fromEntries([...shipTreeDataset().tables, 'groups', 'typeDogma'].map((table) => [table, locked])),
-}
-
 const run = async () => {
-  const root = await mkdtemp(join(tmpdir(), 'eve-ship-tree-'))
-  const dataset = shipTreeDataset()
-  const result = await (
-    await runDatasets({ datasets: [dataset], lockfile, source, root, cacheDir: join(root, 'cache') })
-  )
-    .get(dataset.id)!
-    .load()
+  const result = await buildDataset(shipTreeDataset(), { source })
   const file = result.assets.get('ship-tree-data.json')!
   return { value: result.value, data: JSON.parse(new TextDecoder().decode(file)) as Data }
 }

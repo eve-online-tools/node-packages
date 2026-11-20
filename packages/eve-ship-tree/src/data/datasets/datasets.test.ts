@@ -1,9 +1,5 @@
-import { mkdtemp, readFile } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-
 import { fixture } from '@eve-online-tools/eve-sde'
-import { runDatasets, type Lockfile } from '@eve-online-tools/eve-sde/node'
+import { buildDataset } from '@eve-online-tools/eve-sde/node'
 
 import { iconsDataset } from './icons'
 import { identifiersDataset } from './identifiers'
@@ -30,36 +26,12 @@ const source = fixture({
   ],
 })
 
-const locked = { version: 'v1', fb: 'f', bfbs: 'b' }
-const lockfile: Lockfile = {
-  lockfileVersion: 1,
-  release: '20261119T000000Z',
-  buildNumber: 1,
-  releaseDate: '2026-11-19T00:00:00Z',
-  tables: Object.fromEntries(
-    [
-      'factions',
-      'graphics',
-      'groups',
-      'types',
-      'typeDogma',
-      'shipTreeFactions',
-      'shipTreeElements',
-      'shipTreeGroups',
-    ].map((table) => [table, locked]),
-  ),
-}
-
 const run = async () => {
-  const root = await mkdtemp(join(tmpdir(), 'eve-ship-tree-'))
-  await runDatasets({
-    datasets: [identifiersDataset, iconsDataset],
-    lockfile,
-    source,
-    root,
-    cacheDir: join(root, 'cache'),
-  })
-  return (path: string) => readFile(join(root, 'src/data', path), 'utf8')
+  const outputs = await Promise.all(
+    [identifiersDataset, iconsDataset].map((dataset) => buildDataset(dataset, { source })),
+  )
+  const files = new Map(outputs.flatMap((output) => [...output.writes]))
+  return async (path: string) => new TextDecoder().decode(files.get(path))
 }
 
 describe('source datasets', () => {
