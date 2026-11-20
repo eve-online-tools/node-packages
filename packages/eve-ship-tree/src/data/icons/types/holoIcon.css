@@ -2274,6 +2274,82 @@
   --types-holo-icon: url('res:/dx9/model/ship/minmatar/carrier/mca2/icons/mca2_t2_isis.png');
 }
 
+[data-type-id='95629'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc3/icons/abc3_fn_isis.png');
+}
+
+[data-type-id='95630'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/battlecruiser/cbc3/icons/cbc3_fn_isis.png');
+}
+
+[data-type-id='95631'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/battlecruiser/gbc3/icons/gbc3_fn_isis.png');
+}
+
+[data-type-id='95632'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/battlecruiser/mbc3/icons/mbc3_fn_isis.png');
+}
+
 [data-type-id='95741'] {
   --types-holo-icon: url('res:/dx9/model/ship/amarr/battlecruiser/abc4/icons/abc4_t1_isis.png');
+}
+
+[data-type-id='95859'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf7/icons/cf7_t1_isis.png');
+}
+
+[data-type-id='95860'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf4/icons/gf4_t1_isis.png');
+}
+
+[data-type-id='95861'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf2/icons/mf2_t1_isis.png');
+}
+
+[data-type-id='95862'] {
+  --types-holo-icon: url('res:/dx9/model/ship/ore/frigate/oref1/icons/oref1_t1_isis.png');
+}
+
+[data-type-id='97266'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf6/icons/cf6_t1_isis.png');
+}
+
+[data-type-id='97267'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf3/icons/gf3_t1_isis.png');
+}
+
+[data-type-id='97268'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf4/icons/mf4_t1_isis.png');
+}
+
+[data-type-id='97269'] {
+  --types-holo-icon: url('res:/dx9/model/ship/minmatar/frigate/mf5/icons/mf5_t1_isis.png');
+}
+
+[data-type-id='97270'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af3/icons/af3_t1_isis.png');
+}
+
+[data-type-id='97271'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af6/icons/af6_t1_isis.png');
+}
+
+[data-type-id='97272'] {
+  --types-holo-icon: url('res:/dx9/model/ship/caldari/frigate/cf3/icons/cf3_t1_isis.png');
+}
+
+[data-type-id='97273'] {
+  --types-holo-icon: url('res:/dx9/model/ship/gallente/frigate/gf5/icons/gf5_t1_isis.png');
+}
+
+[data-type-id='97274'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af7/icons/af7_t1_isis.png');
+}
+
+[data-type-id='97793'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/frigate/af2/icons/af2_xxii_isis.png');
+}
+
+[data-type-id='97904'] {
+  --types-holo-icon: url('res:/dx9/model/ship/amarr/cruiser/ac1/icons/ac1_xxii_isis.png');
 }

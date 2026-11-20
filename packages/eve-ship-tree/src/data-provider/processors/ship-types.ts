@@ -1,11 +1,5 @@
 import type { Skills } from '../../skills-provider/context'
-import type {
-  CertificateRecord,
-  MasteryEntryRecord,
-  MasteryRecord,
-  RequiredSkillsRecord,
-  ShipTypeRecord,
-} from '../schema'
+import type { CertificateRecord, MasteryRecord, RequiredSkillsRecord, ShipTypeRecord } from '../schema'
 import { Data } from '../types'
 
 export type ShipTechLevel = 'T1' | 'T2' | 'T3' | 'navy'
@@ -64,16 +58,13 @@ const getShipState = (requiredSkills: Skills, currentSkills: Skills): ShipState 
   return meetsRequirements ? 'unlocked' : 'locked'
 }
 
-const getMasteryEntries = (mastery: MasteryRecord): MasteryEntryRecord[] =>
-  Array.isArray(mastery) ? mastery : (mastery._value ?? [])
-
 const getCertificateLevel = (certificate: CertificateRecord, currentSkills: Skills): number => {
   let level = 0
 
   for (let index = 0; index < certificateLevels.length; index++) {
     const levelName = certificateLevels[index]
     const meetsRequirements = (certificate.skillTypes ?? []).every(
-      (skill) => (currentSkills[skill._key] ?? 0) >= (skill[levelName] ?? 0),
+      (skill) => (currentSkills[skill.typeID] ?? 0) >= (skill[levelName] ?? 0),
     )
 
     if (!meetsRequirements) {
@@ -89,8 +80,8 @@ const getCertificateLevel = (certificate: CertificateRecord, currentSkills: Skil
 const parseMasteryCertificates = (mastery: MasteryRecord): Record<number, number[]> => {
   const result: Record<number, number[]> = {}
 
-  for (const entry of getMasteryEntries(mastery)) {
-    result[entry._key + 1] = entry._value ?? []
+  for (const { level, certificateIDs } of mastery.levels ?? []) {
+    result[level + 1] = certificateIDs
   }
 
   return result

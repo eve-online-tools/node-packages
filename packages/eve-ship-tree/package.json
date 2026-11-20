@@ -25,7 +25,10 @@
         "default": "./dist/cjs/index.cjs"
       }
     },
-    "./data/generated/*": "./dist/data/generated/*",
+    "./sde": {
+      "types": "./dist/types/sde/index.d.ts",
+      "default": "./dist/sde/index.mjs"
+    },
     "./styles.css": "./dist/styles.css",
     "./styles.layer.css": "./dist/styles.layer.css"
   },
@@ -40,7 +43,7 @@
     "test": "pnpm --workspace-root vitest run packages/eve-ship-tree",
     "lint": "pnpm exec oxlint src",
     "format:check": "pnpm exec oxfmt --check \"src/**/*.{ts,tsx,css}\"",
-    "sde:update": "tsx scripts/sde-update.ts"
+    "sde:update": "eve-sde update && pnpm run build"
   },
   "sideEffects": [
     "**/*.css",

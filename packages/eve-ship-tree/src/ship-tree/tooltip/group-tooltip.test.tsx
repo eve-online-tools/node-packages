@@ -18,17 +18,17 @@ const tooltipData = () => {
         description: { en: 'Small, fast but fragile vessels.' },
         preReqSkills: [
           {
-            _key: factions.caldariState,
+            factionID: factions.caldariState,
             skills: [
-              { _key: 3330, display: true, level: 1 },
-              { _key: 3327, display: false, level: 1 },
+              { skillTypeID: 3330, display: true, level: 1 },
+              { skillTypeID: 3327, display: false, level: 1 },
             ],
           },
           {
-            _key: factions.guristasPirates,
+            factionID: factions.guristasPirates,
             skills: [
-              { _key: 3328, display: true, level: 3 },
-              { _key: 3330, display: true, level: 3 },
+              { skillTypeID: 3328, display: true, level: 3 },
+              { skillTypeID: 3330, display: true, level: 3 },
             ],
           },
         ],

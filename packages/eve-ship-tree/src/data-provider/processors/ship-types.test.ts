@@ -17,7 +17,7 @@ const sourceData: ShipTypesInput = {
     },
   },
   masteries: {
-    [bantamTypeId]: [{ _key: 0, _value: [] }],
+    [bantamTypeId]: { levels: [{ level: 0, certificateIDs: [] }] },
   },
   certificates: {},
 }
@@ -63,7 +63,7 @@ describe('shipTypesProcessor', () => {
         },
         requiredSkills: {},
         masteries: {
-          [heliosTypeId]: [{ _key: 0, _value: [] }],
+          [heliosTypeId]: { levels: [{ level: 0, certificateIDs: [] }] },
         },
         certificates: {},
       },

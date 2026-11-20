@@ -43,7 +43,7 @@ describe('TreeDisplay', () => {
 
     expect(() =>
       renderWithShipTreeProviders(<TreeDisplay faction={500001} />, {
-        baseUrl: '/ship-tree-data',
+        dataset: { url: '/ship-tree-data.json' },
         fetch: fetchImpl as typeof fetch,
       }),
     ).toThrow('Ship tree data is not ready yet')

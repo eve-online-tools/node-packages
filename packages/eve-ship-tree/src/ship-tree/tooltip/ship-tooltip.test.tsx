@@ -20,8 +20,8 @@ const tooltipData = () => {
     typeElements: {
       [bantam]: {
         elements: [
-          { _key: 2, _value: 25 },
-          { _key: 1, _value: 30 },
+          { position: 2, elementID: 25 },
+          { position: 1, elementID: 30 },
         ],
       },
     },
@@ -31,8 +31,8 @@ const tooltipData = () => {
       [bantam]: {
         types: [
           {
-            _key: 3330,
-            _value: [
+            typeID: 3330,
+            bonuses: [
               {
                 bonus: 10,
                 bonusText: { en: 'reduction in <a href=showinfo:3422>Remote Shield Booster</a> activation cost' },
@@ -48,8 +48,8 @@ const tooltipData = () => {
             ],
           },
           {
-            _key: 28615,
-            _value: [{ bonus: 5, bonusText: { en: 'bonus to ship capacitor capacity' }, importance: 1, unitID: 105 }],
+            typeID: 28615,
+            bonuses: [{ bonus: 5, bonusText: { en: 'bonus to ship capacitor capacity' }, importance: 1, unitID: 105 }],
           },
         ],
         roleBonuses: [

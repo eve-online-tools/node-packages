@@ -1,0 +1,528 @@
+{
+  "lockfileVersion": 1,
+  "release": "20261119T110708Z",
+  "buildNumber": 3720952,
+  "releaseDate": "2026-11-19T11:07:08Z",
+  "tables": {
+    "_changes": {
+      "version": "e9ad93d981199094f1e13ea99879aca4d652c2031de131565ceb46f483e04a19",
+      "fb": "dcc3094383fcac42abf03f2b87dbe7a1b91389c8908dcf0629d836b335449724",
+      "bfbs": "882815afbbade991747e6ab8e9973f4a812349336cb9fa3053861db14a2ca42a"
+    },
+    "_schemaChangelog": {
+      "version": "7d48c752cefaae9e221ca346d369bd7d6720bba0167139bcbae6c4b5d52546f6",
+      "fb": "d006f37a00bd57fc37b46105177d71304c4e6b94ff7db1b1f7c8c9f8736f4a03",
+      "bfbs": "3ef1c3720faf58c693e9b788f81a97f0f05534ee0b8502c16d3cb381e9bb5a6f"
+    },
+    "_sde": {
+      "version": "0dfa17885c16ff74cb5b0ff8c37ed5cea239f0d0f9bebb6868b5382165e76f47",
+      "fb": "5230b14c5e9e9152e467415933d3130b73f282d48ec753df94fc84aad141ead6",
+      "bfbs": "8a261c3cb7faee202172b03c9ecdfccbfbb2e2e938a480165b96a160aeb77a8d"
+    },
+    "accountingEntryTypes": {
+      "version": "8f9c11785ab31cc28f3e0ff4a0aa682d42b127bff02587004180565dd19b9af1",
+      "fb": "0a84f353d11a7d6bc68d86aa9bdd0402f63c12038dd52d74abd144adc4c59792",
+      "bfbs": "f53e1102f9196b734dc905fb1c722956d061467a8adeb5de776b70b6e22da7e1"
+    },
+    "agentTypes": {
+      "version": "a909a11df1c3ebb062eb23c49e41defdadfd118d072035cfef535f51997becce",
+      "fb": "48fdc5841b50b673e6b1d9d712567aace7b8ec6c1a649edcf7172c33abe677df",
+      "bfbs": "ccebd8820bd7460ab2936e86ef13c683e45cc58d7b3119fd089b94d40b90bc17"
+    },
+    "agentsInSpace": {
+      "version": "b3312c8a4cf942ebe6e0fd48cca441a60ca996c11e883482dbc77489a0d96adf",
+      "fb": "049fae7ea76716a9e05da108394ef2947618afa36ab42ea6ed6d4c4bd2260670",
+      "bfbs": "67ba83d569bb7cb7c49594fb4832aa89cd2b45aad3c79389a2414ba55900cb14"
+    },
+    "ancestries": {
+      "version": "e4bfb8891943ead5ce11457b65d87333135953f0108297fb7d821efd11276f29",
+      "fb": "dcfc5dc11620a902b5887935a65aacb4e02d17b32db87f35f419928553e976ca",
+      "bfbs": "0bb8761c30a2227b061779ade70e9919e9ea2e20c2ea1443b41aabdab7d5b0e8"
+    },
+    "appliedProximityEffects": {
+      "version": "214a275eb01f8b3e90009c9f594b6bcc31507196189e81eaf8bf5fb86fddfd66",
+      "fb": "11b7938ce108acce80453d6ce1cc73802d2a9f92ed1575e76e3299816eb8970e",
+      "bfbs": "cd06aedb779aea7c5c4b0515630d3df374d9bb401d9fa8438723721d1798b045"
+    },
+    "archetypes": {
+      "version": "8f8369f437facb8dc88127c93ac8c7dbce6f4aef37b9a5b9963db86b74c3498a",
+      "fb": "e4c120c193a6e3064b1d6f3bda814616f579320d00ae4c90e1733b85169f4608",
+      "bfbs": "d92e031ec6e6936383ad3ba0697d6d8ce5f0f50b10c2f2be6432e03da7ccf134"
+    },
+    "bloodlines": {
+      "version": "d368ae38a7145aa21d17cd5c739a4fb23fe03432115c8e5a89be03e9c2603bdd",
+      "fb": "b8961f7e54a114ea70c646fd24a5bd23fce1fffbbebb67afb206735cff9b5391",
+      "bfbs": "bd88e273e875c8d7f0b94089235680955062334995d7618dac098947f1e8714b"
+    },
+    "blueprints": {
+      "version": "1aeba61aa11888308ce74956d0f290d8ee81d89703b9c6db8962412374935c9f",
+      "fb": "cc2e018d4db371e71e0e80481afffbd4407b02cb6d33fc2263d950474e96e100",
+      "bfbs": "f51c39f95c2e439f124b3b29a6d64b13b92cdacfb386c1c4e62a5c308273b883"
+    },
+    "categories": {
+      "version": "d18645f30d42450d55a25d8e8cd1c9f57e16fd491c97b00f2233d5daec10fa43",
+      "fb": "400c560d71aac1534edbc516b2fa0e3c5e0284bd6b59527e33206e938a409b54",
+      "bfbs": "bc0e5757c4da2822410a0ee7b407cc79af5a28bdd9dbba42a80ea4eb297f55cd"
+    },
+    "certificates": {
+      "version": "0e83e29cf5b6c918a33af32c471b3d71df084ad04d162b70d2de1165c05de04e",
+      "fb": "381f12d2e78f32752ee50a55d083a2d1addcb37824ce16f8eb05dcba3871402a",
+      "bfbs": "652d974063cb18badc00d67c0f6748f88fae21b6b9b82d8e32ae58dc949753f8"
+    },
+    "characterAttributes": {
+      "version": "751185fa2d867a9e388bc2a83a13b5a977d98e6e9ee4986920f37a7e46f12620",
+      "fb": "cd0e2ccd21ead479f6e7316f379f780d15272d8ea610eddb1b14ce0706a100b8",
+      "bfbs": "7d1fd5f15f5ad93f2a7827167305b5925b758241a62827a08b95e5c0895eb22a"
+    },
+    "characterTitles": {
+      "version": "6f738c642a4264f674dec56b9cd1b8f7300a41a9319408f41120a342f8a11867",
+      "fb": "d795e15baa5d52c1fdd0998fc67a5cb342bff303148e48619206347a91d0e988",
+      "bfbs": "4e213d5d6e5b935040c0243bca4b7dc156a12fd68ac3148d16f4d269bb9174cf"
+    },
+    "cloneGrades": {
+      "version": "01a3d005567376bfa80cd78f445e84a4c550160823b8624c92664c6459fd11d7",
+      "fb": "3bd7559209f3bf9f47648747f27e3fd6f13bcb2001cd77ea0e04a70294a42bf0",
+      "bfbs": "9f927cf09716ad038f646b5fe78995b7f32198e08c22c8c0e98430338ee70137"
+    },
+    "compressibleTypes": {
+      "version": "4e8054024d4be530f71fcf06f6a95b7e6f0cd545736d79013f5499cae873f2a2",
+      "fb": "1a264f8657caed742f805d8335dba8b8a07c426b6192121b7b91f5202c1325a7",
+      "bfbs": "1905ef14597fa7aefa2bcc4940f109bbb1d95f4f4a7d52f93532618fe652d951"
+    },
+    "contrabandTypes": {
+      "version": "b31f51286a62c01d5213fccec0ba3414ec9cd2750e242ddbc838c4b5374b805a",
+      "fb": "f6e9162980af06826daa888d0d002d102156474e7f244be167f6065edcdebaa7",
+      "bfbs": "66b5a9eab28216e74f1162caeca034d8a613d81f56169d22f29c6c2da800193d"
+    },
+    "controlTowerResources": {
+      "version": "9eef282b23b1014c81652ede988072e84f74f230993ff15e2c036a200004ebe0",
+      "fb": "62476a2a421e7c383ac8fd264bf922280794acdfb9127ae78548e5b27f131ac7",
+      "bfbs": "88a2182def118334339d195d6c064900d549f336de503b5e8716ce90bfc09cf8"
+    },
+    "corporationActivities": {
+      "version": "dd07055a6f51dd808e6281c9ef3b00528665d4502915b4563545f1370d4bf25b",
+      "fb": "8c671f96c3e4110b53ee1f0c1734d3820157ebf151ca68e35ae1406b3b8eb183",
+      "bfbs": "b65061e726842a4089eac6cce46c400c752ae0c2162aa4b970e56bc508fe6bdb"
+    },
+    "corporationRoleGroups": {
+      "version": "f7363f52f71371fa3afce6b99e74bc739ce6d297d411e14fac620f3c2cf68083",
+      "fb": "431b742377626a9ce3a8115b0273e5785df70ec0347a7b74cb3bbf7480f926b3",
+      "bfbs": "e978dc0d69bda3e881961d6f2e99493f6d2ffb12f02c9714dfbd60a12f349097"
+    },
+    "corporationRoles": {
+      "version": "85554f82b484999c8a54df753949f276e4b1bf8516c4fc2ee123fd2060984fcf",
+      "fb": "2d9fa5a0a6ef338f8ec391592920b1e6b451e282d0f0461b3282d5edd55a7196",
+      "bfbs": "77f3e829ca5a2233fbc945f11c5d101cf622b6a7d7543f2089a384b4ddc3c8ef"
+    },
+    "dbuffCollections": {
+      "version": "81b4aba8542eadced2a07ba0ab6173b89ffaa39459399ff3ba2e4cab90cd9acc",
+      "fb": "042d5530af76ed823fcc15d1f94cc400acffd963a5a09d96c40894a817891070",
+      "bfbs": "bd1f55d6e0304476806aac5f1f908d13889a7114dac51ba2e8dc2dd446c05e6a"
+    },
+    "dogmaAttributeCategories": {
+      "version": "f57a8ca447368bd2ab30c63f107309fee91b86d9c5b951fa5457dc6ee720daed",
+      "fb": "4c40612bec14f6596b12dcfeee836d819b9b23bce6baa3f8561af12fc90eaca8",
+      "bfbs": "5210786d8499c2753453ee808e230184c07024a9ccaf42fb349548b20da0c6f4"
+    },
+    "dogmaAttributes": {
+      "version": "e69a316b2d6b5a80bea8512f373d2494bc1ce41c940d4dea9138b39499d3006d",
+      "fb": "4099246ef9a642f4f9fd289c9b5594329a08cc9088f1c42ac3ca1ee5a6b98cb7",
+      "bfbs": "a2c4c0733802fef61b6ee5e64cef8bdb2f88cd1c81f0aba69fa201b220fa29d2"
+    },
+    "dogmaEffects": {
+      "version": "d9a7621fd5339359382029f4b770606750e7ec472e28060ef775a33005cdae59",
+      "fb": "81130b247939d4d80089c09fece44e91af0b0f4cd2a94fe02c4af891232d2139",
+      "bfbs": "c845cf915668cdb432f2807c75084b6ea807a303c99febab5b746f4146248930"
+    },
+    "dogmaUnits": {
+      "version": "3a20cac885bd2ead6f3cf9dfbe1d25a380a239ec6e3fca9b03fe881ae1b8ccad",
+      "fb": "b7fcdec67e17a13ce556cfab8f1eaeeefeb76e02376994019b5c69e1f62f2c69",
+      "bfbs": "c26874cf0e2b09d38441a3eb5bfd3fabc9844574eb2996a99b36cb676fba67e7"
+    },
+    "dungeons": {
+      "version": "013fbb91daf0d9aa22a8a7d81c7aa206ce258e8a03294d6272f902d83cf87050",
+      "fb": "23c2faa106f902ffdee7f85a9bac2ab3c9f7ba4fa0756e48352b35cf6dcd587c",
+      "bfbs": "2ecf1761ec396fb5f24ae7438567e302f23ab22712394a02b17c2b7ddbe70f13"
+    },
+    "dynamicItemAttributes": {
+      "version": "9aa6dc3ff9e0d0552b424a6385e20a4c8b3af3b422a8911af7f7a4b118c62028",
+      "fb": "1464b284fb67f17eb0f16cbfe9fb2552dd1e2f770a0d352b2ce6b79dad1e3d36",
+      "bfbs": "14cc7603245b27b8749106ffbb718c670248b756b3a650cf609989e4809bec3e"
+    },
+    "epicArcs": {
+      "version": "154b947d3bafbe83cf5beef913c214cd9cce23021314d23eee38dcd673a428e3",
+      "fb": "80250128309a60bed5c102e51c50c532bc81b79055ff4b76de690ba5f94540d4",
+      "bfbs": "7b583aa7128ac60374f502852ce1428436c8c1f791aaf7a236d16dd0e1763642"
+    },
+    "expertSystems": {
+      "version": "27d8d73b009c4ff3581ca8b6586c6804653c85af910abb8bae5e3ef88ef0dc7e",
+      "fb": "824ceda910f3bce099e564b42ef54541972d4bbdfdef3e50b26576ea8bd83caa",
+      "bfbs": "36c810b6901225b80160cdfdc86fd3fa850b4d3ed7e68d6896057e9f158cb6aa"
+    },
+    "factions": {
+      "version": "14281ceb9c63639067c0eb1248b04b053066c7d1acddf370518ac2bcee38ae09",
+      "fb": "20ca8c4bca22f2bc8c2eaf954ed2adffab922717280ef06d1fe5489f79601a61",
+      "bfbs": "a5fbb649db16ce0978c2f50c90f1fe91f3fadf09d657b84e8634594de7e1f3cb"
+    },
+    "fighterAbilities": {
+      "version": "9b4e68f2926bc6baa288075723921c134da02e98df12ca2857d54ce64c30403c",
+      "fb": "82237bfe64553d3b681f003e596913c75ac9630504dcdf9dbd9d5d0f07ba7027",
+      "bfbs": "2dda7afcf4630e6f7aa674779d87c4dd4495e01c95f0156ee6fc01f7058c5c7b"
+    },
+    "fighterAbilitiesByType": {
+      "version": "3835e735f136efc278415b484908670bf610164ade83db24778b81b2b7f46582",
+      "fb": "a7e2a7b8710f88a12922ae835ec64d3f6b84f48842dce6bf2ef2a7b85a498fcb",
+      "bfbs": "1a4291aa208e2468de776f353be72a1678ac9f25fdcba8d6e22d5821511752eb"
+    },
+    "freelanceJobSchemas": {
+      "version": "ef075b26990b11c020f63994f2ad299ea600bd0d8204230b2059a5a5d9de3dfb",
+      "fb": "15acaa71d89677474a01c27b0eeca7cc757105b2e99e40e06d45c104c16312f0",
+      "bfbs": "99210b3aacc1f789ef2a5ef8f37c9738c8082ac90d6e240d3731df51d27f5314"
+    },
+    "graphicMaterialSets": {
+      "version": "fc2577b071ecf97156885f7eeb732c0ba97d6d5cf51b5d52450b61e668b9c71e",
+      "fb": "905084a7c4aefe0f686430efb7c39485977b1ef59c543fb35f7d1eed50aa5f9b",
+      "bfbs": "893c0c3f36c44516325a260e02a0b66be2f59c6ccaaea4c121b9dd673b7f2d1f"
+    },
+    "graphics": {
+      "version": "84b961a9f14941f4a9b40b1ba1711ee9767c0d0c1a703ee704f836db3ab29f89",
+      "fb": "c85ecedde92a2a89b010e5f0d51f332fcf867b0bd9957287f8bfc35dcdedffa2",
+      "bfbs": "c857c3e55be30d9d53540d45dc8a7f111566a232700614201eba9e8a64354394"
+    },
+    "groups": {
+      "version": "82e6a9786ac87d5390cb585850ae343530d53455ae82f602a35f6f633a6dbe35",
+      "fb": "e3168bf581029a7cf496c817f6db8156539e829d81d1b4c887ac6bba05811f88",
+      "bfbs": "36398661f042a4239e84ef5e8703e2bd9ee10d2c9f5a3af41cac9e6c2c970351"
+    },
+    "icons": {
+      "version": "296030f5638089fac14de7b0acba2fed242e211f02027755d50e5dbb2b9a3fb2",
+      "fb": "55c657d021bf3479af45e2f24de1e65daeb5d3de4a18e093136918b0a1a386fe",
+      "bfbs": "ac813c82a85387f941dbce3c58a10e55747ad6a72cb3228290a46cb856392552"
+    },
+    "industryActivities": {
+      "version": "9729d32dd53026141878ca6447cc66836988fece45de05a7b370a5eb2e218ca2",
+      "fb": "3f8300654c3d987ebedb78f46bfa01f074f05be9eb4cbbcdfdbfd2dc85aa6a90",
+      "bfbs": "42ffda538c85bae6e8888b2c0f3d8454114af1352e992762227fa3793e78b343"
+    },
+    "industryAssemblyLines": {
+      "version": "76e32f8528c113eecf160928650938f6553f4a79bd403c4b562a40653121c614",
+      "fb": "fd8e8c763c46f56ce6a7d6c2f4d9ef1b2667c8db1abbaeae070bab6d682247ac",
+      "bfbs": "25033bf76014f2ca897d477b71f302b968661bc110020b219c07fbcbeacd3528"
+    },
+    "industryInstallationTypes": {
+      "version": "358652610defb467ffd0b0e8ec75740640a7ffe8b7a832dfaf95feaf8ee69cb0",
+      "fb": "06f430c222e0243a0879b4cf06920117b6c0c20e2c9eaf85cdbaed5172f45e69",
+      "bfbs": "08e9821316cf24b86a802fd6123defa19dba9341a8d730f7b6df6efc685a47ad"
+    },
+    "industryModifierSources": {
+      "version": "40d0ff8e7064960f991992432be966ebb818a769f3dfb7a2221bab1af836cc0a",
+      "fb": "78805ff2482d2ab62a12b4dae82288020dab8ad17e64edc21545582b6b119c4a",
+      "bfbs": "650b6140e5b7e64aa5152d8084e6c0eb41679589dfef2ff4292c410a688384ac"
+    },
+    "industryTargetFilters": {
+      "version": "812a9f624d9f5f6ee4f56f65c33f298755e4bf0ea6d9456df3c8550d6bbf542f",
+      "fb": "d5a27bf6e6ee197f3b84d7a2826eee454364d2cc53df2d7b0d7797a383db35b6",
+      "bfbs": "fb70daf3bd4079b948288b20487091bbe7355504535cc5eeede7c90062772a34"
+    },
+    "landmarks": {
+      "version": "b24051ba6f35f20b07903c6872b943ad04808573fe483b5e188cbd8e90215a5f",
+      "fb": "2d3e0eb388d480e64bc9b1d522845989daea6ffed5e5eb65d78d7c2332d084b8",
+      "bfbs": "24feed3c02bb9e6cd22202fb3b4ffd25d84b1c53588267a8b4f3c282d5e0a810"
+    },
+    "linkWithShip": {
+      "version": "29421d6d96565730f472d3a3f10efaa0bb8d830f9b9e0def91a0fb0a906ea683",
+      "fb": "199b75c6fe2657d8ae1decc48390b095e90ac6e19908259a1807a9857105f094",
+      "bfbs": "8969aea17403782b52c8476e5b98c97d9da0e35676d7804c5d934d2f5f96b6ba"
+    },
+    "mapAsteroidBelts": {
+      "version": "dbb04ef5e6695a1df4c8c17052b0dd7d177afc6cad9d4d2516d46ca0eeb3ac45",
+      "fb": "2b017db1fc7cc12b01b4ee9a180a5ecb7370ab57c01ee5babbf354642f61710b",
+      "bfbs": "a45dda9e5a802cbd3e27526264cdb0586db65553b29fda91c8d1259cf19c74cd"
+    },
+    "mapConstellations": {
+      "version": "1effe63585d64afe2455d62a57acebd3896ce9af1b17e29c39e6f70d83a30874",
+      "fb": "278f11669f958e2bd93febf06e84d8b63069fd133750859e393d6773db84cdc0",
+      "bfbs": "456192237b93fcbb37471c525869cfac5d594d59c06f53fd0c184e64c5292c9c"
+    },
+    "mapMoons": {
+      "version": "eeb931042dae0e799ae284225a4d0795e5e164387c67b86ad9458d256d8f41d9",
+      "fb": "d3497342b1867a636b7316e37e5395b99a7c24460738446fcc64782ac605bfd0",
+      "bfbs": "2e0245beb3cd82b90817851b20c71590040bc1272d051fa4649309e1cd2de5a2"
+    },
+    "mapPlanets": {
+      "version": "1a03bd7b6a8ea940c587218eddcd78013375faef8033121eccc10c9f1da7f458",
+      "fb": "0fab2d61718aab0c644762777e0d2e216832e9cb026a8f17d5680997047af398",
+      "bfbs": "484c67de01bcadfd63b0fa4219df2d237ef566880ffd578c1e30c667e32d914c"
+    },
+    "mapRegions": {
+      "version": "892896cfe6ee9180da3d04f613154b1c15b6fbed275528aa2ec8f19d40e9a5d9",
+      "fb": "924447e3b1c004f42a28598481039489b7df91581f44c962af4f77fddb6d7dbd",
+      "bfbs": "b4388e8582c9627efe1cd2683287a7fd5856df09d3c19ad2bd4ddc51f350884e"
+    },
+    "mapSecondarySuns": {
+      "version": "a328482c281c9f381d111b1efc3c376b0c19277d1cf04fe391157ca7a5db6845",
+      "fb": "49cd9315bda80e1c3b9eb66b1fef6692c7b4cdf1da62e14f8d386a5824cdcbee",
+      "bfbs": "fd928b660b3d363061e168b2b20603546f0730a86c4ea3103328bd610640c9ed"
+    },
+    "mapSolarSystems": {
+      "version": "5c75e0f6ffeb231a340f105e6ae61719740616e14d4b36413e7c7d8f1185752d",
+      "fb": "a8b0a8c45d0d9949a0c8f9780608480a3c0518cd9eb2f493214a39f677aec0da",
+      "bfbs": "fcb8a2bb4d11d06d5867695b6a8a5e5e4685b8697a62b59eeeb4f5563ed671ec"
+    },
+    "mapStargates": {
+      "version": "e9d569037b072265e55e9beb48257d62032ba70f3c7ec22a12340f2164550336",
+      "fb": "775c3ef0117e475c54b613e2eedec68b64e48d2aac82fce52825320918b76a6e",
+      "bfbs": "8a7bdf116bfa6320f7881d7979c5a2bff24a655d1ad067e787c61707f8be03ff"
+    },
+    "mapStars": {
+      "version": "23e53f24e66f91ab9e7de67f86c4aee7dc1f7b9bb54438169b5fb7124b4cba0f",
+      "fb": "a366c76d3b5bec74327c4a9b910b9f139d85ee7532ea236635bf382938b8399f",
+      "bfbs": "bc2d0a98478845562131093f1f0822bc8152133369e1dd9bb6d6185968702a99"
+    },
+    "marketGroups": {
+      "version": "69a38fee7f8abbc314607eaab6ece957ea6fbda8a1e6fbe5515e5a7218c195bc",
+      "fb": "03dd85194c89e763068082fd812325bcb99573ab8252aaeb24057563f7114c5a",
+      "bfbs": "02624660977281da6cbcde2a891c05acb5bf759b716621df6ef9ecb52f9b0df3"
+    },
+    "masteries": {
+      "version": "424c3fe53eb2367f3affb05c86d38a8e655d12256d8f112faae01cafa70165b0",
+      "fb": "258456cdb55577d555bfa1308606d091b2f42e95fdff2ab722f88086fe6fbc60",
+      "bfbs": "3c07dcbb98a203177eeaa627bcf729f01fcd10e22b85154623044f7354e7242c"
+    },
+    "mercenaryTacticalOperations": {
+      "version": "ef549717229006584e1472f28b8e3d55ad64f26e134a3a99d61f426e354e630e",
+      "fb": "d54dce19e18eba0b7eafe85930ad1088f64c0a669dd9172411b73aef82b85b8e",
+      "bfbs": "6af88d485c79c61d7179e13499e472522fa8fbcbed6e1acab199b4cda904ae48"
+    },
+    "metaGroups": {
+      "version": "14a63d134948a9b9079280a9f9428989a8d02f1c237b51a1ced012b1ab8ca27b",
+      "fb": "c4bcb242972584d7502e55d8a37e2792529e1538405414522532e2def797b1c3",
+      "bfbs": "e248ea0b18c8acab385bc7ede3578e41140fd58883b9dc7a3dfa0b957a6d4ea9"
+    },
+    "metenoxMoonDrill": {
+      "version": "36f9571681faa003a023c2d2ff728fc7d1a047079f65adca9cf5c1e86db0da28",
+      "fb": "405decfb454b3b00da4cce7c6be9b6d86f745b412b9883848f5646874e433a16",
+      "bfbs": "5c84ad0060692c8ab4d6f4297b9a47e0e39c2bb10c41935fe9367940dacb749e"
+    },
+    "militaryCampaignObjectives": {
+      "version": "7b0f68c1c12fe92554691092585d4d35ee32f1b963382b661ef8aab5963f4375",
+      "fb": "e35cc187ba7502130f204541765590060d70ab3f2e582b0ad8ac07024653387c",
+      "bfbs": "7e7dbc22d7606f54da4f56ffb9840dcc55f813ebfc31fcc82eb57c01dff9ac05"
+    },
+    "militaryCampaigns": {
+      "version": "fe66cdfbee15968096d4a3292ba6f3c9cf3ffb05d23c68977ce49479bdd4f0dd",
+      "fb": "7d4d4a691de528473f60caf5ad86c3cec659cfa0af0f1695ef647dd0ba26b074",
+      "bfbs": "4389cc088ed2fba4f5376d035336b31d072b5e7c54fedebba1425c21bfee9570"
+    },
+    "missions": {
+      "version": "005481ea4304ac5b74918ca4b5712444afe949de1df6839cda825284c558cecc",
+      "fb": "7f30ab106f739ebcb6bb818a54472cf3878b8181858553f357174c84133888b7",
+      "bfbs": "4d18645ccaad9eb64991f9572982a8528688cae5e67912d6e2cd3c27eb9d1956"
+    },
+    "notificationTypes": {
+      "version": "af95375f97cfb5922f57176fcf5753c8a7476af91a889079543a820da1135aa4",
+      "fb": "ae901b04ce310497db1eec5a655e66b7f0c73ef04aa9989cfe4610b59df6e1d5",
+      "bfbs": "6111316fb8c41589ead3ae1892b4cdc582928a10807c3910f0d4ad0d1f655950"
+    },
+    "npcCharacters": {
+      "version": "e300cb0e309de545738f92a5000a4617b33009e9f44a029c4223fd2dd0a4a884",
+      "fb": "17ea210169fc80dcc90268c265086cfd3269c024ea1b076db878ba56ecf29ff6",
+      "bfbs": "f0dad92cefe57d5cff4aa66d69707ae5520ded215b8772af5f6dd288392cb93f"
+    },
+    "npcCorporationDivisions": {
+      "version": "f728521c1df22ecfd50d7831308e0d2bec31ec18ddc8dc1d5417f72a56f9a1d9",
+      "fb": "509012aaef5877e1e41ee34f117bf3998b37a7cf0f89803a1459213a219a62a9",
+      "bfbs": "ae07860db17ee73e10a5d9064eec6efbd34a37cae5f97aa91620f29e130d4ae1"
+    },
+    "npcCorporations": {
+      "version": "d56b078397e76c971cb81928976408b86463e21ae0a508483b74b4604e54d610",
+      "fb": "d67e223af4d9107f5eab12b05e36b3d4b50b13b8ecd78de9428107d900ca7eb2",
+      "bfbs": "65a0523657b8d565d5f6ccbd6fdb02f26db9fb2be4bc7bad56174ae201488c25"
+    },
+    "npcStations": {
+      "version": "87ba95d01f5360240eda1d10bc5f9bc382a8f21b7dbb1440899a1b052c2b7c5d",
+      "fb": "ec8dc59eb67855d3e0f936339ce7f875ad45874532ce71738ba9bb65212a2d99",
+      "bfbs": "b613a8ea43100b070946273dc79caf868decd5340abb96a684cd7d9633bec2b4"
+    },
+    "planetResources": {
+      "version": "2e28542876d465f2470a6f8ab3065a1b72e48cb979c16f7d723c18cf76ef4374",
+      "fb": "d9644789e8866e1b3ee189945c53fd8ee235a91abfee5f4a388a0d2be0e5440d",
+      "bfbs": "44910e905275453ef106079efca0fa9e731276305f8615b94cbb0385d8cbbae7"
+    },
+    "planetSchematics": {
+      "version": "2e8d59756c096721e49a2f8e19bdf5a387551824f0ce900b4e554e0935e96d43",
+      "fb": "9c9b2f206264c2553b7d3696465775369dc31531b17c8c3b7646f6d826f5d522",
+      "bfbs": "e8876955fd55560134267825171a178d610a4a18e15a9e099740936f29bace19"
+    },
+    "proximityTrap": {
+      "version": "25d717a983abef02422a6f1c945cc5f891e630abfb5494ab4c42938234b65234",
+      "fb": "a17ff798a2bcc80518eb498e8c8e402cc295e89f126eefc07a6a8b700b3979bf",
+      "bfbs": "d16190d81fcebd4193648790ef71d07aeb79f66c4a13d8ccc69f31b7807adc09"
+    },
+    "races": {
+      "version": "dec2fc5692a180be8d72c0c475a4733efcbb5b57afcb6599ae98c185433fdc55",
+      "fb": "f95cec4d239c69b423300a5adfb68ce0ae082a0537b7459c7ce8f11ae766cd40",
+      "bfbs": "c53bbcaaa6ef4c072d2e66a6b27348d5e801b97f43814b36a33e93a0bbbee8b0"
+    },
+    "schoolMap": {
+      "version": "c969e9fcc6c4e8ca8841def71fb77711d17d470c1ab77f090713a71839f54688",
+      "fb": "622e5b4fb48e8203ed564b7ab1fce8a6e816caba7301b61e88210835d87b3d88",
+      "bfbs": "51374a409bc2d4bb203a0d4b5659076d27a38a4abc61a4bd6ce424287e679adc"
+    },
+    "schools": {
+      "version": "0f4571d407cf20c0b95b749a2e8e8888f8d885d05f9eea08b04cf2585d63c1bf",
+      "fb": "77619aaa46539de2b09a858a5c510962d1e888950dbef288236ba00a417e6bf1",
+      "bfbs": "2b387a72c4d12f24580368619643216aee6adb6611294ccb796b9cc9ae6481a9"
+    },
+    "shipTreeElements": {
+      "version": "5b9fc24bd1d344b3d95f1cf669f3802d0e0ad9adbf3bc5bb29ea64476e834909",
+      "fb": "f9e08202b98f90a67c35dce52c13051c2b8f8481c5db86c0859dbe46b6d98e56",
+      "bfbs": "8e3262b3ed36ed8c464c399556bb79081c8a67cc98fa892276c1fd39844287fc"
+    },
+    "shipTreeFactions": {
+      "version": "87c0637581ff6a8ebe542006333073f01ff6d23f03383017900ffe77eeb62048",
+      "fb": "eecb8076cb40df9bb69226e239c4acc883ddbe13809d9a146aef28efbce7eab9",
+      "bfbs": "7e167be68a1a15d35059de9cb42988f0bcb39be355c9e5340fe4b57853cbfced"
+    },
+    "shipTreeGroups": {
+      "version": "83b4ba5a7903bdd3c99c41e28e8068998ee9a2efea4ef5f2a6ff8eb7bf8ae7cc",
+      "fb": "ac2cda1cb49b0afe7e16c7d7445445813f482a35267f97244449117ab66379d8",
+      "bfbs": "94290754af2a98a4f2f404473112226f76e178f8c00aeb026d17c42bd8c5e156"
+    },
+    "skillPlans": {
+      "version": "0f36f88b7923217507382f50a5c1448faebdd5ca517034f8664bccac663e5dc3",
+      "fb": "f7a3744f58f9affe9191e8ae0b79b11463818bdaa17ac998b54f45233cb2aabf",
+      "bfbs": "d201e6d393784d0cc16b1130ca618804379287cbcdec7572fa41a0be1909f832"
+    },
+    "skinLicenses": {
+      "version": "322e62cb30a2379e192f44cf445b295d59e97b66b8e80d31d993d4b8f4bf4ca2",
+      "fb": "c653425fce5ca947c740b2ba95304708c9b82549650bfef0e297f5dcac3349eb",
+      "bfbs": "0e9e7932b4bc07c80a1a7b88479d66ff6777a40fb443901425ec5b09e46bf776"
+    },
+    "skinMaterials": {
+      "version": "35be88a056fb20bc5521cefffebd3fd4b85656c3f157ec1d0f61779ec286d9a6",
+      "fb": "b3374218e3d8c107b5faba249f6135a96c11a5d4f83be2c8ef22e9f1eb61bbfc",
+      "bfbs": "1d537a87df60ef160e4f7da0ca4d9e1785cc7970b2f0cff50905cfc7ca57c9bd"
+    },
+    "skinrComponentCategories": {
+      "version": "74e7f97a94e46a3907a1c4df5408b149e92933136a5e2e257c6df404debb3925",
+      "fb": "fdf024dc529db395367357ad9437c7b41ef1290a9c85129633daae1d2021461f",
+      "bfbs": "1f7e731e289bd61edcbd08ca3b25bd2aa0e4a8bee6d1b7e338862b3122a33c8c"
+    },
+    "skinrComponentPointValues": {
+      "version": "f854c995fd95e328d4e61d2da574648fc564d79416e78a8a3800409f1640ee0c",
+      "fb": "3c4669490b94a8388d43f8786d1ab68e3d34f85795d5519087debbad88160e16",
+      "bfbs": "ef21a7a4b42dd08268ac91ff5454fa3264aa5965e2b0c11d932dae9aa8780eb2"
+    },
+    "skinrComponentRarities": {
+      "version": "551d0730da33c2cef88e60588dde3f8b13aaefbcb2e179ba2e0f5e9668bfdbbc",
+      "fb": "9e2be509bdf3668b8c0e6845a14c9199d95e5118f92430d0186850257212ff11",
+      "bfbs": "d7629f5dbbefc6f63fff1bc3e2d85b886ecfbf00da39a7d6c90a11cd81427681"
+    },
+    "skinrComponents": {
+      "version": "9f0809f889f1268013fd3641b27647287b8cec68e2663bc4115c306e36632151",
+      "fb": "b957385c6e1b3eeef97033bc908c7e7014312fa2b4dfcc6ff4394bce1afe57cb",
+      "bfbs": "9c3b97d9f2fc1b6a81cd745c0f812896cb83d9dcf20b598a0ca748b2902c29fc"
+    },
+    "skinrSlotCategories": {
+      "version": "349f858e0c741ed6e1d534ca9f5480f262dc008249f86449a98717f9227a2cde",
+      "fb": "00f83e6a885e601e42d8bc512767deb288d6aa6673d58fb8773db9c0ebc62dfc",
+      "bfbs": "164c68deb49ec3fd3e6da2f30eb61ce54ae7e4e096a7b8f30e1b377f2e924712"
+    },
+    "skinrSlotConfigurations": {
+      "version": "3a5e77472dc82559ccb855f04e4b5c67ae8edfd8a10d117ffc94d8f3778a893c",
+      "fb": "ebe4ee0abae08a592e9eebf6bba1da9fe4ffdb0cf11fec063d15da932832aabc",
+      "bfbs": "7b0a50d117deee271ab36a0733cb95a6ecfc95441d085cf5b10009a998d1a520"
+    },
+    "skinrSlotNames": {
+      "version": "ef22f88dbb0f9b5151b8c64a48c8cd120d8d1df8af01977b52885f4f574cc3f6",
+      "fb": "c934f288f7bd80e13cb51e2760030f2616a8d2aff380bca8b6b37e6224d9d1ec",
+      "bfbs": "515ea28ea31feb326f395421f115b717b87b6d842c11dd9c64761d4d9cdc2fa7"
+    },
+    "skinrSlots": {
+      "version": "b4f51c63d446789d1ffa8c39c053c3a2d6e9b5132458472f186114327a846717",
+      "fb": "e40626625cc2cce576a019949ab44ecff3ee0357840fa418c760c8d45337be10",
+      "bfbs": "5ac944eead42e0f4c7f0ac190550a9d140f9381f853537a5e5418fcf6a8dd66e"
+    },
+    "skinrSlotsToMaterials": {
+      "version": "9e93ae7ed27df64c30df42a77b17b79d6e3de1eb899dc44084b20d253fb4110a",
+      "fb": "1d254441c71461d23f6da32ff79dbfb9cecca3059d69bd2edbfe0d2b75c876c2",
+      "bfbs": "af452f3ba42cf0ab79df2b98b5805eef967e9e9e7bad9d614bcae738516f8190"
+    },
+    "skinrTierThresholds": {
+      "version": "34c84787c3fbc8fd60fa18f865509090cac834c2142d9ca5c7753f6bf65b650a",
+      "fb": "0f8b5d1e78b927409112579b85dfb068a7624ca1e991554d588ac96e33c2cbbd",
+      "bfbs": "3e64bfb2d9237cc349b530b815e1ea23c3866db4bf36c48594700929fb3bf4af"
+    },
+    "skins": {
+      "version": "697b7f43daf3089e701756de0f8ee5a3a3cdb82c83e61603ec92ce4d9264f6e1",
+      "fb": "5ec1d8dc89c8b41c16d521446fa525d2484c62b356517121c73e18c7b81953ef",
+      "bfbs": "bff470a92482aa0ff46e8031e546014acf1e8745648d92a9dc35da2864afeeff"
+    },
+    "sovereigntyUpgrades": {
+      "version": "122d497c5bab53f36d6910633446cf130adf9024ec8fd0a7d73829796805f626",
+      "fb": "6495e32f5af3bb74e9373c48935fa89d71d7a226f7fe9f5e23d5b133b9b50b63",
+      "bfbs": "d5b28ca48ad2323ca4971b653d7cffa7ba427acf289247491cd634a76bb64579"
+    },
+    "stationOperations": {
+      "version": "3caa2c8c79a570f4de57f6c1999f6cf87578c8551df80d2ce7d8cb96a0cb3111",
+      "fb": "f2bca935c15f1d64abb162193353e00b07d5be6322ddd226ad053b9e9df8ca62",
+      "bfbs": "5208f45c39e3c43d1e4b2897d05a9ef6e33f86d81d415107a4975594930dbe91"
+    },
+    "stationServices": {
+      "version": "2b6b4f60034aaa38fb4dd7b74d9b20f4c913f7c09f5db816776f8e84ebaf8bc4",
+      "fb": "3745ef8faf940c466535938ea64027013af7bc55693fad148f220961f578368d",
+      "bfbs": "759d4fb21d208ec8c8bb2d4ed376bfb0a552cc38c7e9158d16d1ee5e310cdda9"
+    },
+    "stationStandingsRestrictions": {
+      "version": "fc21d5c34bd54266d8ac24220a46d5dbc31705ec2122174023f1728c23b17ceb",
+      "fb": "5617c1d6dfc47d690cf1855b05a1fe43741912f31097bc9a1efe815e601b78c2",
+      "bfbs": "41773d0a7559032b8064f33f945aa6f46ca3fe4ab77ce4af48c73b8e33ea6550"
+    },
+    "systemDbuffEmitters": {
+      "version": "bb2a7568ee91be202615bc0e4aff373ce4d577a180fb430cf5cc796be9b5de63",
+      "fb": "833ffc3a13b638871a8abf02e94fb15bcc4912bdb6ebe36f44aa38d84cc99ec6",
+      "bfbs": "5d75adc90cfb023f8754a9ab6f7f488651ad1c2ecd20ac5d02cabe694470d170"
+    },
+    "systemWideEffects": {
+      "version": "67ca1ce049d97913893e8335e2bb8392223b8e8d5f9963ce36f31287cbcd2457",
+      "fb": "49cbeafd69193c8c9245e7acc609acaf6fbd3b9eff52b637e5d02d75f54d1fe4",
+      "bfbs": "69fb97fc46f0df2a8daf615a4e3459f0f406407e49da17e2cc73b36c1a1144fa"
+    },
+    "translationLanguages": {
+      "version": "3bc06e53b2e1c5a52f6a66397e5912c734928e203374c0e8054e88aecf126ab4",
+      "fb": "b5cf8a05b69d77cc41dab03741b9557e66dfce065ee7fe89c3a051c51602c43b",
+      "bfbs": "68df6a91f3aa9728c88752ca8e457174da87f7ca6a6a73fa701e44a20ec502bf"
+    },
+    "typeBonus": {
+      "version": "936fb7e4e3d79958a4104e918602747acd7c2b560e8ccf99b43bf2da81a14141",
+      "fb": "bc8fd9bb6d38d9927b45b0112aa9b6f373cff9ae872cf7b01fddae474c27e543",
+      "bfbs": "4e3555a8dacb83af2a228d9524de8d0238b245225474f50effc04e6331fa6aec"
+    },
+    "typeDogma": {
+      "version": "9c2b04a02a4592b25f07dacb4534feff402d617cdedef63f1b52e2b605909cef",
+      "fb": "268b212d87d3869cecc83647b9d4e0d3ba72b253bd544ea4a715129a5a79aad0",
+      "bfbs": "03c3103b7dea8c312b2ad0e4a1099f44b8c858e54d7bb2f0c2b4dcbbf7255d3f"
+    },
+    "typeElements": {
+      "version": "50b2ef9c320ddf79710c326bbb34c2a43864b2b9edb9f424ccaef881575618b0",
+      "fb": "197a7a5387be430e212658bcb87e86ebf4d21922838bfc78a711bc6fae982cb6",
+      "bfbs": "f5135bdddc9801aafcb96e615af3cdb76f5a375621a40829ee9f4fdfb050497c"
+    },
+    "typeLists": {
+      "version": "71e4f480873d9a320609c5d372e35b4fad260c45a6e156e9dadf353f8d14ff27",
+      "fb": "988c0e7b02ae9090c82b00842a2d59742696ec35f84cda8e989c5363ba6006f2",
+      "bfbs": "4a0d539c05ed08e9999e95f1ab73acf1d2ec8496a23f76822312c742706d776e"
+    },
+    "typeMaterials": {
+      "version": "3cf6fd831967e22f238068a9a747bc33165a6a8b4fdaa6083240e9c707f409cc",
+      "fb": "c12c12df0531c5069dac481e2aaa3b614caccf7e391d5df4b630204da7d7e398",
+      "bfbs": "281e830db65ff47a78de2ac1ef1c617cfb57388fc773b935c46a774e7547f462"
+    },
+    "types": {
+      "version": "0991bb96069340bd860c97d96e57f28aa48e08dee438b1965de3782dcd31163b",
+      "fb": "0a7f8541e356607e4fe83ccbef066fe7abb358394325cfb652c0e0659c859a5c",
+      "bfbs": "3af4b9966f81ee6bccc7365fce917abad4d349bab81fc7e5704b421d7fa2ad61"
+    }
+  }
+}

@@ -129,8 +129,8 @@ export const GroupTooltip = ({ groupId, faction }: GroupTooltipProps) => {
   const group = data?.shipTreeGroups[groupId]
   const name = localize(group?.name) ?? groupNames[groupId as keyof typeof groupNames]
   const description = localize(group?.description)
-  const elements = [...(group?.elements ?? [])].sort((a, b) => a._key - b._key).map((entry) => entry._value)
-  const factionSkills = group?.preReqSkills?.find((entry) => entry._key === faction)?.skills ?? []
+  const elements = [...(group?.elements ?? [])].sort((a, b) => a.position - b.position).map((entry) => entry.elementID)
+  const factionSkills = group?.preReqSkills?.find((entry) => entry.factionID === faction)?.skills ?? []
   const locked = shipTreeGroups[groupId]?.factions[faction]?.status === 'locked'
   const listedSkills = locked ? factionSkills : factionSkills.filter((skill) => skill.display)
   const icon = iconLarge[groupId as keyof typeof iconLarge]
@@ -184,9 +184,9 @@ export const GroupTooltip = ({ groupId, faction }: GroupTooltipProps) => {
           <ul className={classes.skills}>
             {listedSkills.map((skill) => (
               <SkillEntry
-                key={skill._key}
-                skillId={skill._key}
-                name={localize(data?.skills?.[skill._key]?.name) ?? `Skill ${skill._key}`}
+                key={skill.skillTypeID}
+                skillId={skill.skillTypeID}
+                name={localize(data?.skills?.[skill.skillTypeID]?.name) ?? `Skill ${skill.skillTypeID}`}
                 requiredLevel={skill.level}
                 showLevel={locked}
               />

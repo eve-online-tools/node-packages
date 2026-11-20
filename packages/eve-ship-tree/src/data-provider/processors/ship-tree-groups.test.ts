@@ -6,29 +6,29 @@ import { buildShipsByGroupFactionIndex, shipTreeGroupsProcessor } from './ship-t
 
 const frigateGroup = {
   elements: [
-    { _key: 1, _value: 30 },
-    { _key: 2, _value: 22 },
+    { position: 1, elementID: 30 },
+    { position: 2, elementID: 22 },
   ],
   preReqSkills: [
     {
-      _key: factions.caldariState,
-      skills: [{ _key: 3330, display: true, level: 1 }],
+      factionID: factions.caldariState,
+      skills: [{ skillTypeID: 3330, display: true, level: 1 }],
     },
     {
-      _key: factions.gallenteFederation,
-      skills: [{ _key: 3328, display: true, level: 1 }],
+      factionID: factions.gallenteFederation,
+      skills: [{ skillTypeID: 3328, display: true, level: 1 }],
     },
   ],
 }
 
 const interceptorGroup = {
-  elements: [{ _key: 1, _value: 30 }],
+  elements: [{ position: 1, elementID: 30 }],
   preReqSkills: [
     {
-      _key: factions.caldariState,
+      factionID: factions.caldariState,
       skills: [
-        { _key: 3330, display: true, level: 5 },
-        { _key: 12092, display: true, level: 1 },
+        { skillTypeID: 3330, display: true, level: 5 },
+        { skillTypeID: 12092, display: true, level: 1 },
       ],
     },
   ],

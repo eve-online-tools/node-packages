@@ -9,7 +9,7 @@ import { useDataStatus } from './use-data'
 import { useProcessedData } from './use-processed-data'
 import { identifiers as groups } from '../data/identifiers/shipTreeGroups'
 import { SkillsProvider } from '../skills-provider'
-import { renderWithShipTreeProviders } from '../test/render-with-ship-tree-providers'
+import { emptyData, renderWithShipTreeProviders } from '../test/render-with-ship-tree-providers'
 
 const ProcessedConsumer = () => {
   const { shipTreeGroups } = useProcessedData()
@@ -112,8 +112,8 @@ describe('DataProvider', () => {
     expect(refs[0]).toBe(refs[1])
   })
 
-  it('loads data from baseUrl and exposes processed output', async () => {
-    const fetchImpl = vi.fn(async () => new Response('\n', { status: 200 }))
+  it('loads data from the dataset url and exposes processed output', async () => {
+    const fetchImpl = vi.fn(async () => Response.json(emptyData()))
 
     const StatusConsumer = () => {
       const { status } = useDataStatus()
@@ -121,7 +121,7 @@ describe('DataProvider', () => {
     }
 
     renderWithShipTreeProviders(<StatusConsumer />, {
-      baseUrl: '/ship-tree-data',
+      dataset: { url: '/ship-tree-data.json' },
       fetch: fetchImpl as typeof fetch,
     })
 
@@ -130,7 +130,7 @@ describe('DataProvider', () => {
     })
   })
 
-  it('ignores stale fetch responses when baseUrl changes quickly', async () => {
+  it('ignores stale fetch responses when the dataset url changes quickly', async () => {
     let resolveFirst: ((value: Response) => void) | undefined
     const firstFetch = new Promise<Response>((resolve) => {
       resolveFirst = resolve
@@ -139,11 +139,11 @@ describe('DataProvider', () => {
     const fetchImpl = vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
 
-      if (url.includes('slow-base')) {
+      if (url.includes('slow')) {
         return firstFetch
       }
 
-      return Promise.resolve(new Response('\n', { status: 200 }))
+      return Promise.resolve(Response.json(emptyData()))
     })
 
     const StatusConsumer = () => {
@@ -152,14 +152,14 @@ describe('DataProvider', () => {
     }
 
     const { rerender } = renderWithShipTreeProviders(<StatusConsumer />, {
-      baseUrl: '/slow-base',
+      dataset: { url: '/slow.json' },
       fetch: fetchImpl as typeof fetch,
     })
 
     rerender(
       <SkillsProvider skills={{}}>
         <DataProvider
-          baseUrl="/fast-base"
+          dataset={{ url: '/fast.json' }}
           fetch={fetchImpl as typeof fetch}
         >
           <StatusConsumer />
@@ -167,7 +167,7 @@ describe('DataProvider', () => {
       </SkillsProvider>,
     )
 
-    resolveFirst?.(new Response('\n', { status: 200 }))
+    resolveFirst?.(Response.json(emptyData()))
 
     await waitFor(() => {
       expect(screen.getByTestId('status')).toHaveTextContent('ready')
