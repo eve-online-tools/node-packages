@@ -22,7 +22,10 @@ export type SdeEvents = {
 }
 
 export type SdeOptions = {
-  /** Release to start from: `latest` (default), a release id, or a manifest. Expired release ids fall back to latest. */
+  /**
+   * `latest` (default) follows new releases. A release id or manifest pins the instance: it only moves to latest once
+   * the pinned release has expired upstream.
+   */
   release?: string | ReleaseManifest
   /** Tried in order; the first source that has a table serves it. Default: `[remote()]`. */
   sources?: SdeSource[]
@@ -85,6 +88,10 @@ export type SdeInternals = {
   loadRow: (table: string, key: AnyKey) => Promise<AnyRow | undefined>
   cachedRow: (table: string, key: AnyKey) => Promise<AnyRow | undefined> | undefined
   seedRow: (table: string, key: AnyKey, row: AnyRow | undefined) => void
+  /** Drops seeded rows of tables whose version here differs, once that version is known. */
+  seedVersions?: (versions: Record<string, string>) => void
+  /** Version of the table data this instance serves, for dehydration. */
+  tableVersion?: (table: string) => Promise<string | undefined>
   /** Adopts the server's release for hydration, unless this instance already resolved one. */
   adoptRelease: (release: string) => void
   currentRelease: () => string | undefined
@@ -113,8 +120,10 @@ export const createSde = (options: SdeOptions = {}): Sde => {
   const updates = options.updates ?? 'lazy'
   const updateIntervalMs = options.updateIntervalMs ?? defaultUpdateIntervalMs
   const checksUseful = sources.some((source) => source.live || source.versions)
+  const pinned = (options.release ?? 'latest') !== 'latest'
 
   let releaseOption = options.release ?? 'latest'
+  let currentManifest: ReleaseManifest | undefined
   let manifestPromise: Promise<ReleaseManifest> | undefined
   let resolvedRelease: string | undefined
   let lastCheckAt = 0
@@ -131,13 +140,48 @@ export const createSde = (options: SdeOptions = {}): Sde => {
   }
   const emit = <E extends keyof SdeEvents>(event: E, payload: SdeEvents[E]): void => {
     for (const handler of listeners[event]) {
-      handler(payload)
+      try {
+        handler(payload)
+      } catch (error) {
+        // A throwing listener must not abort the check that emitted the event.
+        if (event !== 'error') {
+          emit('error', { error })
+        }
+      }
+    }
+  }
+
+  const seededVersions = new Map<string, string>()
+
+  /** `undefined` while it depends on a manifest that is not resolved yet, or when the source has no versions. */
+  const servedVersion = (table: string): string | undefined => {
+    const source = servingSource(table)
+    return source?.versions?.[table] ?? (source?.live ? currentManifest?.tables[table]?.version : undefined)
+  }
+
+  const verifySeeds = (): void => {
+    const mismatched: string[] = []
+    for (const [table, version] of seededVersions) {
+      const served = servedVersion(table)
+      if (served === undefined && servingSource(table)?.live && !currentManifest) {
+        continue
+      }
+      seededVersions.delete(table)
+      if (served !== undefined && served !== version) {
+        mismatched.push(table)
+        cache.delete(table)
+      }
+    }
+    if (mismatched.length > 0 && resolvedRelease) {
+      emit('change', { release: resolvedRelease, tables: mismatched })
     }
   }
 
   const setManifest = (manifest: ReleaseManifest): ReleaseManifest => {
     resolvedRelease = manifest.release
+    currentManifest = manifest
     manifestPromise = Promise.resolve(manifest)
+    verifySeeds()
     return manifest
   }
 
@@ -166,8 +210,7 @@ export const createSde = (options: SdeOptions = {}): Sde => {
   /** `undefined` when no source serves the table. */
   const servingSource = (table: string): SdeSource | undefined => {
     if (remoteTables.has(table)) {
-      fallbackRemote ??= sources.find((source) => source.live) ?? remote()
-      return fallbackRemote
+      return sources.find((source) => source.live && source.has(table)) ?? (fallbackRemote ??= remote())
     }
     return sources.find((candidate) => candidate.has(table))
   }
@@ -193,31 +236,40 @@ export const createSde = (options: SdeOptions = {}): Sde => {
     return rows
   }
 
-  /** Resolves `true` when the release moved. */
-  const check = (): Promise<boolean> => {
+  /**
+   * Resolves `true` when the release moved. A pinned instance only reports `stale` unless `follow` is set, which an
+   * expired release forces.
+   */
+  const check = (follow = !pinned): Promise<boolean> => {
     checking ??= (async () => {
       try {
+        // Resolving `latest` for the first time already is the check; fetching it again would be a duplicate request.
+        const fresh = !manifestPromise && releaseOption === 'latest'
         const current = await manifest()
-        const latest = await fetchLatestManifest(fetchFn)
+        const latest = fresh ? current : await fetchLatestManifest(fetchFn)
         lastCheckAt = Date.now()
 
-        const changed = Object.keys(latest.tables).filter(
-          (table) => current.tables[table]?.version !== latest.tables[table]!.version,
-        )
-        const moved = latest.release !== current.release
+        const moved = follow && latest.release !== current.release
+        const changed = moved
+          ? [...new Set([...Object.keys(latest.tables), ...Object.keys(current.tables)])].filter(
+              (table) => current.tables[table]?.version !== latest.tables[table]?.version,
+            )
+          : []
         const liveChanged = changed.filter((table) => servingSource(table)?.live)
         const stale = sources
           .flatMap((source) => Object.entries(source.versions ?? {}))
-          .filter(([table, version]) => latest.tables[table] && latest.tables[table].version !== version)
+          .filter(([table, version]) => latest.tables[table]?.version !== version)
           .map(([table]) => table)
-          .filter((table) => !reportedStale.has(table))
-        const switched = stale.filter((table) => options.onStale?.[table as TableName] === 'remote')
+          .filter((table) => !reportedStale.has(`${table}\0${latest.tables[table]?.version}`))
+        const switched = stale.filter(
+          (table) => latest.tables[table] && options.onStale?.[table as TableName] === 'remote',
+        )
 
         if (moved) {
           setManifest(latest)
         }
         for (const table of stale) {
-          reportedStale.add(table)
+          reportedStale.add(`${table}\0${latest.tables[table]?.version}`)
         }
         for (const table of switched) {
           remoteTables.add(table)
@@ -249,7 +301,7 @@ export const createSde = (options: SdeOptions = {}): Sde => {
   }
 
   const onRead = (): void => {
-    if (updates === 'off' || !checksUseful) {
+    if (updates === 'off' || !checksUseful || pinned) {
       return
     }
     if (updates === 'watch' && !watchTimer) {
@@ -287,7 +339,8 @@ export const createSde = (options: SdeOptions = {}): Sde => {
     manifest,
     releaseMissing: async (release) => {
       if (checking) {
-        await checking
+        // Its failure is reported through `error`; this read only needs the outcome.
+        await checking.catch(() => undefined)
       }
       if (resolvedRelease !== release) {
         return true
@@ -296,7 +349,7 @@ export const createSde = (options: SdeOptions = {}): Sde => {
         return false
       }
       // Only an expired release moves the instance, whatever `updates` says: its URLs no longer serve anything.
-      await check()
+      await check(true)
       return resolvedRelease !== release
     },
   }
@@ -487,6 +540,16 @@ export const createSde = (options: SdeOptions = {}): Sde => {
     seedRow: (table, key, row) => {
       tableCache(table).set(key, fulfilled(row))
     },
+    seedVersions: (versions) => {
+      for (const [table, version] of Object.entries(versions)) {
+        seededVersions.set(table, version)
+      }
+      verifySeeds()
+    },
+    tableVersion: async (table) => {
+      const source = servingSource(table)
+      return source?.versions?.[table] ?? (source?.live ? (await manifest()).tables[table]?.version : undefined)
+    },
     adoptRelease: (release) => {
       if (!manifestPromise) {
         releaseOption = release
@@ -516,6 +579,8 @@ export const createLazySde = (resolve: () => Sde): Sde => {
     loadRow: (table, key) => getInternals(get()).loadRow(table, key),
     cachedRow: (table, key) => getInternals(get()).cachedRow(table, key),
     seedRow: (table, key, row) => getInternals(get()).seedRow(table, key, row),
+    seedVersions: (versions) => getInternals(get()).seedVersions?.(versions),
+    tableVersion: async (table) => getInternals(get()).tableVersion?.(table),
     adoptRelease: (release) => getInternals(get()).adoptRelease(release),
     currentRelease: () => getInternals(get()).currentRelease(),
   })

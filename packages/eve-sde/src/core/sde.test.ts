@@ -106,6 +106,26 @@ describe('pinned releases', () => {
     expect(changes).toEqual([])
     expect(fake.requests.filter((url) => url.includes('/latest/'))).toEqual([])
   })
+
+  it('stay on the pinned release when a newer one is published', async () => {
+    const fake = createFakeSde()
+    fake.publish('20261118T000000Z', { types: [rifter] })
+    fake.publish('20261119T000000Z', { types: [{ ...rifter, name: { en: 'Rifter II' } }] })
+    const sde = createSde({ fetch: fake.fetch, release: '20261118T000000Z', updateIntervalMs: 0 })
+
+    expect(await sde.table('types').get(587)).toEqual(rifter)
+    await Promise.resolve()
+    expect(await sde.table('types').get(587)).toEqual(rifter)
+    expect((await sde.manifest()).release).toBe('20261118T000000Z')
+  })
+})
+
+describe('latest', () => {
+  it('resolves latest once on the first read', async () => {
+    const { fake, sde } = setup()
+    await sde.table('types').get(587)
+    expect(fake.requests.filter((url) => url.includes('/latest/'))).toHaveLength(1)
+  })
 })
 
 describe('preload', () => {
@@ -168,16 +188,16 @@ describe('update checks', () => {
     const fake = createFakeSde()
     fake.publish('20261118T000000Z', { types: [rifter], groups: [frigate] })
     const frigates = { ...frigate, name: { en: 'Frigates' } }
-    fake.publish('20261119T000000Z', { types: [rifter], groups: [frigates] })
     const sde = createSde({
       fetch: fake.fetch,
-      release: '20261118T000000Z',
       updates: 'off',
       sources: [embedded({ groups: [frigate] }, { versions: { groups: fake.versionOf([frigate]) } }), remote()],
       onStale: { groups: 'remote' },
     })
 
     expect(await sde.table('groups').get(25)).toEqual(frigate)
+    await sde.manifest()
+    fake.publish('20261119T000000Z', { types: [rifter], groups: [frigates] })
 
     const stale: unknown[] = []
     const changes: unknown[] = []
@@ -230,5 +250,32 @@ describe('dehydrate and hydrate', () => {
     expect(state.release).toBe('20261118T000000Z')
     expect(await client.table('types').get(587)).toEqual(rifter)
     expect(await client.table('types').get(1)).toBeUndefined()
+  })
+
+  it('drops hydrated rows of a table the client serves at another version', async () => {
+    const fake = createFakeSde()
+    fake.publish('20261118T000000Z', { types: [rifter], groups: [frigate] })
+    const server = createSde({
+      fetch: fake.fetch,
+      sources: [embedded({ groups: [{ ...frigate, name: { en: 'Old' } }] }, { versions: { groups: 'old' } }), remote()],
+    })
+    const scope = server.scope()
+    await scope.table('groups').get(25)
+    const state = JSON.parse(JSON.stringify(await dehydrate(scope)))
+
+    const client = createSde({ fetch: fake.fetch, updates: 'off' })
+    hydrate(client, state)
+    await client.manifest()
+
+    expect(state.versions).toEqual({ groups: 'old' })
+    expect(await client.table('groups').get(25)).toEqual(frigate)
+  })
+
+  it('leaves rows that failed to load for the client to retry', async () => {
+    const server = createSde({ fetch: () => Promise.reject(new Error('network')), updates: 'off' })
+    const scope = server.scope()
+    const pending = scope.table('types').get(587).catch(() => undefined)
+    expect((await dehydrate(scope)).rows).toEqual({})
+    await pending
   })
 })

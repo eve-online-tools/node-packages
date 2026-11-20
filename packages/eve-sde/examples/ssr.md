@@ -79,7 +79,8 @@ hydrateRoot(document.getElementById('root')!, <App />)
 ```
 
 `hydrate` seeds the rows and the server's release into the shared instance before the first render, so hooks resolve
-from the cache.
+from the cache. Rows of a table the browser serves at another version than the server, such as an `embed` table on the
+server read with `record` in the browser, are dropped once the browser knows its version and refetched.
 
 ## Static generation
 
@@ -88,11 +89,13 @@ Rerun `eve-sde update` and rebuild to publish a new release.
 
 ## Revalidation
 
-A long-running server keeps checking `latest/` while it reads:
+The server stays on the locked release until it expires upstream; then it moves to latest and emits `change`. To hear
+about newer releases earlier, check on a schedule:
 
 ```ts
 import { sde } from '@eve-online-tools/eve-sde'
 
-sde.on('change', ({ tables }) => revalidateRuntimeTables(tables)) // record / bulk tables moved
+sde.on('change', ({ tables }) => revalidateRuntimeTables(tables)) // the locked release expired
 sde.on('stale', ({ release }) => scheduleRebuild(release)) // embed / files tables are behind
+setInterval(() => void sde.checkForUpdates(), 15 * 60_000)
 ```

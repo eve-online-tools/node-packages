@@ -199,7 +199,7 @@ export default resolve(JSON.parse(${json(JSON.stringify(value))}))`
       tables.filter((table) => config.tables[table]?.onStale).map((table) => [table, config.tables[table]!.onStale]),
     )
 
-    // Servers render with the locked release, so prerendered pages match build-time tables. Browsers start at latest:
+    // Servers are pinned to the locked release, so prerendered pages match build-time tables. Browsers start at latest:
     // a hydrated page adopts the server's release instead, and a cold start avoids fetching a release it would leave.
     const release = environment === 'server' ? lockfile.release : 'latest'
     return `${imports.join('\n')}

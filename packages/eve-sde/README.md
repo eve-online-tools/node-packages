@@ -77,7 +77,7 @@ sde.on('stale', ({ release, tables }) => {}) // build-time data is behind the la
 sde.on('error', ({ error }) => {}) // a background check failed
 ```
 
-The API keeps the current and previous release. When a request for an expired release returns 404, the instance moves to the latest release and retries.
+An instance created with a release id or manifest is pinned: checks report `stale` but do not move it. The API keeps the current and previous release. When a request for an expired release returns 404, the instance moves to the latest release, emits `change` and retries.
 
 ## Build plugins
 
@@ -119,7 +119,7 @@ Defaults can only be `record` or `bulk`; build-time modes are set per table. Tab
 
 `onStale: 'remote'` switches a table to the HTTP API for the rest of the session once its build-time copy falls behind, and emits `change` for it; the default `keep` only emits `stale`.
 
-Server environments read runtime tables at the locked release, so prerendered pages match build-time tables. Browsers start at the latest release, or at the server's release after `hydrate`. Both follow newer releases through the usual checks.
+Server environments are pinned to the locked release, so every page matches build-time tables until that release expires upstream. Browsers start at the latest release, or at the server's release after `hydrate`, and follow newer releases through the usual checks.
 
 The dev server restarts when the config file or lockfile changes. Edits to dataset modules the config imports need a manual restart.
 
