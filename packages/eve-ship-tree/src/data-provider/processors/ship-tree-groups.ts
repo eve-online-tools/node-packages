@@ -47,7 +47,7 @@ export type GroupFactionKey = `${GroupIdentifier}:${FactionIdentifier}`
 export type ShipsByGroupFaction = Map<GroupFactionKey, number[]>
 
 const parseElements = (elements: Data['shipTreeGroups'][number]['elements']): number[] =>
-  (elements ?? []).map((entry) => entry._value)
+  [...(elements ?? [])].sort((a, b) => a.position - b.position).map((entry) => entry.elementID)
 
 const collectRequiredSkills = (
   skills: NonNullable<Data['shipTreeGroups'][number]['preReqSkills']>[number]['skills'],
@@ -64,12 +64,12 @@ const collectRequiredSkills = (
     const requiredLevel = skill.level as SkillLevel
 
     if (skill.display) {
-      displaySkills[skill._key] = requiredLevel
+      displaySkills[skill.skillTypeID] = requiredLevel
     } else {
-      otherSkills[skill._key] = requiredLevel
+      otherSkills[skill.skillTypeID] = requiredLevel
     }
 
-    allSkills.push([skill._key, requiredLevel])
+    allSkills.push([skill.skillTypeID, requiredLevel])
   }
 
   return { displaySkills, otherSkills, allSkills }
@@ -130,7 +130,7 @@ export const shipTreeGroupsProcessor = (
     groups[groupId] = record
 
     for (const factionInfo of group.preReqSkills ?? []) {
-      const factionId = factionInfo._key as FactionIdentifier
+      const factionId = factionInfo.factionID as FactionIdentifier
       const { displaySkills, otherSkills, allSkills } = collectRequiredSkills(factionInfo.skills)
 
       const resolvedCurrentSkills = Object.fromEntries(

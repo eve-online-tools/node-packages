@@ -132,8 +132,8 @@ describe('FactionSummary', () => {
             [f.minmatarRepublic]: {
               description: { en: 'Prefer Projectile Turrets.' },
               elements: [
-                { _key: 2, _value: 9 },
-                { _key: 1, _value: 10 },
+                { position: 2, elementID: 9 },
+                { position: 1, elementID: 10 },
               ],
             },
           },

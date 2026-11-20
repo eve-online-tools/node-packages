@@ -2,27 +2,11 @@ import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFi
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { Plugin } from 'rollup'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import type { Plugin, RollupOptions } from 'rollup'
+import esbuild from 'rollup-plugin-esbuild'
+import nodeExternals from 'rollup-plugin-node-externals'
 import { createReactRollupConfig } from '../../internal/react-build/create-rollup-config'
-import { copyGeneratedDataPlugin, staticDataFilesProcessor } from './src/data/processors/copy-generated-data'
-import { staticExtraProcessor } from './src/data/processors/static-extra-data'
-import { factionsProcessor } from './src/data/processors/factions'
-import { cloneGradesProcessor } from './src/data/processors/cloneGrades'
-import { certificatesProcessor } from './src/data/processors/certificates'
-import { groupsProcessor } from './src/data/processors/groups'
-import { masteriesProcessor } from './src/data/processors/masteries'
-import { shipTreeElementsProcessor } from './src/data/processors/shipTreeElements'
-import { shipTreeFactionIdentifiersProcessor } from './src/data/processors/shipTreeFactionIdentifiers'
-import { shipTreeFactionsProcessor } from './src/data/processors/shipTreeFactions'
-import { shipTreeGroupIdentifiersProcessor } from './src/data/processors/shipTreeGroupIdentifiers'
-import { shipTreeGroupsProcessor } from './src/data/processors/shipTreeGroups'
-import { dogmaAttributeIdentifiersProcessor } from './src/data/processors/dogmaAttributeIdentifiers'
-import { typeBonusProcessor } from './src/data/processors/typeBonus'
-import { typeElementsProcessor } from './src/data/processors/typeElements'
-import { shipSizesProcessor } from './src/data/processors/shipSizes'
-import { skillsProcessor } from './src/data/processors/skills'
-import { shipTypeRequirementsProcessor } from './src/data/processors/shipTypeRequirements'
-import { typesProcessor } from './src/data/processors/types'
 
 const fontPackageDir = path.dirname(
   createRequire(import.meta.url).resolve('@fontsource/saira-semi-condensed/package.json'),
@@ -49,42 +33,30 @@ const fontAssetsPlugin = (outDir: string): Plugin => ({
   },
 })
 
-const SDE_BUILD_NUMBER = '3579973'
-
 const packageDir = path.dirname(fileURLToPath(import.meta.url))
-const keepLanguages = ['en']
-const fallbackLanguage = 'en'
-const stripOptions = { keepLanguages, fallbackLanguage }
+// Game resources follow the client build the locked SDE release came from.
+const { buildNumber } = JSON.parse(readFileSync(path.join(packageDir, 'eve-sde.lock.json'), 'utf8')) as {
+  buildNumber: number
+}
 
-export default createReactRollupConfig({
-  packageDir,
-  cssPrefix: 'est',
-  resfile: { root: packageDir, buildNumber: SDE_BUILD_NUMBER },
-  sde: {
-    buildNumber: SDE_BUILD_NUMBER,
-    outputDir: 'src/data',
-    root: packageDir,
-    processors: [
-      cloneGradesProcessor(stripOptions),
-      groupsProcessor(stripOptions),
-      typesProcessor(stripOptions),
-      shipTypeRequirementsProcessor(),
-      shipSizesProcessor(),
-      dogmaAttributeIdentifiersProcessor(),
-      masteriesProcessor(stripOptions),
-      certificatesProcessor(stripOptions),
-      shipTreeFactionsProcessor(stripOptions),
-      shipTreeElementsProcessor(stripOptions),
-      shipTreeGroupsProcessor(stripOptions),
-      shipTreeGroupIdentifiersProcessor(),
-      typeBonusProcessor(stripOptions),
-      typeElementsProcessor(stripOptions),
-      skillsProcessor(stripOptions),
-      factionsProcessor(stripOptions),
-      shipTreeFactionIdentifiersProcessor(),
-      staticExtraProcessor(),
-      staticDataFilesProcessor(),
-    ],
-  },
-  plugins: [copyGeneratedDataPlugin(packageDir), fontAssetsPlugin(packageDir)],
-})
+// `@eve-online-tools/eve-ship-tree/sde` runs in the app's build tooling, so it is plain ESM without React or CSS.
+const sdeEntry: RollupOptions = {
+  input: path.join(packageDir, 'src/sde/index.ts'),
+  output: { file: path.join(packageDir, 'dist/sde/index.mjs'), format: 'es', sourcemap: true },
+  plugins: [
+    nodeExternals({ packagePath: path.join(packageDir, 'package.json') }),
+    nodeResolve({ extensions: ['.ts'] }),
+    esbuild({ tsconfig: path.join(packageDir, 'tsconfig.build.json') }),
+  ],
+}
+
+export default [
+  createReactRollupConfig({
+    packageDir,
+    cssPrefix: 'est',
+    resfile: { root: packageDir, buildNumber: String(buildNumber) },
+    sde: { root: packageDir },
+    plugins: [fontAssetsPlugin(packageDir)],
+  }),
+  sdeEntry,
+]

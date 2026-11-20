@@ -7,6 +7,9 @@ import { ShipTree } from './ship-tree'
 import shipTreeData from './ship-tree.story-data.json'
 import { TreeDisplay } from './tree-display'
 
+// Registered in the Storybook eve-sde config.
+import shipTreeDataset from 'eve-sde:dataset/eve-ship-tree:data'
+
 const storySkills = shipTreeData.skills
 
 const factionOptions = Object.entries(names).map(([, name]) => name)
@@ -67,7 +70,7 @@ const meta = {
       <div style={context.parameters.viewportShellStyle ?? defaultViewportShellStyle}>
         <ShipTree.Root
           skills={storySkills}
-          baseUrl="/ship-tree-data"
+          dataset={shipTreeDataset}
           faction={context.args.faction ?? 500001}
           backgroundColor={context.args.backgroundColor}
           goldenCapsule={context.args.goldenCapsule}
@@ -161,7 +164,7 @@ export const Loading: Story = {
       >
         <ShipTree.Root
           skills={storySkills}
-          baseUrl="/ship-tree-data"
+          dataset={shipTreeDataset}
           faction={context.args.faction ?? 500001}
           style={{ flex: 1, minHeight: 0, width: '100%' }}
           fetch={
@@ -196,7 +199,7 @@ export const ErrorState: Story = {
       >
         <ShipTree.Root
           skills={storySkills}
-          baseUrl="/ship-tree-data"
+          dataset={shipTreeDataset}
           faction={context.args.faction ?? 500001}
           style={{ flex: 1, minHeight: 0, width: '100%' }}
           fetch={

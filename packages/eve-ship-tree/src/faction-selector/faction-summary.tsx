@@ -10,15 +10,6 @@ import classes from './faction-summary.module.css'
 
 export type FactionSummaryStylesNames = 'root' | 'header' | 'logo' | 'name' | 'elements' | 'element' | 'description'
 
-type LocalizedText = { en?: string }
-
-type FactionRecord = {
-  description?: LocalizedText
-  elements?: Array<{ _key: number; _value: number }>
-}
-
-type ElementRecord = { name?: LocalizedText }
-
 export type FactionSummaryData = Pick<Partial<PreloadedData>, 'shipTreeFactions' | 'shipTreeElements'>
 
 export interface FactionSummaryProps extends StylesApiProps<FactionSummaryStylesNames> {
@@ -32,11 +23,11 @@ export const FactionSummary = ({ faction, data, className, style, classNames, st
   const contextData = useContext(DataContext)?.data
   const tables = data ?? contextData ?? {}
 
-  const record = tables.shipTreeFactions?.[faction] as FactionRecord | undefined
-  const elementTable = tables.shipTreeElements as Record<number, ElementRecord> | undefined
+  const record = tables.shipTreeFactions?.[faction]
+  const elementTable = tables.shipTreeElements
   const elements = [...(record?.elements ?? [])]
-    .sort((a, b) => a._key - b._key)
-    .map(({ _value: id }) => ({
+    .sort((a, b) => a.position - b.position)
+    .map(({ elementID: id }) => ({
       id,
       name: elementTable?.[id]?.name?.en,
       icon: elementIcons[id as keyof typeof elementIcons],

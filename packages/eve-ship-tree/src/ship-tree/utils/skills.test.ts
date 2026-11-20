@@ -1,20 +1,20 @@
 import { describe, expect, it } from 'vitest'
 
-import type { ShipTreeGroupRecord } from '../types/ship-tree-group'
+import type { ShipTreeGroupRecord } from '../../data-provider/schema'
 import { shipTreeGroupSkills } from './skills'
 
 const sampleGroup: ShipTreeGroupRecord = {
   preReqSkills: [
     {
-      _key: 500001,
+      factionID: 500001,
       skills: [
-        { _key: 3330, display: true, level: 1 },
-        { _key: 3327, display: false, level: 1 },
+        { skillTypeID: 3330, display: true, level: 1 },
+        { skillTypeID: 3327, display: false, level: 1 },
       ],
     },
     {
-      _key: 500002,
-      skills: [{ _key: 3329, display: true, level: 1 }],
+      factionID: 500002,
+      skills: [{ skillTypeID: 3329, display: true, level: 1 }],
     },
   ],
 }
@@ -22,8 +22,8 @@ const sampleGroup: ShipTreeGroupRecord = {
 describe('shipTreeGroupSkills', () => {
   it('returns skills for a matching faction', () => {
     expect(shipTreeGroupSkills(sampleGroup, 500001)).toEqual([
-      { _key: 3330, display: true, level: 1 },
-      { _key: 3327, display: false, level: 1 },
+      { skillTypeID: 3330, display: true, level: 1 },
+      { skillTypeID: 3327, display: false, level: 1 },
     ])
   })
 
