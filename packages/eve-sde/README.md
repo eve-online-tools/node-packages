@@ -11,8 +11,8 @@ ESM only. Runs in Node, browsers and edge runtimes with `fetch`. Optional peers:
 ## Getting started
 
 1. Add `sde()` to the Vite plugins (see [Build plugins](#build-plugins)) and create `eve-sde.config.ts` with `dts: 'src/eve-sde.d.ts'`.
-2. Run the dev server or a build. The plugin writes `eve-sde.lock.json` and the `dts` files. Commit all three.
-3. Add `.cache/eve-sde` to `.gitignore`, and make sure `tsconfig.json` includes the generated `.d.ts` files.
+2. Run the dev server or a build. The plugin writes `eve-sde.lock.json` and the two `dts` files. Commit them with the config.
+3. Add `.cache/eve-sde` (and `.eve-sde`, if you use `eve-sde build`) to `.gitignore`, and make sure `tsconfig.json` includes the generated `.d.ts` files.
 4. Read rows with `sde.table(name).get(key)`, or the React hooks.
 5. Run `eve-sde update` to move to a newer SDE release.
 
@@ -117,7 +117,11 @@ export default defineConfig({
 
 Defaults can only be `record` or `bulk`; build-time modes are set per table. Tables not listed use the defaults, so every table can be read. Edge runtimes have no file system, so use `record` or `bulk` for their server environment.
 
-`onStale: 'remote'` switches a table to the HTTP API for the rest of the session once its build-time copy falls behind; the default `keep` only emits `stale`.
+`onStale: 'remote'` switches a table to the HTTP API for the rest of the session once its build-time copy falls behind, and emits `change` for it; the default `keep` only emits `stale`.
+
+Server environments read runtime tables at the locked release, so prerendered pages match build-time tables. Browsers start at the latest release, or at the server's release after `hydrate`. Both follow newer releases through the usual checks.
+
+The dev server restarts when the config file or lockfile changes. Edits to dataset modules the config imports need a manual restart.
 
 The Rollup plugin (`@eve-online-tools/eve-sde/rollup`) takes the same options plus `root` and `environment: 'client' | 'server'`.
 
@@ -152,12 +156,13 @@ frigates.file // URL of the emitted file
 ```
 
 - `table` only reads tables listed in `tables`, and `dataset` only reads datasets listed in `dependsOn`.
-- A dataset rebuilds when its `version`, the version of an input table or a dependency changes. A new SDE release that leaves its tables untouched reuses the cached result.
+- A dataset rebuilds when its `version`, its `build` source, the eve-sde version, the version of an input table or a dependency changes. A new SDE release that leaves its tables untouched reuses the cached result. Bump `version` when helpers called by `build` change, or delete `.cache/eve-sde/datasets`.
+- A dataset with an up-to-date `outDir` only builds when its value is imported, so committed output does not need the SDE files in CI.
 - `emit(fileName, data)` adds a file to the build output; the value holds its URL.
 - `write(path, data)` writes a file under the dataset's `outDir`, for generated data you commit.
 - Prefix ids with your package name. Libraries export datasets for apps to register.
 
-Datasets also run without a bundler: `eve-sde build --out <dir>` writes `<id>.json` and emitted files.
+Datasets also run without a bundler: `eve-sde build --out <dir>` writes `<name>.json` and emitted files, where `<name>` is the id with `:` replaced by `_`.
 
 ## Lockfile and CLI
 
@@ -189,7 +194,7 @@ import { SdeProvider, useSdeRow, useSdeRows } from '@eve-online-tools/eve-sde/re
 const ShipName = ({ typeId }: { typeId: number }) => <>{useSdeRow('types', typeId)?.name.en}</>
 ```
 
-Hooks suspend until rows are loaded and re-render on `change`. Without a provider they use the shared `sde`. Rows that are already cached render without suspending, so preload before rendering to skip the fallback:
+Hooks suspend until rows are loaded and re-render on `change`. Without a provider they use the shared `sde`. `useSdeRow` takes an `undefined` key for lookups that depend on another row, and returns `undefined` without suspending. Rows that are already cached render without suspending, so preload before rendering to skip the fallback:
 
 ```ts
 await Promise.all([sde.table('groups').preload(), sde.table('types').preload([587, 588])])
@@ -208,7 +213,7 @@ connectQueryClient(sde, queryClient) // invalidates tables on `change`
 ## Rendering strategies
 
 - **SSR:** render with `sde.scope()` in the provider, send `await dehydrate(scope)` to the client and call `hydrate(sde, state)` before hydrating. The client adopts the server's release and does not refetch those rows.
-- **SSG:** reads during prerendering use the locked release through `embed` and `files` tables.
+- **SSG:** prerendering reads every table at the locked release.
 - **ISR:** revalidate on `change` for runtime tables and on `stale` for build-time tables.
 - **RSC:** read on the server and pass plain rows to client components.
 

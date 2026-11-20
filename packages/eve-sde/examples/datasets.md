@@ -142,9 +142,15 @@ Put options that change the output into `version`, or the cached result of anoth
 
 ## Caching
 
-Results are cached in `cacheDir` by fingerprint: dataset `version`, the `version` of every input table and the
-fingerprints of dependencies. A new SDE release that leaves the input tables unchanged reuses the cached result. Cache
-`.cache/eve-sde` in CI to skip unchanged datasets.
+Results are cached in `cacheDir` by fingerprint: dataset `version`, the `build` function's source, the eve-sde version,
+the `version` of every input table and the fingerprints of dependencies. A new SDE release that leaves the input tables
+unchanged reuses the cached result. Cache `.cache/eve-sde` in CI to skip unchanged datasets.
+
+The fingerprint does not see helpers that `build` calls. Bump `version` when they change, or delete
+`.cache/eve-sde/datasets`.
+
+A dataset whose `outDir` already matches its fingerprint skips the build until something imports its value, so
+committed output does not need the SDE files on a cold CI cache.
 
 ## Without a bundler
 
@@ -152,4 +158,4 @@ fingerprints of dependencies. A new SDE release that leaves the input tables unc
 eve-sde build --out dist/sde
 ```
 
-Writes `<id>.json` per dataset plus emitted files.
+Writes `my-app_ship-names.json` (the id with `:` replaced by `_`) per dataset plus emitted files.

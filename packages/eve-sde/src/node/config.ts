@@ -128,7 +128,8 @@ const importConfig = async (file: string): Promise<{ default?: EveSdeConfig }> =
       throw error
     }
   }
-  if (vite) {
+  // runnerImport arrived in Vite 6.1; older Vite falls back to Node.
+  if (vite?.runnerImport) {
     return (await vite.runnerImport<{ default?: EveSdeConfig }>(file, { configFile: false, logLevel: 'error' })).module
   }
   return (await import(pathToFileURL(file).href)) as { default?: EveSdeConfig }

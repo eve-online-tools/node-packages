@@ -1,4 +1,4 @@
-import type { Plugin } from 'vite'
+import type { Plugin, ViteDevServer } from 'vite'
 
 import { datasetPrefix, createPluginCore, type SdePluginOptions } from '../plugin/core'
 
@@ -13,6 +13,8 @@ export const sde = (options?: SdePluginOptions): Plugin => {
   let root = process.cwd()
   let command: 'build' | 'serve' = 'build'
   const devAssets = new Map<string, Uint8Array>()
+  let devServer: ViteDevServer | undefined
+  let watching = false
   const core = createPluginCore(options)
 
   return {
@@ -29,6 +31,7 @@ export const sde = (options?: SdePluginOptions): Plugin => {
       command = resolved.command
     },
     configureServer: (server) => {
+      devServer = server
       server.middlewares.use((req, res, next) => {
         const bytes = req.url?.startsWith(devAssetPrefix) ? devAssets.get(req.url) : undefined
         if (!bytes) {
@@ -40,7 +43,19 @@ export const sde = (options?: SdePluginOptions): Plugin => {
       })
     },
     buildStart: async function () {
-      await core.init(root, (message) => this.info(message))
+      const { config } = await core.init(root, (message) => this.info(message))
+      const server = devServer
+      if (server && !watching) {
+        watching = true
+        // Tables, datasets and the release are resolved once per server; changes need a restart to take effect.
+        const files = [config.configFile, config.lockfile].filter((file): file is string => file !== undefined)
+        server.watcher.add(files)
+        server.watcher.on('change', (file) => {
+          if (files.includes(file)) {
+            void server.restart()
+          }
+        })
+      }
     },
     resolveId: (id) => core.resolveId(id),
     renderChunk: (code, chunk) => core.renderChunk(code, chunk.fileName),

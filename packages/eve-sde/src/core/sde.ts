@@ -4,6 +4,8 @@ import { sdeTableKeys } from '../schema/generated/tables'
 import { SdeError, SdeRowNotFoundError, SdeUnknownTableError } from './errors'
 import type { FetchFn } from './http'
 import { fetchLatestManifest, fetchReleaseManifest, type ReleaseManifest } from './manifest'
+import { projectRow } from './projection'
+import { shared } from './shared'
 import { fulfilled, track } from './thenable'
 import type { AnyKey, AnyRow, FieldName, Key, Projection, Row, TableName } from './types'
 
@@ -88,7 +90,7 @@ export type SdeInternals = {
   currentRelease: () => string | undefined
 }
 
-const internals = new WeakMap<Sde | SdeScope, SdeInternals>()
+const internals = shared.internals
 
 /** For a scope, `loadRow` also records the read. */
 export const getInternals = (reader: Sde | SdeScope): SdeInternals => {
@@ -389,11 +391,10 @@ export const createSde = (options: SdeOptions = {}): Sde => {
     table: <T extends TableName>(name: T): SdeTable<T> => {
       const get = async (key: AnyKey, projection?: Projection): Promise<AnyRow | undefined> => {
         onRead()
-        if (projection) {
-          return (await sourceFor(name).get(ctx, name, [key], projection)).get(key)
-        }
         recordRead?.(name, key)
-        return loadRow(name, key)
+        // Projections read the cached full row, so they batch, deduplicate and dehydrate like plain reads.
+        const row = await loadRow(name, key)
+        return row && projection ? projectRow(row, projection) : row
       }
 
       const table = {
@@ -498,12 +499,12 @@ export const createSde = (options: SdeOptions = {}): Sde => {
 }
 
 /**
- * An instance created on first use. Lets a module export an instance whose options come from a module that may import
- * this package itself, without an evaluation-order cycle.
+ * A facade over an instance resolved on first use. Lets a module export an instance whose options come from a module
+ * that may import this package itself, without an evaluation-order cycle.
  */
-export const createLazySde = (options: () => SdeOptions): Sde => {
+export const createLazySde = (resolve: () => Sde): Sde => {
   let instance: Sde | undefined
-  const get = (): Sde => (instance ??= createSde(options()))
+  const get = (): Sde => (instance ??= resolve())
   const facade: Sde = {
     table: (name) => get().table(name),
     manifest: () => get().manifest(),

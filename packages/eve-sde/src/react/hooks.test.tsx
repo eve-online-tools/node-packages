@@ -53,6 +53,12 @@ describe('preloaded rows', () => {
 })
 
 describe('useSdeRow', () => {
+  it('returns undefined without suspending for an undefined key', () => {
+    const MaybeName = ({ typeID }: { typeID?: number }) => <p>{useSdeRow('types', typeID)?.name?.en ?? 'none'}</p>
+    render(wrap(fixtureSde(), <MaybeName />))
+    expect(screen.getByText('none')).toBeTruthy()
+  })
+
   it('suspends, then renders the row', async () => {
     const view = render(wrap(fixtureSde(), <TypeName typeID={587} />))
     expect(screen.getByText('loading')).toBeTruthy()

@@ -65,10 +65,14 @@
     "@types/react": "catalog:",
     "react": "catalog:",
     "rollup": "catalog:",
+    "tsup": "catalog:",
     "tsx": "^4.23.15",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=20.12"
   },
   "bin": {
     "eve-sde": "./dist/cli.js"

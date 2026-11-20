@@ -12,6 +12,9 @@ export type RowLoader = {
   loadRows: (table: string, keys: readonly AnyKey[], version: number) => Promise<Map<AnyKey, AnyRow>>
 }
 
+// Bounds the memory of long-lived pages that render many distinct key lists; rows themselves stay in the instance cache.
+const maxRowsEntries = 500
+
 const isScope = (reader: Sde | SdeScope): reader is SdeScope => 'parent' in reader
 
 const createRowLoader = (reader: Sde | SdeScope): RowLoader => {
@@ -40,7 +43,11 @@ const createRowLoader = (reader: Sde | SdeScope): RowLoader => {
       ? fulfilled(toMap(settled.map((row) => row!.value)))
       : track(Promise.all(promises).then(toMap))
     const entry = { version, promise }
+    rowsCache.delete(id)
     rowsCache.set(id, entry)
+    if (rowsCache.size > maxRowsEntries) {
+      rowsCache.delete(rowsCache.keys().next().value!)
+    }
     promise.catch(() => {
       if (rowsCache.get(id) === entry) {
         rowsCache.delete(id)

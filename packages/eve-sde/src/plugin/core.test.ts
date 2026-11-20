@@ -31,12 +31,23 @@ const setup = async (options: Parameters<typeof createPluginCore>[0]) => {
 }
 
 describe('generated config module', () => {
-  it('pins the locked release and orders sources by mode', async () => {
+  it('pins servers to the locked release and starts browsers at latest', async () => {
+    const { client, server } = await setup({})
+    expect(await client()).toContain('release: "latest"')
+    expect(await server()).toContain('release: "20261119T000000Z"')
+  })
+
+  it('rejects tables the locked release does not have', async () => {
+    await expect(setup({ tables: { typez: { client: 'embed' } } as never })).rejects.toThrow(
+      'release 20261119T000000Z has no table "typez"',
+    )
+  })
+
+  it('orders sources by mode', async () => {
     const { client } = await setup({
       tables: { categories: { client: 'embed', onStale: 'remote' }, types: { client: 'bulk' } },
     })
     const code = (await client())!
-    expect(code).toContain('release: "20261119T000000Z"')
     expect(code).toContain('onStale: {"categories":"remote"}')
     expect(code).toMatch(
       /embedded\(\{ "categories": .*import\("eve-sde:table\/categories"\).*\{ versions: \{"categories":"c1"\} \}\)/,

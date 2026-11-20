@@ -4,8 +4,8 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { defineConfig } from 'tsup'
 
 // React Server Components need the directive at the top of the client entries; esbuild drops module-level directives
-// when bundling, so it is prepended after the build.
-const clientEntries = ['dist/react/index.js', 'dist/react-query/index.js']
+// when bundling, so it is prepended after the build. `/react-query` stays server-safe for prefetching.
+const clientEntries = ['dist/react/index.js']
 
 export default defineConfig({
   entry: {
@@ -26,6 +26,8 @@ export default defineConfig({
   clean: true,
   target: 'es2022',
   platform: 'node',
+  // Deno and some edge runtimes only resolve Node builtins with the `node:` prefix.
+  removeNodeProtocol: false,
   // The config is imported by package name so build plugins can replace it.
   define: { __EVE_SDE_VERSION__: JSON.stringify(JSON.parse(readFileSync('package.json', 'utf8')).version) },
   external: ['react', '@tanstack/react-query', 'vite', 'rollup', '@eve-online-tools/eve-sde/config'],

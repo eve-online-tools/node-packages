@@ -58,6 +58,12 @@ export const createPluginCore = (options: SdePluginOptions | undefined) => {
       await writeLockfile(config.lockfile, lockfile)
       log(`Locked SDE release ${lockfile.release} in ${config.lockfile}.`)
     }
+    const unknown = Object.keys(config.tables).filter((table) => !lockfile.tables[table])
+    if (unknown.length > 0) {
+      throw new SdeError(
+        `eve-sde config: SDE release ${lockfile.release} has no table ${unknown.map((table) => `"${table}"`).join(', ')}.`,
+      )
+    }
     const datasets = await runDatasets({
       datasets: config.datasets,
       lockfile,
@@ -193,9 +199,12 @@ export default resolve(JSON.parse(${json(JSON.stringify(value))}))`
       tables.filter((table) => config.tables[table]?.onStale).map((table) => [table, config.tables[table]!.onStale]),
     )
 
+    // Servers render with the locked release, so prerendered pages match build-time tables. Browsers start at latest:
+    // a hydrated page adopts the server's release instead, and a cold start avoids fetching a release it would leave.
+    const release = environment === 'server' ? lockfile.release : 'latest'
     return `${imports.join('\n')}
 export default () => ({
-  release: ${json(lockfile.release)},
+  release: ${json(release)},
   onStale: ${json(onStale)},
   sources: [
     ${sources.join(',\n    ')},

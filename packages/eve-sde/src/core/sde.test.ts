@@ -50,6 +50,13 @@ describe('createSde with the remote source', () => {
     expect(await sde.table('types').get(587, { omit: ['name'] })).toEqual({ typeID: 587, groupID: 25 })
   })
 
+  it('serves projected and plain reads from one cached request', async () => {
+    const { fake, sde } = setup()
+    await Promise.all([sde.table('types').get(587, { fields: ['typeID'] }), sde.table('types').get(587)])
+    await sde.table('types').get(587, { omit: ['name'] })
+    expect(recordRequests(fake.requests)).toHaveLength(1)
+  })
+
   it('streams a table from JSONL', async () => {
     const { sde } = setup()
     const rows = []
