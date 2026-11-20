@@ -105,12 +105,22 @@ describe('runDatasets', () => {
     expect(seen).toHaveBeenCalledWith({ when: '1970-01-01T00:00:00.000Z' })
   })
 
-  it('rebuilds when the build code changes without a version bump', async () => {
+  it('rebuilds when the build code changes without a version bump, keeping the outDir fingerprint', async () => {
     const { run } = await setup()
     const first = await run([defineDataset({ id: 'test:edited', version: '1', tables: [], build: () => 1 })])
     const second = await run([defineDataset({ id: 'test:edited', version: '1', tables: [], build: () => 2 })])
-    expect(first.get('test:edited')!.fingerprint).not.toBe(second.get('test:edited')!.fingerprint)
+    expect(first.get('test:edited')!.fingerprint).toBe(second.get('test:edited')!.fingerprint)
     expect((await second.get('test:edited')!.load()).value).toBe(2)
+  })
+
+  it('retries a build that failed', async () => {
+    const { root, run } = await setup()
+    const build = vi.fn().mockRejectedValueOnce(new Error('offline')).mockResolvedValue('value')
+    const dataset = defineDataset({ id: 'test:flaky', version: '1', tables: [], outDir: 'out', build })
+    await expect(run([dataset])).rejects.toThrow('offline')
+    await rm(join(root, 'out'), { recursive: true, force: true })
+    const results = await run([dataset])
+    expect((await results.get('test:flaky')!.load()).value).toBe('value')
   })
 
   it('skips datasets whose outDir is up to date until their value is loaded', async () => {
@@ -142,8 +152,12 @@ describe('runDatasets', () => {
 })
 
 describe('orderDatasets', () => {
-  it('rejects two datasets with the same id', () => {
-    const copy = { ...shipNames }
-    expect(() => orderDatasets([shipNames, copy])).toThrow('Two different datasets use the id "test:ship-names"')
+  it('treats equal definitions with the same id as one dataset', () => {
+    expect(orderDatasets([shipNames, { ...shipNames }])).toEqual([shipNames])
+  })
+
+  it('rejects two different datasets with the same id', () => {
+    const other = { ...shipNames, version: '2' }
+    expect(() => orderDatasets([shipNames, other])).toThrow('Two different datasets use the id "test:ship-names"')
   })
 })

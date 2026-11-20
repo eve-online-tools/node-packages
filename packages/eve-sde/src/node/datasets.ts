@@ -18,6 +18,7 @@ export type DatasetOutput = {
 
 export type DatasetResult = {
   id: string
+  /** Covers the dataset's declared inputs; written to the `outDir` marker. */
   fingerprint: string
   /** Reads the cached output, building the dataset when the cache has none. */
   load: () => Promise<DatasetOutput>
@@ -36,7 +37,7 @@ export type RunDatasetsOptions = {
 const markerFileName = '.eve-sde-dataset.json'
 
 declare const __EVE_SDE_VERSION__: string | undefined
-// Set by the package build; decoder fixes in a new release must not reuse results cached by an older one.
+// Set by the package build; decoder fixes in a new release must not reuse cache entries written by an older one.
 const packageVersion = typeof __EVE_SDE_VERSION__ === 'string' ? __EVE_SDE_VERSION__ : 'source'
 
 const toBytes = (data: Uint8Array | string): Uint8Array =>
@@ -53,6 +54,13 @@ const safeJoin = (base: string, relativePath: string, what: string): string => {
   return target
 }
 
+const sameDefinition = (a: Dataset<unknown, TableName>, b: Dataset<unknown, TableName>): boolean =>
+  a.version === b.version &&
+  a.outDir === b.outDir &&
+  String(a.build) === String(b.build) &&
+  [...a.tables].sort().join() === [...b.tables].sort().join() &&
+  (a.dependsOn ?? []).map((d) => d.id).join() === (b.dependsOn ?? []).map((d) => d.id).join()
+
 /** All datasets including transitive dependencies, dependencies first. */
 export const orderDatasets = (roots: readonly Dataset<unknown, TableName>[]): Dataset<unknown, TableName>[] => {
   const ordered: Dataset<unknown, TableName>[] = []
@@ -61,7 +69,8 @@ export const orderDatasets = (roots: readonly Dataset<unknown, TableName>[]): Da
 
   const visit = (dataset: Dataset<unknown, TableName>, path: string[]): void => {
     const known = byId.get(dataset.id)
-    if (known && known !== dataset) {
+    // Factories return a new object per call; only differing definitions conflict.
+    if (known && known !== dataset && !sameDefinition(known, dataset)) {
       throw new SdeError(`Two different datasets use the id "${dataset.id}".`)
     }
     if (known) {
@@ -85,6 +94,10 @@ export const orderDatasets = (roots: readonly Dataset<unknown, TableName>[]): Da
   return ordered
 }
 
+/**
+ * Output identity, stable across eve-sde and toolchain upgrades so committed `outDir` files only rebuild when the
+ * dataset's declared inputs change.
+ */
 const fingerprintOf = (dataset: Dataset<unknown, TableName>, lock: Lockfile, dependencies: string[]): string => {
   const tables = [...dataset.tables].sort().map((table) => {
     const locked = lock.tables[table]
@@ -93,18 +106,13 @@ const fingerprintOf = (dataset: Dataset<unknown, TableName>, lock: Lockfile, dep
     }
     return [table, locked.version]
   })
-  // The build source catches edits made without bumping `version`; helpers it calls are still covered by `version` only.
-  return sha256(
-    JSON.stringify({
-      id: dataset.id,
-      version: dataset.version,
-      build: String(dataset.build),
-      eveSde: packageVersion,
-      tables,
-      dependencies,
-    }),
-  )
+  return sha256(JSON.stringify({ id: dataset.id, version: dataset.version, tables, dependencies }))
 }
+
+// The build source catches local edits made without bumping `version`. It depends on the transpiler, so it only keys
+// the local cache, never the committed marker.
+const cacheKeyOf = (dataset: Dataset<unknown, TableName>, fingerprint: string, dependencies: string[]): string =>
+  sha256(JSON.stringify({ fingerprint, build: String(dataset.build), eveSde: packageVersion, dependencies }))
 
 type CachedDataset = { value: unknown; assets: Map<string, Uint8Array>; writes: Map<string, Uint8Array> }
 
@@ -217,7 +225,7 @@ export const runDatasets = async (options: RunDatasetsOptions): Promise<Map<stri
     sources: [options.source ?? files({ lockfile, cacheDir })],
     updates: 'off',
   })
-  const results = new Map<string, DatasetResult>()
+  const results = new Map<string, DatasetResult & { cacheKey: string }>()
 
   for (const dataset of orderDatasets(options.datasets)) {
     const dependencies = (dataset.dependsOn ?? []).map((dependency) => results.get(dependency.id)!)
@@ -226,7 +234,12 @@ export const runDatasets = async (options: RunDatasetsOptions): Promise<Map<stri
       lockfile,
       dependencies.map((dependency) => dependency.fingerprint),
     )
-    const dir = cacheDirOf(cacheDir, dataset.id, fingerprint)
+    const cacheKey = cacheKeyOf(
+      dataset,
+      fingerprint,
+      dependencies.map((dependency) => dependency.cacheKey),
+    )
+    const dir = cacheDirOf(cacheDir, dataset.id, cacheKey)
 
     let loading: Promise<CachedDataset> | undefined
     const load = (): Promise<CachedDataset> => {
@@ -246,6 +259,10 @@ export const runDatasets = async (options: RunDatasetsOptions): Promise<Map<stri
         await writeCache(dir, built)
         return built
       })()
+      // A long-lived dev server must retry after a transient failure.
+      loading.catch(() => {
+        loading = undefined
+      })
       return loading
     }
 
@@ -262,8 +279,8 @@ export const runDatasets = async (options: RunDatasetsOptions): Promise<Map<stri
       await load()
     }
 
-    results.set(dataset.id, { id: dataset.id, fingerprint, load })
+    results.set(dataset.id, { id: dataset.id, fingerprint, cacheKey, load })
   }
 
-  return results
+  return new Map([...results].map(([id, { cacheKey: _, ...result }]) => [id, result]))
 }
