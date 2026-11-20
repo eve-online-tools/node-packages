@@ -17,6 +17,7 @@
   "devDependencies": {
     "@eve-online-tools/eve-map": "workspace:*",
     "@eve-online-tools/eve-resfile": "workspace:*",
+    "@eve-online-tools/eve-ship-tree": "workspace:*",
     "@eve-online-tools/eve-sde": "workspace:*",
     "@storybook/react": "catalog:",
     "@storybook/react-vite": "catalog:",
