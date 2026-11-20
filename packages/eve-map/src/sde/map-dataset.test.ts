@@ -76,7 +76,8 @@ const run = async (dataset: ReturnType<typeof mapDataset>) => {
   const result = (
     await runDatasets({ datasets: [dataset], lockfile, source, root, cacheDir: join(root, 'cache') })
   ).get(dataset.id)!
-  return { value: result.value, data: decodeMapData(result.assets.get('map-data.bin')!) }
+  const out = await result.load()
+  return { value: out.value, data: decodeMapData(out.assets.get('map-data.bin')!) }
 }
 
 describe('mapDataset', () => {
