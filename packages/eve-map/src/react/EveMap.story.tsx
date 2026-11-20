@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from
 import { decodeMapData, regionColor, scaleColor, type MapData, type MapView, type Marker } from '../index'
 import { EveMap, type EveMapApi, type EveMapProps } from './EveMap'
 
-// Served by the Storybook config, generated from the SDE by `mapDataProcessor`.
-const MAP_DATA_URL = '/eve-map/map-data.bin'
+// Registered in the Storybook eve-sde config.
+import mapData from 'eve-sde:dataset/eve-map:map-data'
 
 const shell: CSSProperties = { height: 'calc(100vh - 2rem)', width: 'calc(100vw - 2rem)', margin: '1rem' }
 const toolbar: CSSProperties = { position: 'absolute', top: 8, left: 8, display: 'flex', gap: 8, zIndex: 1 }
@@ -14,7 +14,7 @@ const useMapData = () => {
   const [data, setData] = useState<MapData | null>(null)
   const [error, setError] = useState<string | null>(null)
   useEffect(() => {
-    fetch(MAP_DATA_URL)
+    fetch(mapData.url)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`${response.status} ${response.statusText}`)
@@ -33,7 +33,7 @@ const idsByName = (data: MapData, names: string[]) =>
 function WithData({ children }: { children: (data: MapData) => ReactNode }) {
   const { data, error } = useMapData()
   if (error) {
-    return <p>Map data unavailable ({error}). Storybook generates it from the SDE on startup.</p>
+    return <p>Map data unavailable ({error}). Storybook builds it from the SDE on startup.</p>
   }
   return data ? <div style={shell}>{children(data)}</div> : <p>Loading map data...</p>
 }

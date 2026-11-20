@@ -9,7 +9,7 @@ apps/
   demo/          Vite showcase for components
   storybook/     Storybook for component development
 packages/
-  eve-map/       WebGL 2D/3D map of New Eden, React binding, SDE processor
+  eve-map/       WebGL 2D/3D map of New Eden, React binding, SDE dataset
   eve-resfile/   resfile index loader for Vite and Rollup
   eve-sde/       Typed EVE SDE access over HTTP, build plugins, datasets
 internal/
