@@ -1,0 +1,490 @@
+import { remote } from '../sources/remote'
+import type { SdeSource, SourceContext } from '../sources/types'
+import { sdeTableKeys } from '../schema/generated/tables'
+import { SdeError, SdeRowNotFoundError, SdeUnknownTableError } from './errors'
+import type { FetchFn } from './http'
+import { fetchLatestManifest, fetchReleaseManifest, type ReleaseManifest } from './manifest'
+import { fulfilled, track } from './thenable'
+import type { AnyKey, AnyRow, FieldName, Key, Projection, Row, TableName } from './types'
+
+export type SdeEvents = {
+  /** Tables read at runtime moved to a newer release; their cached rows were dropped. */
+  change: { release: string; tables: string[] }
+  /** Build-time data differs from the latest release. */
+  stale: { release: string; tables: string[] }
+  /** A background release check failed. It is retried at the next interval. */
+  error: { error: unknown }
+}
+
+export type SdeOptions = {
+  /** Release to start from: `latest` (default), a release id, or a manifest. Expired release ids fall back to latest. */
+  release?: string | ReleaseManifest
+  /** Tried in order; the first source that has a table serves it. Default: `[remote()]`. */
+  sources?: SdeSource[]
+  fetch?: FetchFn
+  /**
+   * `lazy` (default): a read more than `updateIntervalMs` after the last check starts a background check.
+   * `watch`: additionally check on a timer. `off`: never check for updates.
+   */
+  updates?: 'lazy' | 'watch' | 'off'
+  updateIntervalMs?: number
+  /** What to do when build-time data of a table is stale: keep serving it (default) or switch the table to remote. */
+  onStale?: Partial<Record<TableName, 'keep' | 'remote'>>
+}
+
+type Pick_<T extends TableName, F extends FieldName<T>> = Pick<Row<T>, F>
+type Omit_<T extends TableName, F extends FieldName<T>> = Omit<Row<T>, F>
+
+export type SdeTable<T extends TableName> = {
+  get: {
+    (key: Key<T>): Promise<Row<T> | undefined>
+    <F extends FieldName<T>>(key: Key<T>, projection: { fields: readonly F[] }): Promise<Pick_<T, F> | undefined>
+    <F extends FieldName<T>>(key: Key<T>, projection: { omit: readonly F[] }): Promise<Omit_<T, F> | undefined>
+  }
+  getOrThrow: (key: Key<T>) => Promise<Row<T>>
+  /** Rows for the keys that exist. Requests made in the same tick are batched. */
+  getMany: (keys: Iterable<Key<T>>) => Promise<Map<Key<T>, Row<T>>>
+  list: {
+    (): AsyncIterable<Row<T>>
+    <F extends FieldName<T>>(projection: { fields: readonly F[] }): AsyncIterable<Pick_<T, F>>
+    <F extends FieldName<T>>(projection: { omit: readonly F[] }): AsyncIterable<Omit_<T, F>>
+  }
+  /**
+   * Loads rows into the cache so later reads, and React hooks, resolve without waiting. Without keys it loads the whole
+   * table through the source's cheapest path, and keys missing from it resolve to `undefined` without a request.
+   */
+  preload: (keys?: Iterable<Key<T>>) => Promise<void>
+}
+
+export type SdeReader = {
+  table: <T extends TableName>(name: T) => SdeTable<T>
+}
+
+export type Sde = SdeReader & {
+  /** Manifest of the release runtime reads currently use. */
+  manifest: () => Promise<ReleaseManifest>
+  /** Compares the current release with latest and emits `change` / `stale`. */
+  checkForUpdates: () => Promise<void>
+  on: <E extends keyof SdeEvents>(event: E, handler: (event: SdeEvents[E]) => void) => () => void
+  /** A view that shares this instance's cache and records which rows it read, for SSR dehydration. */
+  scope: () => SdeScope
+}
+
+export type SdeScope = SdeReader & {
+  readonly parent: Sde
+  reads: () => ReadonlyArray<readonly [table: string, key: AnyKey]>
+}
+
+export type SdeInternals = {
+  /** Cached promise per key, stable across calls until the row is invalidated; for React `use()`. */
+  loadRow: (table: string, key: AnyKey) => Promise<AnyRow | undefined>
+  cachedRow: (table: string, key: AnyKey) => Promise<AnyRow | undefined> | undefined
+  seedRow: (table: string, key: AnyKey, row: AnyRow | undefined) => void
+  /** Adopts the server's release for hydration, unless this instance already resolved one. */
+  adoptRelease: (release: string) => void
+  currentRelease: () => string | undefined
+}
+
+const internals = new WeakMap<Sde | SdeScope, SdeInternals>()
+
+/** For a scope, `loadRow` also records the read. */
+export const getInternals = (reader: Sde | SdeScope): SdeInternals => {
+  const found = internals.get(reader)
+  if (!found) {
+    throw new SdeError('Not an instance created by createSde().')
+  }
+  return found
+}
+
+const defaultUpdateIntervalMs = 5 * 60_000
+// After a check, a 404 within this window is treated as a missing row rather than an expired release.
+const releaseMissingRecheckMs = 60_000
+
+type Deferred = { resolve: (row: AnyRow | undefined) => void; reject: (error: unknown) => void }
+
+export const createSde = (options: SdeOptions = {}): Sde => {
+  const fetchFn = options.fetch ?? ((input, init) => globalThis.fetch(input, init))
+  const sources = options.sources ?? [remote()]
+  const updates = options.updates ?? 'lazy'
+  const updateIntervalMs = options.updateIntervalMs ?? defaultUpdateIntervalMs
+  const checksUseful = sources.some((source) => source.live || source.versions)
+
+  let releaseOption = options.release ?? 'latest'
+  let manifestPromise: Promise<ReleaseManifest> | undefined
+  let resolvedRelease: string | undefined
+  let lastCheckAt = 0
+  let checking: Promise<boolean> | undefined
+  let watchTimer: ReturnType<typeof setInterval> | undefined
+  const remoteTables = new Set<string>()
+  const reportedStale = new Set<string>()
+  let fallbackRemote: SdeSource | undefined
+
+  const listeners: { [E in keyof SdeEvents]: Set<(event: SdeEvents[E]) => void> } = {
+    change: new Set(),
+    stale: new Set(),
+    error: new Set(),
+  }
+  const emit = <E extends keyof SdeEvents>(event: E, payload: SdeEvents[E]): void => {
+    for (const handler of listeners[event]) {
+      handler(payload)
+    }
+  }
+
+  const setManifest = (manifest: ReleaseManifest): ReleaseManifest => {
+    resolvedRelease = manifest.release
+    manifestPromise = Promise.resolve(manifest)
+    return manifest
+  }
+
+  const resolveInitialManifest = async (): Promise<ReleaseManifest> => {
+    if (typeof releaseOption !== 'string') {
+      return releaseOption
+    }
+    if (releaseOption !== 'latest') {
+      const pinned = await fetchReleaseManifest(fetchFn, releaseOption)
+      if (pinned) {
+        return pinned
+      }
+    }
+    lastCheckAt = Date.now()
+    return fetchLatestManifest(fetchFn)
+  }
+
+  const manifest = (): Promise<ReleaseManifest> => {
+    manifestPromise ??= resolveInitialManifest().then(setManifest, (error: unknown) => {
+      manifestPromise = undefined
+      throw error
+    })
+    return manifestPromise
+  }
+
+  const sourceFor = (table: string): SdeSource => {
+    if (remoteTables.has(table)) {
+      fallbackRemote ??= sources.find((source) => source.live) ?? remote()
+      return fallbackRemote
+    }
+    const source = sources.find((candidate) => candidate.has(table))
+    if (!source) {
+      throw new SdeError(`No source serves SDE table "${table}". Sources: ${sources.map((s) => s.name).join(', ')}.`)
+    }
+    return source
+  }
+
+  const cache = new Map<string, Map<AnyKey, Promise<AnyRow | undefined>>>()
+  // Keyed by the table's cache map, so an invalidated table forgets that it was preloaded.
+  const tablePreloads = new WeakMap<Map<AnyKey, Promise<AnyRow | undefined>>, Promise<void>>()
+  const completeTables = new WeakSet<Map<AnyKey, Promise<AnyRow | undefined>>>()
+  const tableCache = (table: string): Map<AnyKey, Promise<AnyRow | undefined>> => {
+    let rows = cache.get(table)
+    if (!rows) {
+      rows = new Map()
+      cache.set(table, rows)
+    }
+    return rows
+  }
+
+  /** Resolves `true` when the release moved. */
+  const check = (): Promise<boolean> => {
+    checking ??= (async () => {
+      try {
+        const current = await manifest()
+        const latest = await fetchLatestManifest(fetchFn)
+        lastCheckAt = Date.now()
+
+        const changed = Object.keys(latest.tables).filter(
+          (table) => current.tables[table]?.version !== latest.tables[table]!.version,
+        )
+        const moved = latest.release !== current.release
+        if (moved) {
+          setManifest(latest)
+        }
+
+        const liveChanged = changed.filter((table) => sourceFor(table).live)
+        for (const table of liveChanged) {
+          cache.delete(table)
+        }
+        if (liveChanged.length > 0) {
+          emit('change', { release: latest.release, tables: liveChanged })
+        }
+
+        const stale = sources
+          .flatMap((source) => Object.entries(source.versions ?? {}))
+          .filter(([table, version]) => latest.tables[table] && latest.tables[table].version !== version)
+          .map(([table]) => table)
+          .filter((table) => !reportedStale.has(table))
+        for (const table of stale) {
+          reportedStale.add(table)
+          if (options.onStale?.[table as TableName] === 'remote') {
+            remoteTables.add(table)
+            cache.delete(table)
+          }
+        }
+        if (stale.length > 0) {
+          emit('stale', { release: latest.release, tables: stale })
+        }
+
+        return moved
+      } finally {
+        checking = undefined
+      }
+    })()
+    return checking
+  }
+
+  const backgroundCheck = (): void => {
+    check().catch((error: unknown) => {
+      lastCheckAt = Date.now()
+      emit('error', { error })
+    })
+  }
+
+  const onRead = (): void => {
+    if (updates === 'off' || !checksUseful) {
+      return
+    }
+    if (updates === 'watch' && !watchTimer) {
+      watchTimer = setInterval(backgroundCheck, updateIntervalMs)
+      // Node: the watcher must not keep the process alive.
+      ;(watchTimer as { unref?: () => void }).unref?.()
+    }
+    if (Date.now() - lastCheckAt >= updateIntervalMs && !checking) {
+      // Set before the async check so concurrent reads don't start their own.
+      lastCheckAt = Date.now()
+      backgroundCheck()
+    }
+  }
+
+  const ctx: SourceContext = {
+    fetch: fetchFn,
+    manifest,
+    releaseMissing: async (release) => {
+      if (checking) {
+        await checking
+      } else if (Date.now() - lastCheckAt >= releaseMissingRecheckMs) {
+        await check()
+      }
+      return resolvedRelease !== release
+    },
+  }
+
+  const pending = new Map<string, Map<AnyKey, Deferred[]>>()
+  const flush = (table: string): void => {
+    const batch = pending.get(table)
+    pending.delete(table)
+    if (!batch) {
+      return
+    }
+    const keys = [...batch.keys()]
+    Promise.resolve()
+      .then(() => sourceFor(table).get(ctx, table, keys))
+      .then(
+        (rows) => {
+          for (const [key, deferreds] of batch) {
+            for (const deferred of deferreds) {
+              deferred.resolve(rows.get(key))
+            }
+          }
+        },
+        (error: unknown) => {
+          for (const deferreds of batch.values()) {
+            for (const deferred of deferreds) {
+              deferred.reject(error)
+            }
+          }
+        },
+      )
+  }
+
+  const loadRow = (table: string, key: AnyKey): Promise<AnyRow | undefined> => {
+    const rows = tableCache(table)
+    const cached = rows.get(key)
+    if (cached) {
+      return cached
+    }
+    if (completeTables.has(rows)) {
+      const missing = fulfilled(undefined)
+      rows.set(key, missing)
+      return missing
+    }
+
+    const promise = new Promise<AnyRow | undefined>((resolve, reject) => {
+      let batch = pending.get(table)
+      if (!batch) {
+        batch = new Map()
+        pending.set(table, batch)
+        queueMicrotask(() => flush(table))
+      }
+      batch.set(key, [...(batch.get(key) ?? []), { resolve, reject }])
+    })
+    rows.set(key, track(promise))
+    promise.catch(() => {
+      if (rows.get(key) === promise) {
+        rows.delete(key)
+      }
+    })
+    return promise
+  }
+
+  const preloadTable = (table: string): Promise<void> => {
+    const rows = tableCache(table)
+    let preload = tablePreloads.get(rows)
+    if (!preload) {
+      const keyField = (sdeTableKeys as Record<string, string>)[table]
+      if (!keyField) {
+        return Promise.reject(new SdeUnknownTableError(table))
+      }
+      preload = (async () => {
+        for await (const row of sourceFor(table).list(ctx, table)) {
+          const key = row[keyField] as AnyKey
+          // Keeps promises already handed out, so React sees a stable promise per row.
+          if (!rows.has(key)) {
+            rows.set(key, fulfilled(row))
+          }
+        }
+        completeTables.add(rows)
+      })()
+      tablePreloads.set(rows, preload)
+      preload.catch(() => {
+        if (tablePreloads.get(rows) === preload) {
+          tablePreloads.delete(rows)
+        }
+      })
+    }
+    return preload
+  }
+
+  const createReader = (recordRead?: (table: string, key: AnyKey) => void): SdeReader => ({
+    table: <T extends TableName>(name: T): SdeTable<T> => {
+      const get = async (key: AnyKey, projection?: Projection): Promise<AnyRow | undefined> => {
+        onRead()
+        if (projection) {
+          return (await sourceFor(name).get(ctx, name, [key], projection)).get(key)
+        }
+        recordRead?.(name, key)
+        return loadRow(name, key)
+      }
+
+      const table = {
+        get,
+        getOrThrow: async (key: AnyKey) => {
+          const row = await get(key)
+          if (!row) {
+            throw new SdeRowNotFoundError(name, key)
+          }
+          return row
+        },
+        getMany: async (keys: Iterable<AnyKey>) => {
+          onRead()
+          const unique = [...new Set(keys)]
+          const rows = await Promise.all(
+            unique.map((key) => {
+              recordRead?.(name, key)
+              return loadRow(name, key)
+            }),
+          )
+          const result = new Map<AnyKey, AnyRow>()
+          unique.forEach((key, i) => {
+            if (rows[i]) {
+              result.set(key, rows[i])
+            }
+          })
+          return result
+        },
+        preload: async (keys?: Iterable<AnyKey>) => {
+          onRead()
+          if (keys === undefined) {
+            return preloadTable(name)
+          }
+          await Promise.all([...new Set(keys)].map((key) => loadRow(name, key)))
+        },
+        list: (projection?: Projection): AsyncIterable<AnyRow> => ({
+          [Symbol.asyncIterator]: () => {
+            onRead()
+            return sourceFor(name).list(ctx, name, projection)[Symbol.asyncIterator]()
+          },
+        }),
+      }
+      return table as unknown as SdeTable<T>
+    },
+  })
+
+  const reader = createReader()
+  const sde: Sde = {
+    ...reader,
+    manifest,
+    checkForUpdates: async () => {
+      await check()
+    },
+    on: (event, handler) => {
+      listeners[event].add(handler)
+      return () => {
+        listeners[event].delete(handler)
+      }
+    },
+    scope: () => {
+      const reads: Array<readonly [string, AnyKey]> = []
+      const seen = new Set<string>()
+      // Hooks call loadRow on every render, so reads are recorded once per row.
+      const record = (table: string, key: AnyKey): void => {
+        const id = `${table}\0${typeof key}\0${key}`
+        if (!seen.has(id)) {
+          seen.add(id)
+          reads.push([table, key])
+        }
+      }
+      const scope: SdeScope = { ...createReader(record), parent: sde, reads: () => reads }
+      const parent = getInternals(sde)
+      internals.set(scope, {
+        ...parent,
+        loadRow: (table, key) => {
+          record(table, key)
+          return parent.loadRow(table, key)
+        },
+      })
+      return scope
+    },
+  }
+
+  internals.set(sde, {
+    loadRow: (table, key) => {
+      onRead()
+      return loadRow(table, key)
+    },
+    cachedRow: (table, key) => cache.get(table)?.get(key),
+    seedRow: (table, key, row) => {
+      tableCache(table).set(key, fulfilled(row))
+    },
+    adoptRelease: (release) => {
+      if (!manifestPromise) {
+        releaseOption = release
+      }
+    },
+    currentRelease: () => resolvedRelease,
+  })
+
+  return sde
+}
+
+/**
+ * An instance created on first use. Lets a module export an instance whose options come from a module that may import
+ * this package itself, without an evaluation-order cycle.
+ */
+export const createLazySde = (options: () => SdeOptions): Sde => {
+  let instance: Sde | undefined
+  const get = (): Sde => (instance ??= createSde(options()))
+  const facade: Sde = {
+    table: (name) => get().table(name),
+    manifest: () => get().manifest(),
+    checkForUpdates: () => get().checkForUpdates(),
+    on: (event, handler) => get().on(event, handler),
+    scope: () => get().scope(),
+  }
+  internals.set(facade, {
+    loadRow: (table, key) => getInternals(get()).loadRow(table, key),
+    cachedRow: (table, key) => getInternals(get()).cachedRow(table, key),
+    seedRow: (table, key, row) => getInternals(get()).seedRow(table, key, row),
+    adoptRelease: (release) => getInternals(get()).adoptRelease(release),
+    currentRelease: () => getInternals(get()).currentRelease(),
+  })
+  return facade
+}

@@ -1,31 +1,20 @@
-import { resolveSdeOptions } from './plugin-core'
-import { processSdeWithResolvedOptions } from './processor'
-import type { ProcessSdeResult, SdeOptions } from './types'
-
-export const processSde = async (options: SdeOptions): Promise<ProcessSdeResult> => {
-  const root = options.root ?? process.cwd()
-  const resolvedOptions = resolveSdeOptions(options, root)
-  return processSdeWithResolvedOptions(resolvedOptions)
-}
-
-export { loadSdeTable } from './load-table'
-export { loadSdeTableStream } from './stream-table'
-export { assertBareTableName } from './table-name'
-export { resolveSdeOptions } from './plugin-core'
-export { stripFields, parseJsonlLine, parseJsonlTable, formatSdeJsonlRecord, writeSdeRecord } from './processors'
-export type { ParsedSdeTable } from './processors'
-export { applyStripFields, isTranslationDict, stripTranslationDict } from './translation-dict'
-export type { StripTranslationDictOptions } from './translation-dict'
-export type {
-  ProcessSdeResult,
-  ResolvedSdeOptions,
-  SdeGeneratedEntry,
-  SdeJsonlRecord,
-  SdeJsonStreamWriter,
-  SdeLockFile,
-  SdeOptions,
-  SdeProcessor,
-  SdeProcessorContext,
-  SdeTextStreamWriter,
-  StripFieldsOptions,
-} from './types'
+export { sde } from './global'
+export { createSde } from './core/sde'
+export type { Sde, SdeEvents, SdeOptions, SdeReader, SdeScope, SdeTable } from './core/sde'
+export { defineDataset, isDatasetAsset, resolveAssets } from './core/dataset'
+export type { Dataset, DatasetAsset, DatasetContext, DatasetValue, Resolved } from './core/dataset'
+export { dehydrate, hydrate } from './core/hydration'
+export type { DehydratedSde } from './core/hydration'
+export { SdeError, SdeHttpError, SdeRowNotFoundError, SdeUnknownTableError } from './core/errors'
+export { fetchLatestManifest, fetchReleaseManifest, parseManifest } from './core/manifest'
+export type { ReleaseManifest, TableInfo } from './core/manifest'
+export type { ActiveTables, FieldName, Key, Projection, Row, SdeTypeRegistry, TableName } from './core/types'
+export { embedded, fixture } from './sources/embedded'
+export type { EmbeddedData, EmbeddedOptions, FixtureData } from './sources/embedded'
+export { remote } from './sources/remote'
+export type { RemoteOptions } from './sources/remote'
+export type { SdeSource, SourceContext } from './sources/types'
+export { openFbTable } from './formats/fb'
+export type { FbKey, FbProjection, FbRow, FbTable } from './formats/fb'
+export { sdeTableKeys } from './schema/generated/tables'
+export type * from './schema/generated/tables'

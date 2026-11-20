@@ -1,11 +1,19 @@
+import { fileURLToPath } from 'node:url'
+
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 
 const virtualJestAxe = '\0virtual:jest-axe'
 
 export default defineConfig({
   resolve: {
     dedupe: ['react', 'react-dom'],
+    alias: {
+      // Replaced by the eve-sde build plugins in apps; tests use the package default.
+      '@eve-online-tools/eve-sde/config': fileURLToPath(
+        new URL('./packages/eve-sde/src/runtime-config.ts', import.meta.url),
+      ),
+    },
   },
   plugins: [
     {
@@ -65,6 +73,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
     include: ['packages/**/src/**/*.test.{ts,tsx}', 'internal/**/*.test.ts'],
+    // Live SDE tests download the full export; run them with `pnpm test:live` in packages/eve-sde.
+    exclude: [...configDefaults.exclude, '**/*.live.test.ts'],
     server: {
       deps: {
         inline: ['react', 'react-dom'],
