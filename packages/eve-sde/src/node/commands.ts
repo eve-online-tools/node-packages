@@ -29,8 +29,8 @@ const describeChanges = (result: UpdateResult): string =>
   result.from === undefined
     ? `Locked SDE release ${result.to}.`
     : result.changed.length === 0
-    ? `No relevant changes since ${result.from ?? 'nothing'} (latest ${result.to}).`
-    : `${result.from ?? 'nothing'} -> ${result.to}: ${result.changed.join(', ')} changed.`
+      ? `No relevant changes since ${result.from ?? 'nothing'} (latest ${result.to}).`
+      : `${result.from ?? 'nothing'} -> ${result.to}: ${result.changed.join(', ')} changed.`
 
 const latestLock = async (options: CommandOptions): Promise<{ lock: Lockfile; result: UpdateResult }> => {
   const fetchFn = fetchOf(options)

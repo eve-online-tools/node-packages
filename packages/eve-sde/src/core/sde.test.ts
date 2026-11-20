@@ -297,7 +297,10 @@ describe('dehydrate and hydrate', () => {
   it('leaves rows that failed to load for the client to retry', async () => {
     const server = createSde({ fetch: () => Promise.reject(new Error('network')), updates: 'off' })
     const scope = server.scope()
-    const pending = scope.table('types').get(587).catch(() => undefined)
+    const pending = scope
+      .table('types')
+      .get(587)
+      .catch(() => undefined)
     expect((await dehydrate(scope)).rows).toEqual({})
     await pending
   })

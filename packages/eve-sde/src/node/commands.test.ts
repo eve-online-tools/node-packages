@@ -30,7 +30,13 @@ describe('build', () => {
       build: ({ emit }) => ({ url: emit('names.json', '{}') }),
     })
     const { root, config } = await setup([dataset])
-    await writeLockfile(config.lockfile, { lockfileVersion: 1, release: 'R', buildNumber: 1, releaseDate: 'D', tables: {} })
+    await writeLockfile(config.lockfile, {
+      lockfileVersion: 1,
+      release: 'R',
+      buildNumber: 1,
+      releaseDate: 'D',
+      tables: {},
+    })
     const outDir = join(root, 'out')
 
     await build({ config, outDir })

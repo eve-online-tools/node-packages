@@ -21,9 +21,12 @@ export class SdeNetworkError extends SdeError {
     readonly url: string,
     cause: unknown,
   ) {
-    super(`GET ${url} failed: ${cause instanceof Error ? cause.message : String(cause)}. Check the network connection.`, {
-      cause,
-    })
+    super(
+      `GET ${url} failed: ${cause instanceof Error ? cause.message : String(cause)}. Check the network connection.`,
+      {
+        cause,
+      },
+    )
   }
 }
 
