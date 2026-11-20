@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { sde, type SdeOptions } from '@eve-online-tools/eve-sde/rollup'
+import { sde, type RollupSdeOptions } from '@eve-online-tools/eve-sde/rollup'
 import { createEveResfileIntegration, type EveResfileOptions } from '@eve-online-tools/eve-resfile/integration'
 import { rollupPlugin } from '@eve-online-tools/eve-resfile/rollup'
 import { postcssPlugin } from '@eve-online-tools/eve-resfile/postcss'
@@ -17,7 +17,7 @@ export interface ReactRollupConfigOptions {
   packageDir: string
   cssPrefix: string
   /** Runs before resfile so generated artifacts can reference res:/ imports. */
-  sde?: SdeOptions
+  sde?: RollupSdeOptions
   resfile?: EveResfileOptions
   plugins?: InputPluginOption[]
 }
@@ -87,4 +87,4 @@ export function createReactRollupConfig({
   }
 }
 
-export type { EveResfileOptions, SdeOptions }
+export type { EveResfileOptions, RollupSdeOptions }

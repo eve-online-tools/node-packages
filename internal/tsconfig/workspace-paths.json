@@ -4,6 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@eve-online-tools/*": ["../../packages/*/src/index.ts"],
+      "@eve-online-tools/eve-sde/config": ["../../packages/eve-sde/src/runtime-config.ts"],
+      "@eve-online-tools/eve-sde/*": ["../../packages/eve-sde/src/*/index.ts"],
       "@eve-online-tools/*/styles.css": ["../../packages/*/dist/styles.css"],
       "@eve-online-tools/*/styles.layer.css": ["../../packages/*/dist/styles.layer.css"]
     }

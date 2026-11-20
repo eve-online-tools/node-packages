@@ -11,6 +11,7 @@ apps/
 packages/
   eve-map/       WebGL 2D/3D map of New Eden, React binding, SDE processor
   eve-resfile/   resfile index loader for Vite and Rollup
+  eve-sde/       Typed EVE SDE access over HTTP, build plugins, datasets
 internal/
   react-build/   Shared Rollup + post-build pipeline (@repo/react-build)
   tsconfig/      Shared TypeScript configs (@repo/tsconfig)

@@ -1,0 +1,15 @@
+{
+  "rows": [
+    { "id": 30, "name": { "en": "Third" }, "kind": "Module", "big": 9007199254740991, "level": 0, "aliases": [] },
+    { "id": 2, "name": { "en": "Second", "de": "Zweite" }, "ratio": 2.5, "published": true },
+    {
+      "id": 1,
+      "name": { "en": "First" },
+      "big": -5,
+      "level": 3,
+      "tags": [{ "name": "a", "weight": 1.25 }, { "name": "b" }],
+      "aliases": ["one", "eins"],
+      "ids": [3, -4]
+    }
+  ]
+}

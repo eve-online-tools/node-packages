@@ -17,7 +17,7 @@
     "clean": "tsx scripts/clean.ts",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "pnpm build && changeset publish",
+    "release": "pnpm --filter @eve-online-tools/eve-sde generate:types && pnpm build && changeset publish",
     "create-package": "tsx scripts/create-package.ts",
     "dev:demo": "turbo dev --filter=@eve-online-tools/demo",
     "storybook": "turbo dev --filter=@eve-online-tools/storybook",
