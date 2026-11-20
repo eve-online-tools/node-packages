@@ -4,7 +4,7 @@ A client-only app that embeds small tables and fetches `types` rows per id.
 
 ```bash
 pnpm add @eve-online-tools/eve-sde react react-dom
-pnpm add -D vite
+pnpm add -D vite @vitejs/plugin-react typescript @types/react @types/react-dom
 ```
 
 ```ts

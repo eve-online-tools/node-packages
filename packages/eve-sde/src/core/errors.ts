@@ -13,6 +13,20 @@ export class SdeHttpError extends SdeError {
   }
 }
 
+/** The request did not get a response, such as when offline. `cause` holds the fetch error. */
+export class SdeNetworkError extends SdeError {
+  override name = 'SdeNetworkError'
+
+  constructor(
+    readonly url: string,
+    cause: unknown,
+  ) {
+    super(`GET ${url} failed: ${cause instanceof Error ? cause.message : String(cause)}. Check the network connection.`, {
+      cause,
+    })
+  }
+}
+
 export class SdeRowNotFoundError extends SdeError {
   override name = 'SdeRowNotFoundError'
 

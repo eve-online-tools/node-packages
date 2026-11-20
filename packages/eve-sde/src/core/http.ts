@@ -1,4 +1,4 @@
-import { SdeHttpError } from './errors'
+import { SdeHttpError, SdeNetworkError } from './errors'
 
 export type FetchFn = typeof fetch
 
@@ -23,8 +23,11 @@ export const request = async (fetchFn: FetchFn, url: string, init?: RequestInit)
     try {
       response = await fetchFn(url, init)
     } catch (error) {
-      if (!canRetry || !isNetworkError(error)) {
+      if (!isNetworkError(error)) {
         throw error
+      }
+      if (!canRetry) {
+        throw new SdeNetworkError(url, error)
       }
       await sleep(retryDelaysMs[attempt]!)
       continue

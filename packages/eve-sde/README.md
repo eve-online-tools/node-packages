@@ -173,7 +173,7 @@ Downloads use the content-addressed blob URL first and the locked release second
 | Command | |
 | --- | --- |
 | `eve-sde update` | Lock the latest release and list changed build tables |
-| `eve-sde check` | Exit with code 1 when the latest release changes build tables |
+| `eve-sde check` | Exit with code 1 when the latest release changes build tables, 2 on errors |
 | `eve-sde fetch [--all]` | Download locked FlatBuffers files into the cache |
 | `eve-sde build [--out <dir>]` | Run datasets without a bundler |
 | `eve-sde types` | Write row types for the locked release to `dts` |

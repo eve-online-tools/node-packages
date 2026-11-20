@@ -51,8 +51,8 @@ for await (const group of local.table('groups').list({ fields: ['groupID', 'name
 `files` downloads missing tables on first use and checks them against the locked hashes. Pass `download: false` on
 servers that must not reach the network.
 
-`eve-sde update` needs a config file. Without one, `createLockfile` and `writeLockfile` from `/node` do the same in
-code.
+Without a config file, `eve-sde update` writes `eve-sde.lock.json` in the current directory. `createLockfile` and
+`writeLockfile` from `/node` do the same in code.
 
 ## CI
 
@@ -64,5 +64,6 @@ code.
 - run: pnpm exec eve-sde check # fails when the latest release changes build tables
 ```
 
-`eve-sde check` exits with code 1 when a newer release changes a table used by `embed`, `files` or a dataset. Run it on
+`eve-sde check` exits with code 1 when a newer release changes a table used by `embed`, `files` or a dataset, and with
+code 2 on errors such as a missing lockfile. Run it on
 a schedule to get notified, then run `eve-sde update` locally and commit the lockfile.

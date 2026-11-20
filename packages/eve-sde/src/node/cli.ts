@@ -9,7 +9,7 @@ const usage = `Usage: eve-sde <command> [options]
 
 Commands:
   update   Lock the latest SDE release and report changed build tables
-  check    Exit with code 1 when the latest release changes build tables
+  check    Exit with code 1 when the latest release changes build tables, 2 on errors
   fetch    Download locked FlatBuffers files into the cache (--all for every table)
   build    Run datasets without a bundler (--out <dir>, default .eve-sde/datasets)
   types    Write row types for the locked release to the configured dts file
@@ -66,6 +66,7 @@ main().then(
   },
   (error: unknown) => {
     process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`)
-    process.exitCode = 1
+    // Distinct from `check`'s "changes available".
+    process.exitCode = 2
   },
 )

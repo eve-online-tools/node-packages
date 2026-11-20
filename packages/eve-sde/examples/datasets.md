@@ -51,7 +51,9 @@ import ships from 'eve-sde:dataset/my-app:ship-names'
 ships.names[587] // string
 ```
 
-The value is bundled as JSON. Its type comes from `src/eve-sde.datasets.d.ts`, which the plugin writes next to `dts`.
+The value is bundled as JSON. Its type comes from `src/eve-sde.datasets.d.ts`, which the plugin writes next to `dts`
+when Vite starts. A build script that runs `tsc` before Vite, such as the `tsc -b && vite build` of Vite's templates,
+needs the file first: run `eve-sde types` after adding a dataset, and commit the generated files.
 
 ## Emitted files
 

@@ -26,7 +26,9 @@ export const requireLockfile = async (config: ResolvedConfig): Promise<Lockfile>
 }
 
 const describeChanges = (result: UpdateResult): string =>
-  result.changed.length === 0
+  result.from === undefined
+    ? `Locked SDE release ${result.to}.`
+    : result.changed.length === 0
     ? `No relevant changes since ${result.from ?? 'nothing'} (latest ${result.to}).`
     : `${result.from ?? 'nothing'} -> ${result.to}: ${result.changed.join(', ')} changed.`
 
@@ -51,6 +53,7 @@ export const update = async (options: CommandOptions): Promise<UpdateResult> => 
 
 /** Like `update`, but read-only. */
 export const check = async (options: CommandOptions): Promise<UpdateResult> => {
+  await requireLockfile(options.config)
   const { result } = await latestLock(options)
   options.log?.(describeChanges(result))
   return result
@@ -100,7 +103,10 @@ export const build = async (options: CommandOptions & { outDir: string }): Promi
 /** Writes row types for the locked release to `config.dts`, replacing the package's shipped types. */
 export const types = async (options: CommandOptions): Promise<string> => {
   const lock = await requireLockfile(options.config)
-  const { rows } = await writeDts(options.config, lock, fetchOf(options))
-  options.log?.(`Row types for release ${lock.release} written to ${relative(options.config.root, rows)}.`)
+  const { rows, datasets } = await writeDts(options.config, lock, fetchOf(options))
+  const root = options.config.root
+  options.log?.(
+    `Row types for release ${lock.release} written to ${relative(root, rows)}, dataset types to ${relative(root, datasets)}.`,
+  )
   return rows
 }
