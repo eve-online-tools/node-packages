@@ -1,9 +1,5 @@
-import { mkdtemp } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-
 import { fixture } from '@eve-online-tools/eve-sde'
-import { runDatasets, type Lockfile } from '@eve-online-tools/eve-sde/node'
+import { buildDataset } from '@eve-online-tools/eve-sde/node'
 
 import { decodeMapData } from '../data/binary'
 import { mapDataset } from './map-dataset'
@@ -62,21 +58,8 @@ const source = fixture({
   ],
 })
 
-const locked = { version: 'v1', fb: 'f', bfbs: 'b' }
-const lockfile: Lockfile = {
-  lockfileVersion: 1,
-  release: '20261119T000000Z',
-  buildNumber: 1,
-  releaseDate: '2026-11-19T00:00:00Z',
-  tables: { mapSolarSystems: locked, mapStargates: locked, mapConstellations: locked, mapRegions: locked },
-}
-
 const run = async (dataset: ReturnType<typeof mapDataset>) => {
-  const root = await mkdtemp(join(tmpdir(), 'eve-map-'))
-  const result = (
-    await runDatasets({ datasets: [dataset], lockfile, source, root, cacheDir: join(root, 'cache') })
-  ).get(dataset.id)!
-  const out = await result.load()
+  const out = await buildDataset(dataset, { source })
   return { value: out.value, data: decodeMapData(out.assets.get('map-data.bin')!) }
 }
 
