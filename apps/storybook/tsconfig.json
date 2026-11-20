@@ -2,6 +2,7 @@
   "extends": "../../internal/tsconfig/stories.json",
   "include": [
     ".storybook",
+    "eve-sde.config.ts",
     "src",
     "../../@types",
     "../../packages/*/src/**/*.story.tsx",
