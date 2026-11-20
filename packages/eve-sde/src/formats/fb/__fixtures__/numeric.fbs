@@ -1,0 +1,33 @@
+attribute "sde_enum_name";
+attribute "sde_name";
+
+enum Kind : ubyte { Hull = 0, Module = 1 (sde_name: "module") }
+
+table Localized {
+  en: string;
+  de: string;
+}
+
+table Tag {
+  name: string;
+  weight: double;
+}
+
+table Row {
+  id: uint (key);
+  name: Localized;
+  kind: Kind (sde_enum_name: "Kind");
+  big: long;
+  ratio: float = 0.5;
+  published: bool;
+  level: int = null;
+  tags: [Tag];
+  aliases: [string];
+  ids: [int];
+}
+
+table Rows {
+  rows: [Row];
+}
+
+root_type Rows;

@@ -1,0 +1,10 @@
+table Row {
+  name: string (key);
+  value: int;
+}
+
+table Rows {
+  rows: [Row];
+}
+
+root_type Rows;
