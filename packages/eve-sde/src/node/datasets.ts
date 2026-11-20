@@ -240,6 +240,8 @@ export const runDatasets = async (options: RunDatasetsOptions): Promise<Map<stri
           values.set(dependency.id, (await dependency.load()).value)
         }
         const built = await build(dataset, sde, lockfile, values)
+        // Dependents and modules see the value as it reads back from the cache, whether or not this run built it.
+        built.value = JSON.parse(JSON.stringify(built.value ?? null))
         await mkdir(dir, { recursive: true })
         await writeCache(dir, built)
         return built

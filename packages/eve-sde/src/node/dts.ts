@@ -7,7 +7,6 @@ import { request, requestOk, type FetchFn } from '../core/http'
 import { sdeTenantUrl } from '../core/manifest'
 import { sdeBlobUrl } from './blob-store'
 import type { ResolvedConfig } from './config'
-import { orderDatasets } from './datasets'
 import type { Lockfile } from './lockfile'
 
 const packageName = '@eve-online-tools/eve-sde'
@@ -55,7 +54,8 @@ const importPath = (from: string, to: string): string => {
 
 // Ambient module declarations must live in a file without imports or exports, so they are kept apart from the row types.
 const datasetDeclarations = (config: ResolvedConfig, path: string): string => {
-  const ids = orderDatasets(config.datasets).map((dataset) => dataset.id)
+  // Only registered datasets: dependencies are internal to the datasets that use them.
+  const ids = config.datasets.map((dataset) => dataset.id)
   const valueType = (id: string): string =>
     config.configFile
       ? `import(${JSON.stringify(packageName)}).DatasetValue<Extract<NonNullable<typeof import(${JSON.stringify(importPath(path, config.configFile))}).default.datasets>[number], { id: ${JSON.stringify(id)} }>>`

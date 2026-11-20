@@ -90,6 +90,21 @@ describe('runDatasets', () => {
     expect(await readFile(join(root, 'generated/names.txt'), 'utf8')).toBe('Rifter')
   })
 
+  it('passes dependencies the same JSON value on fresh builds and cache hits', async () => {
+    const { run } = await setup()
+    const source = defineDataset({ id: 'test:source', version: '1', tables: [], build: () => ({ when: new Date(0) }) })
+    const seen = vi.fn()
+    const reader = defineDataset({
+      id: 'test:reader',
+      version: '1',
+      tables: [],
+      dependsOn: [source],
+      build: ({ dataset }) => seen(dataset(source)),
+    })
+    await run([reader])
+    expect(seen).toHaveBeenCalledWith({ when: '1970-01-01T00:00:00.000Z' })
+  })
+
   it('rebuilds when the build code changes without a version bump', async () => {
     const { run } = await setup()
     const first = await run([defineDataset({ id: 'test:edited', version: '1', tables: [], build: () => 1 })])
