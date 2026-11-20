@@ -3,7 +3,8 @@ import type { Sde, SdeInternals, SdeOptions, SdeScope } from './sde'
 /**
  * State shared by every copy of this package in one JavaScript realm. Vite SSR can load a library's copy from
  * node_modules next to the app's bundled copy; both must use the configured instance, its internals and one React
- * context. Keyed by major version, since internals may change shape between majors.
+ * context. Keyed by major version: within one major, `SdeInternals` and this shape only gain optional members, and
+ * callers feature-detect them, since copies of different minors can share it.
  */
 type Shared = {
   internals: WeakMap<Sde | SdeScope, SdeInternals>

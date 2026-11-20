@@ -15,4 +15,15 @@ describe('package copies', () => {
     expect(first.sde.scope().parent).toBe(second.sde.scope().parent)
     expect(() => second.getInternals(first.createSde({ updates: 'off' }))).not.toThrow()
   })
+
+  it('replace the default instance when the generated config is reloaded', async () => {
+    const config = '@eve-online-tools/eve-sde/config'
+    vi.doMock(config, () => ({ default: () => ({ updates: 'off' }) }))
+    const before = (await loadCopy()).sde.scope().parent
+    vi.doMock(config, () => ({ default: () => ({ updates: 'off' }) }))
+    const after = (await loadCopy()).sde.scope().parent
+    vi.doUnmock(config)
+
+    expect(after).not.toBe(before)
+  })
 })

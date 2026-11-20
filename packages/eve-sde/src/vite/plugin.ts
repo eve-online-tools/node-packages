@@ -52,7 +52,11 @@ export const sde = (options?: SdePluginOptions): Plugin => {
         server.watcher.add(files)
         server.watcher.on('change', (file) => {
           if (files.includes(file)) {
-            void server.restart()
+            server.restart().catch((error: unknown) => {
+              server.config.logger.error(`eve-sde: restart failed: ${error instanceof Error ? error.message : error}`, {
+                error: error instanceof Error ? error : undefined,
+              })
+            })
           }
         })
       }

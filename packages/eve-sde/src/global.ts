@@ -3,8 +3,11 @@ import { shared } from './core/shared'
 // Imported by package name so build plugins can replace it with the project's generated config.
 import runtimeOptions from '@eve-online-tools/eve-sde/config'
 
-if (runtimeOptions) {
-  shared.options ??= runtimeOptions
+// Copies of the package share one generated config module, so a different function means the config was reloaded,
+// such as after a dev server restart.
+if (runtimeOptions && shared.options !== runtimeOptions) {
+  shared.options = runtimeOptions
+  shared.instance = undefined
 }
 
 /**
