@@ -1,5 +1,21 @@
 # @eve-online-tools/eve-map
 
+## 0.2.0
+
+### Minor Changes
+
+- [#98](https://github.com/eve-online-tools/node-packages/pull/98)
+  [`dc29bf0`](https://github.com/eve-online-tools/node-packages/commit/dc29bf0baae6e841eff3235b7e68c6c7e532d11c) -
+  Breaking: `mapDataProcessor()` is replaced by `mapDataset()` for eve-sde 1.0. Import the result as
+  `eve-sde:dataset/eve-map:map-data` to get `{ url, systems }`. The `format` and `fileName` options are removed; the
+  binary format is the only output.
+
+### Patch Changes
+
+- Updated dependencies
+  [[`dc29bf0`](https://github.com/eve-online-tools/node-packages/commit/dc29bf0baae6e841eff3235b7e68c6c7e532d11c)]:
+  - @eve-online-tools/eve-sde@1.0.0
+
 ## 0.1.1
 
 ### Patch Changes

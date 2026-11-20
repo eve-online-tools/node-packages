@@ -1,5 +1,27 @@
 # @eve-online-tools/eve-ship-tree
 
+## 0.4.0
+
+### Minor Changes
+
+- [#98](https://github.com/eve-online-tools/node-packages/pull/98)
+  [`dc29bf0`](https://github.com/eve-online-tools/node-packages/commit/dc29bf0baae6e841eff3235b7e68c6c7e532d11c) - Ship
+  tree data is no longer shipped in the package; apps build it with eve-sde 1.0 from their locked SDE release.
+
+  Migration: install `@eve-online-tools/eve-sde` 1.x (an optional peer dependency, needed for the data), register
+  `shipTreeDataset()` from `@eve-online-tools/eve-ship-tree/sde` in `eve-sde.config.ts`, import
+  `eve-sde:dataset/eve-ship-tree:data` and pass it as `dataset` (replacing `baseUrl`) to `ShipTree.Root` or
+  `DataProvider`, or to `loadShipTreeData(dataset, options)`. The `./data/generated/*` export and
+  `assertSafeDataBaseUrl` are removed. Preloaded `data` records now use SDE field names (`position`/`elementID`,
+  `factionID`, `skillTypeID`, `typeID`, mastery `levels`) instead of `_key`/`_value`, and the unused `groups` and
+  `factions` tables are gone.
+
+### Patch Changes
+
+- Updated dependencies
+  [[`dc29bf0`](https://github.com/eve-online-tools/node-packages/commit/dc29bf0baae6e841eff3235b7e68c6c7e532d11c)]:
+  - @eve-online-tools/eve-sde@1.0.0
+
 ## 0.3.0
 
 ### Minor Changes
