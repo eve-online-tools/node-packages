@@ -59,7 +59,7 @@
     "oxlint": "pnpm --workspace-root exec oxlint packages/eve-sde"
   },
   "devDependencies": {
-    "@tanstack/react-query": "5.107.1",
+    "@tanstack/react-query": "5.108.1",
     "@testing-library/react": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
